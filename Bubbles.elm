@@ -16,9 +16,8 @@ update action model =
 view : Signal.Address Action -> Model -> Html
 view address model =
     collage 300 300
-    [ circle 200
+    [ circle 180
         |> filled darkBrown
-        |> move (100, 100)
     ]
     |> fromElement
 

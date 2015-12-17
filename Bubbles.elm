@@ -13,11 +13,8 @@ update : Action -> Model -> Model
 update action model =
     model
 
-view : Signal.Address Action -> Model -> Html
+view : Signal.Address Action -> Model -> Form
 view address model =
-    collage 300 300
-    [ circle 180
+    circle 180
         |> filled darkBrown
-    ]
-    |> fromElement
 

@@ -5,7 +5,6 @@ module BubblesHtml where
 import Bubbles exposing (..)
 
 import Html exposing (..)
-import Window
 import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
 

@@ -4,6 +4,7 @@ module BubblesHtml where
 
 import Bubbles exposing (..)
 
+import Effects exposing (Effects)
 import Html exposing (..)
 import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
@@ -14,13 +15,23 @@ type alias Model =
     , bubbles : Bubbles.Model
     }
 
-type Action = Bubble Bubbles.Action
+type Action = Resize (Int, Int) | Bubble Bubbles.Action
 
-update : Action -> Model -> Model
+update : Action -> Model -> (Model, Effects action)
 update action model =
     case action of
+        Resize (w, h) ->
+            let
+                mod = { model | width = w, height = h }
+                effect = Effects.none
+            in
+                (mod, effect)
         Bubble act ->
-            { model | bubbles = Bubbles.update act model.bubbles }
+            let
+                mod = { model | bubbles = Bubbles.update act model.bubbles }
+                effect = Effects.none
+            in
+                (mod, effect)
 
 view : Signal.Address Action -> Model -> Html
 view address model =

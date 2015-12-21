@@ -2,7 +2,7 @@ module BubblesHtml where
 
 -- Bubble forms captured as Html
 
-import Bubbles exposing (..)
+import Bubble exposing (..)
 
 import Html exposing (..)
 import Graphics.Collage exposing (..)
@@ -11,7 +11,7 @@ import Graphics.Element exposing (..)
 type alias Model =
     { width : Int
     , height : Int
-    , bubbles : Bubbles.Model
+    , bubble : Bubble.Model
     }
 
 type Action = Resize (Int, Int)
@@ -25,7 +25,7 @@ update action model =
 view : Signal.Address Action -> Model -> Html
 view address model =
     collage model.width model.height
-    [ Bubbles.view address model.bubbles
+    [ Bubble.view address model.bubble
     ]
         |> fromElement
 

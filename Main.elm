@@ -1,11 +1,11 @@
-import Bubbles
+import Bubble
 import BubblesHtml exposing (update, view, Action)
 
 import StartApp.Simple exposing (start)
 
-bubblesModel = { x = 40, y = 0 }
+bubbleModel = { x = 40, y = 0 }
 
-model = { width = 300, height = 300, bubbles = bubblesModel }
+model = { width = 300, height = 300, bubble = bubbleModel }
 
 main =
     start

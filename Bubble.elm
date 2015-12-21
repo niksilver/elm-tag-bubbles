@@ -1,4 +1,4 @@
-module Bubbles where
+module Bubble where
 
 import Html exposing (..)
 import Color exposing (..)

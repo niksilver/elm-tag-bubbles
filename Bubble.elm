@@ -5,7 +5,7 @@ import Color exposing (..)
 import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
 
-type alias Model = { x : Float, y : Float }
+type alias Model = { x : Float, y : Float, size : Float }
 
 update : a -> Model -> Model
 update action model =
@@ -13,7 +13,7 @@ update action model =
 
 view : Signal.Address a -> Model -> Form
 view address model =
-    circle 180
-        |> filled blue
+    circle model.size
+        |> filled red
         |> move (model.x, model.y)
 

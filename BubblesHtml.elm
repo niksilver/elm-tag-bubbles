@@ -4,9 +4,9 @@ module BubblesHtml where
 
 import Bubble exposing (..)
 
-import Html exposing (..)
-import Graphics.Collage exposing (..)
-import Graphics.Element exposing (..)
+import Html exposing (Html)
+import Svg exposing (svg)
+import Svg.Attributes exposing (width, height, viewBox)
 
 type alias Model =
     { width : Int
@@ -22,10 +22,17 @@ update action model =
         Resize (w, h) ->
             { model | width = w, height = h }
 
+viewBoxStr : Model -> String
+viewBoxStr model =
+    "0 0 " ++ (toString model.width) ++ " " ++ (toString model.height)
+
 view : Signal.Address Action -> Model -> Html
 view address model =
-    collage model.width model.height
-    [ Bubble.view address model.bubble
-    ]
-        |> fromElement
+    svg
+        [ width (toString model.width)
+        , height (toString model.height)
+        , viewBox (viewBoxStr model)
+        ]
+        [ Bubble.view address model.bubble
+        ]
 

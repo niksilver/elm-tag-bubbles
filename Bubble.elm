@@ -1,9 +1,8 @@
 module Bubble where
 
-import Html exposing (..)
 import Color exposing (..)
-import Graphics.Collage exposing (..)
-import Graphics.Element exposing (..)
+import Svg exposing (Svg, circle)
+import Svg.Attributes exposing (cx, cy, r, fill)
 
 type alias Model = { x : Float, y : Float, size : Float }
 
@@ -11,9 +10,12 @@ update : a -> Model -> Model
 update action model =
     model
 
-view : Signal.Address a -> Model -> Form
+view : Signal.Address a -> Model -> Svg
 view address model =
-    circle model.size
-        |> filled red
-        |> move (model.x, model.y)
+    circle
+        [ cx (toString model.x)
+        , cy (toString model.y)
+        , r (toString model.size)
+        , fill "green"
+        ] []
 

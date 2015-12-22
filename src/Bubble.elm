@@ -5,13 +5,21 @@ import Svg.Attributes exposing (cx, cy, r, fill, opacity)
 import Svg.Events exposing (onClick)
 import Signal exposing (message)
 
-type alias Model = { x : Float, y : Float, size : Float, colour: String}
+type alias Model =
+    { x : Float
+    , y : Float
+    , dx : Float
+    , dy : Float
+    , size : Float
+    , colour: String}
 
-update : a -> Model -> Model
+type Action = Flip | Move
+
+update : Action -> Model -> Model
 update action model =
-    flip model
-
-type Action = Flip
+    case action of
+        Flip -> flip model
+        Move -> { model | x = model.x + model.dx, y = model.y + model.dy }
 
 flip : Model -> Model
 flip model =

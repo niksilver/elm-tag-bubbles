@@ -1,4 +1,4 @@
-import BubblesHtml exposing (update, view, Action)
+import BubblesHtml exposing (update, view)
 
 import StartApp.Simple exposing (start)
 

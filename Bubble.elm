@@ -1,6 +1,5 @@
 module Bubble where
 
-import Color exposing (..)
 import Svg exposing (Svg, circle)
 import Svg.Attributes exposing (cx, cy, r, fill, opacity)
 import Svg.Events exposing (onClick)

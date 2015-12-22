@@ -6,7 +6,7 @@ import Bubble
 
 import List exposing (reverse, length, indexedMap)
 import Svg exposing (Svg)
-import Signal exposing (forwardTo)
+import Signal exposing (Address, forwardTo)
 
 type alias Model = List Bubble.Model
 
@@ -32,11 +32,11 @@ update' action model accum =
             hd :: tl -> update' action tl (hd :: accum)
             [] -> reverse accum
 
-fwdingView : Signal.Address Action -> Int -> Bubble.Model -> Svg
+fwdingView : Address Action -> Int -> Bubble.Model -> Svg
 fwdingView address i bub =
     Bubble.view (forwardTo address (\act -> { idx = i, act = act})) bub
 
-view : Signal.Address Action -> Model -> List Svg
+view : Address Action -> Model -> List Svg
 view address model =
     indexedMap (fwdingView address) model
 

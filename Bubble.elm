@@ -3,19 +3,31 @@ module Bubble where
 import Color exposing (..)
 import Svg exposing (Svg, circle)
 import Svg.Attributes exposing (cx, cy, r, fill)
+import Svg.Events exposing (onClick)
+import Signal exposing (message)
 
-type alias Model = { x : Float, y : Float, size : Float }
+type alias Model = { x : Float, y : Float, size : Float, colour: String}
 
 update : a -> Model -> Model
 update action model =
-    model
+    flip model
 
-view : Signal.Address a -> Model -> Svg
+type Action = Flip
+
+flip : Model -> Model
+flip model =
+    if model.colour == "green" then
+        { model | colour = "red" }
+    else
+        { model | colour = "green" }
+
+view : Signal.Address Action -> Model -> Svg
 view address model =
     circle
         [ cx (toString model.x)
         , cy (toString model.y)
         , r (toString model.size)
-        , fill "green"
+        , fill model.colour
+        , onClick (message address Flip)
         ] []
 

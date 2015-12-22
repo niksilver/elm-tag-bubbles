@@ -2,11 +2,12 @@ module BubblesHtml where
 
 -- Bubble forms captured as Html
 
-import Bubble exposing (..)
+import Bubble exposing (Action(Flip))
 
 import Html exposing (Html)
 import Svg exposing (svg)
 import Svg.Attributes exposing (width, height, viewBox)
+import Signal exposing (forwardTo)
 
 type alias Model =
     { width : Int
@@ -14,13 +15,15 @@ type alias Model =
     , bubble : Bubble.Model
     }
 
-type Action = Resize (Int, Int)
+type Action = Resize (Int, Int) | OneOf Bubble.Action
 
 update : Action -> Model -> Model
 update action model =
     case action of
         Resize (w, h) ->
             { model | width = w, height = h }
+        OneOf Flip ->
+            { model | bubble = Bubble.update Flip model.bubble }
 
 viewBoxStr : Model -> String
 viewBoxStr model =
@@ -33,6 +36,6 @@ view address model =
         , height (toString model.height)
         , viewBox (viewBoxStr model)
         ]
-        [ Bubble.view address model.bubble
+        [ Bubble.view (forwardTo address OneOf) model.bubble
         ]
 

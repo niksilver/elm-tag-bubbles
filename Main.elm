@@ -3,7 +3,7 @@ import BubblesHtml exposing (update, view, Action)
 
 import StartApp.Simple exposing (start)
 
-bubbleModel = { x = 40, y = 0, size = 180 }
+bubbleModel = { x = 40, y = 0, size = 180, colour = "red" }
 
 model = { width = 300, height = 300, bubble = bubbleModel }
 

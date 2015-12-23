@@ -1,14 +1,16 @@
-import BubblesHtml exposing (update, view)
+import BubblesHtml exposing (update, view, Action(Tick))
 
 import StartApp exposing (start)
 import Task exposing (Task)
 import Effects exposing (none, Never)
+import Signal
+import Time
 
 bubble1Model =
     { x = 340, y = 200, dx = 0, dy = 1
     , size = 180, colour = "red" }
 bubble2Model =
-    { x = 450, y = 250, dx = 0, dy = 1
+    { x = 450, y = 250, dx = 0, dy = -1
     , size = 100, colour = "green" }
 bubble3Model =
     { x = 480, y = 350, dx = -1, dy = 0
@@ -27,12 +29,16 @@ model = { width = 800
         ]
     }
 
+ticker : Signal Action
+ticker =
+    Signal.map (always Tick) (Time.fps 30) 
+
 app =
     start
         { init = (model, Effects.none)
         , update = update
         , view = view
-        , inputs = []
+        , inputs = [ticker]
         }
 
 main =

@@ -16,7 +16,10 @@ type alias Model =
     , bubbles : MultiBubbles.Model
     }
 
-type Action = Resize (Int, Int) | Direct MultiBubbles.Action
+type Action
+    = Resize (Int, Int)
+        | Direct MultiBubbles.Action
+        | Tick
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
@@ -25,6 +28,8 @@ update action model =
             ({ model | width = w, height = h }, Effects.none)
         Direct act ->
             ({ model | bubbles = MultiBubbles.update act model.bubbles }, Effects.none)
+        Tick ->
+            ({ model | bubbles = MultiBubbles.update MultiBubbles.Tick model.bubbles }, Effects.none)
 
 viewBoxStr : Model -> String
 viewBoxStr model =

@@ -8,6 +8,7 @@ import Html exposing (Html)
 import Svg exposing (svg)
 import Svg.Attributes exposing (width, height, viewBox)
 import Signal exposing (forwardTo)
+import Effects exposing (Effects)
 
 type alias Model =
     { width : Int
@@ -17,13 +18,13 @@ type alias Model =
 
 type Action = Resize (Int, Int) | Direct MultiBubbles.Action
 
-update : Action -> Model -> Model
+update : Action -> Model -> (Model, Effects Action)
 update action model =
     case action of
         Resize (w, h) ->
-            { model | width = w, height = h }
+            ({ model | width = w, height = h }, Effects.none)
         Direct act ->
-            { model | bubbles = MultiBubbles.update act model.bubbles }
+            ({ model | bubbles = MultiBubbles.update act model.bubbles }, Effects.none)
 
 viewBoxStr : Model -> String
 viewBoxStr model =

@@ -1,6 +1,8 @@
 import BubblesHtml exposing (update, view)
 
-import StartApp.Simple exposing (start)
+import StartApp exposing (start)
+import Task exposing (Task)
+import Effects exposing (none, Never)
 
 bubble1Model =
     { x = 340, y = 200, dx = 0, dy = 1
@@ -25,10 +27,18 @@ model = { width = 800
         ]
     }
 
-main =
+app =
     start
-        { model = model
+        { init = (model, Effects.none)
         , update = update
         , view = view
+        , inputs = []
         }
+
+main =
+    app.html
+
+port tasks : Signal (Task.Task Never())
+port tasks =
+    app.tasks
 

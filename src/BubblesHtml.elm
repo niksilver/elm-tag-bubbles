@@ -2,7 +2,7 @@ module BubblesHtml where
 
 -- Bubble forms captured as Html
 
-import MultiBubbles
+import MultiBubbles as MB
 
 import Html exposing (Html)
 import Svg exposing (svg)
@@ -13,12 +13,12 @@ import Effects exposing (Effects)
 type alias Model =
     { width : Int
     , height : Int
-    , bubbles : MultiBubbles.Model
+    , bubbles : MB.Model
     }
 
 type Action
     = Resize (Int, Int)
-        | Direct MultiBubbles.Action
+        | Direct MB.Action
         | Tick
 
 update : Action -> Model -> (Model, Effects Action)
@@ -27,9 +27,9 @@ update action model =
         Resize (w, h) ->
             ({ model | width = w, height = h }, Effects.none)
         Direct act ->
-            ({ model | bubbles = MultiBubbles.update act model.bubbles }, Effects.none)
+            ({ model | bubbles = MB.update act model.bubbles }, Effects.none)
         Tick ->
-            ({ model | bubbles = MultiBubbles.update MultiBubbles.Tick model.bubbles }, Effects.none)
+            ({ model | bubbles = MB.update MB.Tick model.bubbles }, Effects.none)
 
 viewBoxStr : Model -> String
 viewBoxStr model =
@@ -42,5 +42,5 @@ view address model =
         , height (toString model.height)
         , viewBox (viewBoxStr model)
         ]
-        (MultiBubbles.view (forwardTo address Direct) model.bubbles)
+        (MB.view (forwardTo address Direct) model.bubbles)
 

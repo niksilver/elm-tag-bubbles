@@ -30,12 +30,16 @@ updateOne : SingleAction -> Model -> Model -> Model
 updateOne action model accum =
     if (action.idx == length accum) then
         case model of
-            hd :: tl -> updateOne action tl (Bubble.update action.act hd :: accum)
-            [] -> reverse accum
+            hd :: tl ->
+                updateOne action tl (Bubble.update action.act hd :: accum)
+            [] ->
+                reverse accum
     else
         case model of
-            hd :: tl -> updateOne action tl (hd :: accum)
-            [] -> reverse accum
+            hd :: tl ->
+                updateOne action tl (hd :: accum)
+            [] ->
+                reverse accum
 
 -- Update all the bubbles with the Tick action
 

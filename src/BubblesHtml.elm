@@ -25,11 +25,17 @@ update : Action -> Model -> (Model, Effects Action)
 update action model =
     case action of
         Resize (w, h) ->
-            ({ model | width = w, height = h }, Effects.none)
+            ({ model | width = w, height = h }
+             , Effects.none
+            )
         Direct act ->
-            ({ model | bubbles = MB.update act model.bubbles }, Effects.none)
+            ({ model | bubbles = MB.update act model.bubbles }
+             , Effects.none
+            )
         Tick ->
-            ({ model | bubbles = MB.update MB.Tick model.bubbles }, Effects.none)
+            ({ model | bubbles = MB.update MB.Tick model.bubbles }
+             , Effects.none
+            )
 
 view : Signal.Address Action -> Model -> Html
 view address model =

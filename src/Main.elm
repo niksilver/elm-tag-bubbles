@@ -1,4 +1,5 @@
 import BubblesHtml exposing (update, view, Action(Tick))
+import Constants exposing (colour1, colour2)
 
 import StartApp exposing (start)
 import Task exposing (Task)
@@ -8,17 +9,18 @@ import Time
 
 bubble1Model =
     { x = 340, y = 200, dx = 0, dy = 1
-    , size = 180, colour = "red" }
+    , size = 180, colour = colour2 }
 bubble2Model =
     { x = 300, y = 250, dx = 1, dy = 0
-    , size = 100, colour = "green" }
+    , size = 100, colour = colour1 }
 bubble3Model =
     { x = 480, y = 350, dx = -1, dy = 0
-    , size = 80, colour = "red" }
+    , size = 80, colour = colour1 }
 bubble4Model =
     { x = 400, y = 400, dx = 0, dy = -1
-    , size = 60, colour = "green" }
+    , size = 60, colour = colour2 }
 
+model : BubblesHtml.Model
 model = { width = 800
     , height = 600
     , bubbles =

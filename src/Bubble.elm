@@ -1,5 +1,7 @@
 module Bubble where
 
+import Constants exposing (colour1, colour2, bubbleOpacity)
+
 import Svg exposing (Svg, circle)
 import Svg.Attributes exposing (cx, cy, r, fill, opacity)
 import Svg.Events exposing (onClick)
@@ -23,10 +25,10 @@ update action model =
 
 flip : Model -> Model
 flip model =
-    if model.colour == "green" then
-        { model | colour = "red" }
+    if model.colour == colour1 then
+        { model | colour = colour2 }
     else
-        { model | colour = "green" }
+        { model | colour = colour1 }
 
 view : Signal.Address Action -> Model -> Svg
 view address model =
@@ -35,7 +37,7 @@ view address model =
         , cy (toString model.y)
         , r (toString model.size)
         , fill model.colour
-        , opacity "0.75"
+        , opacity bubbleOpacity
         , onClick (message address Flip)
         ] []
 

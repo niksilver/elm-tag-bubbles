@@ -31,16 +31,11 @@ update action model =
         Tick ->
             ({ model | bubbles = MB.update MB.Tick model.bubbles }, Effects.none)
 
-viewBoxStr : Model -> String
-viewBoxStr model =
-    "0 0 " ++ (toString model.width) ++ " " ++ (toString model.height)
-
 view : Signal.Address Action -> Model -> Html
 view address model =
     svg
         [ width (toString model.width)
         , height (toString model.height)
-        , viewBox (viewBoxStr model)
         ]
         (MB.view (forwardTo address Direct) model.bubbles)
 

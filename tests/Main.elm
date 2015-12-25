@@ -1,9 +1,8 @@
 module Main where
 
 import Test
-import Text
-import Graphics.Element exposing (..)
-import ElmTest exposing (..)
+import Graphics.Element exposing (Element)
+import ElmTest exposing (elementRunner)
 
 
 main : Element

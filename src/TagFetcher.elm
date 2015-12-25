@@ -48,3 +48,7 @@ ress = at ["response", "results"] outers
    Ok ["span","lier","wards"] : Result.Result String (List String)
    >
 -}
+
+tagToWebTitle : Decoder String
+tagToWebTitle = ("webTitle" := string)
+

@@ -122,14 +122,22 @@ tagToWebTitleTest =
 
 tagToIdTest : Test
 tagToIdTest =
-    test "Tag to webTitle"
+    test "Tag to id"
     (assertEqual
         (decodeString tagToId tag1)
         (Ok "world/bali-nine"))
+
+tagToSectionIdTest : Test
+tagToSectionIdTest =
+    test "Tag to sectionId"
+    (assertEqual
+        (decodeString tagToSectionId tag1)
+        (Ok "world"))
 
 all : Test
 all =
     suite "TagFetcherTest"
     [ tagToWebTitleTest
     , tagToIdTest
+    , tagToSectionIdTest
     ]

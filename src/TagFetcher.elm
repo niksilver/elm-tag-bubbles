@@ -55,3 +55,6 @@ tagToWebTitle = ("webTitle" := string)
 tagToId : Decoder String
 tagToId = ("id" := string)
 
+tagToSectionId : Decoder String
+tagToSectionId = ("sectionId" := string)
+

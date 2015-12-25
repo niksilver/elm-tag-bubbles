@@ -52,3 +52,6 @@ ress = at ["response", "results"] outers
 tagToWebTitle : Decoder String
 tagToWebTitle = ("webTitle" := string)
 
+tagToId : Decoder String
+tagToId = ("id" := string)
+

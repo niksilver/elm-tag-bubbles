@@ -120,8 +120,16 @@ tagToWebTitleTest =
         (decodeString tagToWebTitle tag1)
         (Ok "Bali Nine"))
 
+tagToIdTest : Test
+tagToIdTest =
+    test "Tag to webTitle"
+    (assertEqual
+        (decodeString tagToId tag1)
+        (Ok "world/bali-nine"))
+
 all : Test
 all =
     suite "TagFetcherTest"
     [ tagToWebTitleTest
+    , tagToIdTest
     ]

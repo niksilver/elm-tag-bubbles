@@ -113,31 +113,22 @@ json = """
         , "results":
 """ ++ "[" ++ result1 ++ "," ++ result2 ++ "]" ++ "}}"
 
-tagToWebTitleTest : Test
-tagToWebTitleTest =
-    test "Tag to webTitle"
-    (assertEqual
-        (decodeString tagToWebTitle tag1)
-        (Ok "Bali Nine"))
-
-tagToIdTest : Test
-tagToIdTest =
-    test "Tag to id"
-    (assertEqual
-        (decodeString tagToId tag1)
-        (Ok "world/bali-nine"))
-
-tagToSectionIdTest : Test
-tagToSectionIdTest =
-    test "Tag to sectionId"
-    (assertEqual
-        (decodeString tagToSectionId tag1)
-        (Ok "world"))
-
 all : Test
 all =
     suite "TagFetcherTest"
-    [ tagToWebTitleTest
-    , tagToIdTest
-    , tagToSectionIdTest
+
+    [ test "Tag to webTitle"
+      (assertEqual
+          (decodeString tagToWebTitle tag1)
+          (Ok "Bali Nine"))
+
+    , test "Tag to id"
+      (assertEqual
+          (decodeString tagToId tag1)
+          (Ok "world/bali-nine"))
+
+    , test "Tag to sectionId"
+      (assertEqual
+          (decodeString tagToSectionId tag1)
+          (Ok "world"))
     ]

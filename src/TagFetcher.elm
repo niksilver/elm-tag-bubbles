@@ -49,6 +49,8 @@ ress = at ["response", "results"] outers
    >
 -}
 
+type alias Tag = { webTitle : String, id : String, sectionId : String }
+
 tagToWebTitle : Decoder String
 tagToWebTitle = ("webTitle" := string)
 
@@ -57,4 +59,11 @@ tagToId = ("id" := string)
 
 tagToSectionId : Decoder String
 tagToSectionId = ("sectionId" := string)
+
+tagToTag : Decoder Tag
+tagToTag =
+    object3 Tag
+        tagToWebTitle
+        tagToId
+        tagToSectionId
 

@@ -76,6 +76,10 @@ tag6 = """
 }
 """
 
+tags1 = "[" ++ tag1 ++ "," ++ tag2 ++ "," ++ tag3 ++ "]"
+
+tags2 = "[" ++ tag4 ++ "," ++ tag5 ++ "," ++ tag6 ++ "]"
+
 result1 = """
     { "type": "article"
     , "sectionId": "media"
@@ -86,7 +90,7 @@ result1 = """
     , "apiUrl": "http://content.guardianapis.com/..."
     , "sectionName": "Media"
     , "tags":
-""" ++ "[" ++ tag1 ++ "," ++ tag2 ++ "," ++ tag3 ++ "]" ++ "}"
+""" ++ tags1 ++ "}"
 
 result2 = """
     { "type": "article"
@@ -98,7 +102,7 @@ result2 = """
     , "apiUrl": "http://content.guardianapis.com/business/..."
     , "sectionName": "Business"
     , "tags":
-""" ++ "[" ++ tag4 ++ "," ++ tag5 ++ "," ++ tag6 ++ "]" ++ "}"
+""" ++ tags2 ++ "}"
 
 json = """
     { "response":
@@ -131,4 +135,13 @@ all =
       (assertEqual
           (decodeString tagToSectionId tag1)
           (Ok "world"))
+
+    , test "Json tag to Tag"
+      (assertEqual
+          (decodeString tagToTag tag1)
+          (Ok { webTitle = "Bali Nine"
+              , id = "world/bali-nine"
+              , sectionId = "world"
+              }))
+
     ]

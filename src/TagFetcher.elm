@@ -79,3 +79,7 @@ resultsToTags : Decoder (List (List Tag))
 resultsToTags =
     list resultToTags
 
+responseToTags : Decoder (List (List Tag))
+responseToTags =
+    at ["response", "results"] resultsToTags
+

@@ -116,7 +116,7 @@ result2 = """
 
 results = "[" ++ result1 ++ "," ++ result2 ++ "]"
 
-json = """
+response = """
     { "response":
         { "status": "ok"
         , "userTier": "developer"
@@ -170,6 +170,11 @@ all =
       (assertEqual
           (Ok [[ tag1rec, tag2rec, tag3rec ], [ tag4rec, tag5rec, tag6rec ]])
           (decodeString resultsToTags results))
+
+    , test "Response to Tags"
+      (assertEqual
+          (Ok [[ tag1rec, tag2rec, tag3rec ], [ tag4rec, tag5rec, tag6rec ]])
+          (decodeString responseToTags response))
 
     ]
 

@@ -49,13 +49,13 @@ ress = at ["response", "results"] outers
    >
 -}
 
-type alias Tag = { webTitle : String, id : String, sectionId : String }
-
-tagToWebTitle : Decoder String
-tagToWebTitle = ("webTitle" := string)
+type alias Tag = { id : String, webTitle : String, sectionId : String }
 
 tagToId : Decoder String
 tagToId = ("id" := string)
+
+tagToWebTitle : Decoder String
+tagToWebTitle = ("webTitle" := string)
 
 tagToSectionId : Decoder String
 tagToSectionId = ("sectionId" := string)
@@ -63,7 +63,11 @@ tagToSectionId = ("sectionId" := string)
 tagToTag : Decoder Tag
 tagToTag =
     object3 Tag
-        tagToWebTitle
         tagToId
+        tagToWebTitle
         tagToSectionId
+
+tagsToListTag : Decoder (List Tag)
+tagsToListTag =
+    list tagToTag
 

@@ -17,6 +17,8 @@ tag1 = """
     }
 """
 
+tag1rec = Tag "world/bali-nine" "Bali Nine" "world"
+
 tag2 = """
     { "id": "australia-news/q-a"
     , "webTitle": "Q&amp;A"
@@ -29,6 +31,8 @@ tag2 = """
     }
 """
 
+tag2rec = Tag "australia-news/q-a" "Q&amp;A" "australia-news"
+
 tag3 = """
     { "id": "environment/cecil-the-lion"
     , "webTitle": "Cecil the lion"
@@ -39,6 +43,8 @@ tag3 = """
     , "sectionName": "Environment"
     }
 """
+
+tag3rec = Tag "environment/cecil-the-lion" "Cecil the lion" "environment"
 
 tag4 = """
     { "id": "world/zimbabwe"
@@ -121,27 +127,33 @@ all : Test
 all =
     suite "TagFetcherTest"
 
-    [ test "Tag to webTitle"
+    [ test "Tag to id"
       (assertEqual
-          (decodeString tagToWebTitle tag1)
-          (Ok "Bali Nine"))
+          (Ok "world/bali-nine")
+          (decodeString tagToId tag1))
 
-    , test "Tag to id"
+    , test "Tag to webTitle"
       (assertEqual
-          (decodeString tagToId tag1)
-          (Ok "world/bali-nine"))
+          (Ok "Bali Nine")
+          (decodeString tagToWebTitle tag1))
 
     , test "Tag to sectionId"
       (assertEqual
-          (decodeString tagToSectionId tag1)
-          (Ok "world"))
+          (Ok "world")
+          (decodeString tagToSectionId tag1))
 
     , test "Json tag to Tag"
       (assertEqual
-          (decodeString tagToTag tag1)
-          (Ok { webTitle = "Bali Nine"
-              , id = "world/bali-nine"
+          (Ok { id = "world/bali-nine"
+              , webTitle = "Bali Nine"
               , sectionId = "world"
-              }))
+              })
+          (decodeString tagToTag tag1))
+
+    , test "Json tags to List Tag"
+      (assertEqual
+          (Ok [ tag1rec, tag2rec, tag3rec])
+          (decodeString tagsToListTag tags1))
 
     ]
+

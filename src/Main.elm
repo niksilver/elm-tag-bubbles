@@ -29,6 +29,7 @@ model = { width = 800
         , bubble3Model
         , bubble4Model
         ]
+    , newTags = [[]]
     }
 
 ticker : Signal Action

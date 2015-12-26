@@ -1,5 +1,6 @@
 module TagFetcherTest where
 
+import Constants exposing (Tag)
 import TagFetcher exposing (..)
 
 import Json.Decode exposing (decodeString)

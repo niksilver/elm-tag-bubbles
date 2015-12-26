@@ -1,5 +1,6 @@
 module TagFetcher where
 
+import Constants exposing (Tag, Tags)
 import Secrets exposing (apiKey)
 
 import Json.Decode exposing (Decoder, (:=), string, object3, list, at)
@@ -11,8 +12,6 @@ url =
     , ("page-size", "10")
     , ("api-key", apiKey)
     ]
-
-type alias Tag = { id : String, webTitle : String, sectionId : String }
 
 tagToId : Decoder String
 tagToId = ("id" := string)
@@ -30,19 +29,19 @@ tagToTag =
         tagToWebTitle
         tagToSectionId
 
-tagsToTags : Decoder (List Tag)
+tagsToTags : Decoder Tags
 tagsToTags =
     list tagToTag
 
-resultToTags : Decoder (List Tag)
+resultToTags : Decoder Tags
 resultToTags =
     ("tags" := tagsToTags)
 
-resultsToTags : Decoder (List (List Tag))
+resultsToTags : Decoder (List Tags)
 resultsToTags =
     list resultToTags
 
-responseToTags : Decoder (List (List Tag))
+responseToTags : Decoder (List Tags)
 responseToTags =
     at ["response", "results"] resultsToTags
 

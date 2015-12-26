@@ -75,3 +75,7 @@ resultToTags : Decoder (List Tag)
 resultToTags =
     ("tags" := tagsToTags)
 
+resultsToTags : Decoder (List (List Tag))
+resultsToTags =
+    list resultToTags
+

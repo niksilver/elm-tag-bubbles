@@ -166,5 +166,10 @@ all =
           (Ok [ tag1rec, tag2rec, tag3rec ])
           (decodeString resultToTags result1))
 
+    , test "Results to Tags"
+      (assertEqual
+          (Ok [[ tag1rec, tag2rec, tag3rec ], [ tag4rec, tag5rec, tag6rec ]])
+          (decodeString resultsToTags results))
+
     ]
 

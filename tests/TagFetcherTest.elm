@@ -57,6 +57,8 @@ tag4 = """
 }
 """
 
+tag4rec = Tag "world/zimbabwe" "Zimbabwe" "world"
+
 tag5 = """
     { "id": "lifeandstyle/shops-and-shopping"
     , "webTitle": "Shops and shopping"
@@ -66,9 +68,10 @@ tag5 = """
     , "webUrl": "http://www.theguardian.com/lifeandstyle/shops-and-shopping"
     , "apiUrl": "http://content.guardianapis.com/lifeandstyle/shops-and-shopping"
     , "sectionName": "Life and style"
-
 }
 """
+
+tag5rec = Tag "lifeandstyle/shops-and-shopping" "Shops and shopping" "lifeandstyle"
 
 tag6 = """
     { "id": "money/consumer-affairs"
@@ -78,9 +81,10 @@ tag6 = """
     , "webUrl": "http://www.theguardian.com/money/consumer-affairs"
     , "apiUrl": "http://content.guardianapis.com/money/consumer-affairs"
     , "sectionName": "Money"
-
 }
 """
+
+tag6rec = Tag "money/consumer-affairs" "Consumer affairs" "money"
 
 tags1 = "[" ++ tag1 ++ "," ++ tag2 ++ "," ++ tag3 ++ "]"
 
@@ -110,6 +114,8 @@ result2 = """
     , "tags":
 """ ++ tags2 ++ "}"
 
+results = "[" ++ result1 ++ "," ++ result2 ++ "]"
+
 json = """
     { "response":
         { "status": "ok"
@@ -121,7 +127,7 @@ json = """
         , "pages": 18409
         , "orderBy": "newest"
         , "results":
-""" ++ "[" ++ result1 ++ "," ++ result2 ++ "]" ++ "}}"
+""" ++ results ++ "}}"
 
 all : Test
 all =
@@ -152,8 +158,13 @@ all =
 
     , test "Json tags to List Tag"
       (assertEqual
-          (Ok [ tag1rec, tag2rec, tag3rec])
-          (decodeString tagsToListTag tags1))
+          (Ok [ tag1rec, tag2rec, tag3rec ])
+          (decodeString tagsToTags tags1))
+
+    , test "Results to List List Tag"
+      (assertEqual
+          (Ok [ tag1rec, tag2rec, tag3rec ])
+          (decodeString resultToTags result1))
 
     ]
 

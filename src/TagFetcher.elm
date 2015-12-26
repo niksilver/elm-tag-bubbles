@@ -67,7 +67,11 @@ tagToTag =
         tagToWebTitle
         tagToSectionId
 
-tagsToListTag : Decoder (List Tag)
-tagsToListTag =
+tagsToTags : Decoder (List Tag)
+tagsToTags =
     list tagToTag
+
+resultToTags : Decoder (List Tag)
+resultToTags =
+    ("tags" := tagsToTags)
 

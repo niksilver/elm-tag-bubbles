@@ -161,7 +161,7 @@ all =
           (Ok [ tag1rec, tag2rec, tag3rec ])
           (decodeString tagsToTags tags1))
 
-    , test "Results to List List Tag"
+    , test "Result to Tags"
       (assertEqual
           (Ok [ tag1rec, tag2rec, tag3rec ])
           (decodeString resultToTags result1))

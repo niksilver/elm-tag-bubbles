@@ -2,7 +2,7 @@ module TagFetcher where
 
 import Secrets exposing (apiKey)
 
-import Json.Decode exposing (..)
+import Json.Decode exposing (Decoder, (:=), string, object3, list, at)
 
 url = "http://content.guardianapis.com/search?show-tags=keyword&page-size=10&api-key=" ++ apiKey
 

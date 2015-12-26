@@ -3,8 +3,14 @@ module TagFetcher where
 import Secrets exposing (apiKey)
 
 import Json.Decode exposing (Decoder, (:=), string, object3, list, at)
+import Http exposing (url)
 
-url = "http://content.guardianapis.com/search?show-tags=keyword&page-size=10&api-key=" ++ apiKey
+url =
+    Http.url "http://content.guardianapis.com/search"
+    [ ("show-tags", "keyword")
+    , ("page-size", "10")
+    , ("api-key", apiKey)
+    ]
 
 type alias Tag = { id : String, webTitle : String, sectionId : String }
 

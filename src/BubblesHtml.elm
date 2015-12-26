@@ -2,7 +2,7 @@ module BubblesHtml where
 
 -- Bubble forms captured as Html
 
-import Constants exposing (Tags)
+import Constants exposing (TagsResult)
 import MultiBubbles as MB
 
 import Html exposing (Html, div, text)
@@ -15,14 +15,14 @@ type alias Model =
     { width : Int
     , height : Int
     , bubbles : MB.Model
-    , newTags : List Tags
+    , newTags : TagsResult
     }
 
 type Action
     = Resize (Int, Int)
         | Direct MB.Action
         | Tick
-        | NewTags (List Tags)
+        | NewTags TagsResult
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
@@ -39,8 +39,8 @@ update action model =
             ({ model | bubbles = MB.update MB.Tick model.bubbles }
              , Effects.none
             )
-        NewTags tagsList ->
-            ({ model | newTags = tagsList }
+        NewTags tags ->
+            ({ model | newTags = tags }
              , Effects.none
             )
 

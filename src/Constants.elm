@@ -1,7 +1,14 @@
 module Constants where
 
+import Http exposing (Error)
+
 type alias Tag = { id : String, webTitle : String, sectionId : String }
+
 type alias Tags = List Tag
+
+type alias TagsResult = Result Http.Error (List Tags)
+
+emptyTagsResult = Ok [[]]
 
 colour1 : String
 colour1 = "green"

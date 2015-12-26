@@ -1,10 +1,13 @@
 module TagFetcher where
 
-import Constants exposing (Tag, Tags)
+import Constants exposing (Tag, Tags, TagsResult)
 import Secrets exposing (apiKey)
+import BubblesHtml exposing (Action(NewTags))
 
 import Json.Decode exposing (Decoder, (:=), string, object3, list, at)
-import Http exposing (url)
+import Http exposing (url, get)
+import Effects exposing (Effects, task)
+import Task exposing (toMaybe)
 
 url =
     Http.url "http://content.guardianapis.com/search"
@@ -44,4 +47,11 @@ resultsToTags =
 responseToTags : Decoder (List Tags)
 responseToTags =
     at ["response", "results"] resultsToTags
+
+getTags : Effects Action
+getTags =
+    get responseToTags url
+        |> Task.toResult
+        |> Task.map NewTags
+        |> Effects.task
 

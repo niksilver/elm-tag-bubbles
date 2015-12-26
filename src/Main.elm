@@ -1,5 +1,6 @@
+import Constants exposing (colour1, colour2, emptyTagsResult)
 import BubblesHtml exposing (update, view, Action(Tick))
-import Constants exposing (colour1, colour2)
+import TagFetcher exposing (getTags)
 
 import StartApp exposing (start)
 import Task exposing (Task)
@@ -29,7 +30,7 @@ model = { width = 800
         , bubble3Model
         , bubble4Model
         ]
-    , newTags = [[]]
+    , newTags = emptyTagsResult
     }
 
 ticker : Signal Action
@@ -38,7 +39,7 @@ ticker =
 
 app =
     start
-        { init = (model, Effects.none)
+        { init = (model, getTags)
         , update = update
         , view = view
         , inputs = [ticker]

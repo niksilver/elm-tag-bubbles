@@ -16,14 +16,14 @@ emptyCounter = Counter emptyDict
 
 -- Return the count of the given pair
 
-countOf : Counter -> Idable a -> Idable a -> Int
-countOf (Counter dict) o1 o2 =
+countOf : Idable a -> Idable a -> Counter -> Int
+countOf o1 o2 (Counter dict) =
     case (get (o1.id, o2.id) dict) of
         Just v -> v
         Nothing -> 0
 
 -- Increment a counter
 
-inc : Counter -> Idable a -> Idable a -> Counter
-inc (Counter dict as counter) x y =
-    Counter (insert (x.id, y.id) ((countOf counter x y)+1) dict)
+inc : Idable a -> Idable a -> Counter -> Counter
+inc x y (Counter dict as counter) =
+    Counter (insert (x.id, y.id) ((countOf x y counter)+1) dict)

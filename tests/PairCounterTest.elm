@@ -15,31 +15,31 @@ all =
     [ test "Empty counter should give zero for anything"
       (assertEqual
         0
-        (countOf emptyCounter x y))
+        (countOf x y emptyCounter))
 
     , test "Should be able to add to an empty counter and see what's added"
       (let
-          counter = inc emptyCounter x y
+          counter = inc x y emptyCounter
        in
           (assertEqual
             1
-            (countOf counter x y)))
+            (countOf x y counter)))
 
     , test "Should be able to add to an empty counter twice and see what's added"
       (let
-          counter1 = inc emptyCounter x y
-          counter2 = inc counter1 x y
+          counter1 = inc x y emptyCounter
+          counter2 = inc x y counter1
        in
           (assertEqual
             2
-            (countOf counter2 x y)))
+            (countOf x y counter2)))
  
     , test "Should be able to add to an empty counter and other pairs are still zero"
       (let
-          counter = inc emptyCounter x y
+          counter = inc x y emptyCounter
        in
           (assertEqual
             0
-            (countOf counter x z)))
+            (countOf x z counter)))
 
     ]

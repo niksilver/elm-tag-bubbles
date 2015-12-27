@@ -25,5 +25,5 @@ countOf (Counter dict) o1 o2 =
 -- Increment a counter
 
 inc : Counter -> Idable a -> Idable a -> Counter
-inc (Counter dict) x y =
-    Counter (insert (x.id, y.id) 1 dict)
+inc (Counter dict as counter) x y =
+    Counter (insert (x.id, y.id) ((countOf counter x y)+1) dict)

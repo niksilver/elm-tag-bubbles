@@ -32,47 +32,24 @@ selectiveUpdate action bubModel =
     else
         bubModel
 
-{-
--- Update only the ith element of the model.
--- Do so by recursively going through the model building up an
--- accumulated result. Each time round the loop we see if we've
--- got the element we need to update.
-
-updateOne : SingleAction -> Model -> Model -> Model
-updateOne action model accum =
-    if (action.idx == length accum) then
-        case model of
-            hd :: tl ->
-                updateOne action tl (Bubble.update action.act hd :: accum)
-            [] ->
-                reverse accum
-    else
-        case model of
-            hd :: tl ->
-                updateOne action tl (hd :: accum)
-            [] ->
-                reverse accum
-
--}
-
 -- Update all the bubbles with the Tick action
 
 updateAll : Model -> Model
 updateAll model =
     map (\mod -> Bubble.update Bubble.Move mod) model
 
-{-
-liftAction : Int -> Bubble.Action -> Action
-liftAction i action =
-    case action of
-        Bubble.Flip -> One { idx = i, act = Bubble.Flip }
-        Bubble.Move -> Tick
--}
+-- Create a forwarding address for the Bubble.view which will enable
+-- its actions to be sent to and interpretted by this update mechanism.
+
+fwdingAddress : Address Action -> String -> Address Bubble.Action
+fwdingAddress address id =
+    forwardTo address (\a -> One { id = id, act = a })
+
+-- A view of a Bubble, using an address at this level of the architecture
 
 fwdingView : Address Action -> Bubble.Model -> Svg
 fwdingView address bubModel =
-    Bubble.view (forwardTo address (\a -> One { id = bubModel.id, act = a })) bubModel
-
+    Bubble.view (fwdingAddress address bubModel.id) bubModel
 
 view : Address Action -> Model -> List Svg
 view address model =

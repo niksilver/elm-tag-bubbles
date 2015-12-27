@@ -2,7 +2,6 @@ module TagFetcher where
 
 import Constants exposing (Tag, Tags, TagsResult)
 import Secrets exposing (apiKey)
-import BubblesHtml exposing (Action(NewTags))
 
 import Json.Decode exposing (Decoder, (:=), string, object3, list, at)
 import Http exposing (url, get)
@@ -48,10 +47,9 @@ responseToTags : Decoder (List Tags)
 responseToTags =
     at ["response", "results"] resultsToTags
 
-getTags : Effects Action
+getTags : Effects TagsResult
 getTags =
     get responseToTags url
         |> Task.toResult
-        |> Task.map NewTags
         |> Effects.task
 

@@ -1,6 +1,5 @@
 import Constants exposing (colour1, colour2, emptyTagsResult)
-import BubblesHtml exposing (update, view, Action(Tick))
-import TagFetcher exposing (getTags)
+import UI exposing (initialEffects, update, view, Action(Tick))
 
 import StartApp exposing (start)
 import Task exposing (Task)
@@ -21,7 +20,7 @@ bubble4Model =
     { x = 400, y = 400, dx = 0, dy = -1
     , size = 60, colour = colour2 }
 
-model : BubblesHtml.Model
+model : UI.Model
 model = { width = 800
     , height = 600
     , bubbles =
@@ -39,7 +38,7 @@ ticker =
 
 app =
     start
-        { init = (model, getTags)
+        { init = (model, initialEffects)
         , update = update
         , view = view
         , inputs = [ticker]

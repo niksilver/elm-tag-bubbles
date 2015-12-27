@@ -1,9 +1,10 @@
-module BubblesHtml where
+module UI where
 
 -- Bubble forms captured as Html
 
 import Constants exposing (TagsResult)
 import MultiBubbles as MB
+import TagFetcher
 
 import Html exposing (Html, div, text)
 import Svg exposing (svg)
@@ -23,6 +24,10 @@ type Action
         | Direct MB.Action
         | Tick
         | NewTags TagsResult
+
+initialEffects : Effects Action
+initialEffects =
+    Effects.map NewTags TagFetcher.getTags
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =

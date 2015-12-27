@@ -8,16 +8,20 @@ import Signal
 import Time
 
 bubble1Model =
-    { x = 340, y = 200, dx = 0, dy = 1
+    { id = "b1"
+    , x = 340, y = 200, dx = 0, dy = 1
     , size = 180, colour = colour2 }
 bubble2Model =
-    { x = 300, y = 250, dx = 1, dy = 0
+    { id = "b2"
+    , x = 300, y = 250, dx = 1, dy = 0
     , size = 100, colour = colour1 }
 bubble3Model =
-    { x = 480, y = 350, dx = -1, dy = 0
+    { id = "b3"
+    , x = 480, y = 350, dx = -1, dy = 0
     , size = 80, colour = colour1 }
 bubble4Model =
-    { x = 400, y = 400, dx = 0, dy = -1
+    { id = "b4"
+    , x = 400, y = 400, dx = 0, dy = -1
     , size = 60, colour = colour2 }
 
 model : UI.Model

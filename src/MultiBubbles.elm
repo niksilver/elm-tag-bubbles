@@ -10,7 +10,7 @@ import Signal exposing (Address, forwardTo)
 
 type alias Model = List Bubble.Model
 
-type alias SingleAction = { idx : Int, act : Bubble.Action }
+type alias SingleAction = { id : String, act : Bubble.Action }
 
 type Action =
     Tick | One SingleAction
@@ -18,9 +18,21 @@ type Action =
 update : Action -> Model -> Model
 update action model =
     case action of
-        One act -> updateOne act model []
+        One act -> updateOne act model
         Tick -> updateAll model
 
+updateOne : SingleAction -> Model -> Model
+updateOne act model =
+    map (selectiveUpdate act) model
+
+selectiveUpdate : SingleAction -> Bubble.Model -> Bubble.Model
+selectiveUpdate action bubModel =
+    if action.id == bubModel.id then
+        (Bubble.update action.act bubModel)
+    else
+        bubModel
+
+{-
 -- Update only the ith element of the model.
 -- Do so by recursively going through the model building up an
 -- accumulated result. Each time round the loop we see if we've
@@ -41,23 +53,28 @@ updateOne action model accum =
             [] ->
                 reverse accum
 
+-}
+
 -- Update all the bubbles with the Tick action
 
 updateAll : Model -> Model
 updateAll model =
     map (\mod -> Bubble.update Bubble.Move mod) model
 
+{-
 liftAction : Int -> Bubble.Action -> Action
 liftAction i action =
     case action of
         Bubble.Flip -> One { idx = i, act = Bubble.Flip }
         Bubble.Move -> Tick
+-}
 
-fwdingView : Address Action -> Int -> Bubble.Model -> Svg
-fwdingView address i bub =
-    Bubble.view (forwardTo address (liftAction i)) bub
+fwdingView : Address Action -> Bubble.Model -> Svg
+fwdingView address bubModel =
+    Bubble.view (forwardTo address (\a -> One { id = bubModel.id, act = a })) bubModel
+
 
 view : Address Action -> Model -> List Svg
 view address model =
-    indexedMap (fwdingView address) model
+    map (fwdingView address) model
 

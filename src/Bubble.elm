@@ -8,7 +8,8 @@ import Svg.Events exposing (onClick)
 import Signal exposing (message)
 
 type alias Model =
-    { x : Float
+    { id : String
+    , x : Float
     , y : Float
     , dx : Float
     , dy : Float

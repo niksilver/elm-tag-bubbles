@@ -1,7 +1,7 @@
-module Main where
+module TestAll where
 
 import TagFetcherTest exposing (all)
-import CountCollectorTest exposing (all)
+import PairCounterTest exposing (all)
 
 import Graphics.Element exposing (Element)
 import ElmTest exposing (elementRunner, suite)
@@ -12,6 +12,6 @@ main =
     elementRunner
         (suite "All tests"
             [ TagFetcherTest.all
-            , CountCollectorTest.all
+            , PairCounterTest.all
             ]
         )

@@ -1,4 +1,4 @@
-module CountCollector where
+module PairCounter where
 
 import Dict exposing (..)
 
@@ -6,16 +6,16 @@ import Dict exposing (..)
 
 type alias Idable a = { a | id : String }
 
-type Collector = Collector (Dict (String, String) Int)
+type Counter = Counter (Dict (String, String) Int)
 
 emptyDict : Dict (String, String) Int
 emptyDict = empty
 
-emptyCollector : Collector
-emptyCollector = Collector emptyDict
+emptyCounter : Counter
+emptyCounter = Counter emptyDict
 
 -- Return the count of the given pair
 
-countOf : Collector -> Idable a -> Idable a -> Int
+countOf : Counter -> Idable a -> Idable a -> Int
 countOf coll o1 o2 =
     0

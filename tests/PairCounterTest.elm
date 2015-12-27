@@ -22,14 +22,22 @@ all =
         1
         (emptyCounter |> inc x y |> countOf x y))
 
-    , test "Should be able to add to an empty counter twice and see what's added"
+    , test
+      "Should be able to add to an empty counter twice and see what's added"
       (assertEqual
         2
         (emptyCounter |> inc x y |> inc x y |> countOf x y))
  
-    , test "Should be able to add to an empty counter and other pairs are still zero"
+    , test
+      "Should be able to add to an empty counter and other pairs are still zero"
       (assertEqual
         0
         (emptyCounter |> inc x y |> countOf x z))
+ 
+    , test
+      "Incrementing x y should show up in the count of y x"
+      (assertEqual
+        1
+        (emptyCounter |> inc x y |> countOf y x))
 
     ]

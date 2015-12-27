@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
     "summary": "An interface to explore Guardian keyword tags",
-    "repository": "https://github.com/niksilver/elm-tag-bubbles",
+    "repository": "https://github.com/niksilver/elm-tag-bubbles.git",
     "license": "BSD3",
     "source-directories": [
         "src",

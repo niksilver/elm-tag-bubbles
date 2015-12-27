@@ -11,6 +11,13 @@ z = { id = "z" }
 all : Test
 all =
     suite "PairCounterTest"
+    [ counterTest
+    , utilTest
+    ]
+
+counterTest : Test
+counterTest =
+    suite "Counter functions"
 
     [ test "Empty counter should give zero for anything"
       (assertEqual
@@ -39,5 +46,42 @@ all =
       (assertEqual
         1
         (emptyCounter |> inc x y |> countOf y x))
+ 
+    , test
+      "Incrementing x y should show up in the count of y x"
+      (assertEqual
+        1
+        (emptyCounter |> inc x y |> countOf y x))
 
+    ]
+
+utilTest : Test
+utilTest =
+    suite "UtilTest"
+
+    [ test "All pairs in [] should be []"
+      (assertEqual
+        []
+        (allPairs []))
+
+    , test "All pairs in [4] should be []"
+      (assertEqual
+        []
+        (allPairs [4]))
+
+    , test "All pairs in [6,7] should be [(6,7)]"
+      (assertEqual
+        [(6,7)]
+        (allPairs [6, 7]))
+
+    , test "All pairs in [3,4,5] should be [(3,4), (3,5), (4,5)]"
+      (assertEqual
+        [(3,4), (3,5), (4,5)]
+        (allPairs [3, 4, 5]))
+
+    , test
+      "All pairs in [3,4,5,6] should be [(3,4), (3,5), (3,6), (4,5), (4,6), (5,6)]"
+      (assertEqual
+        [(3,4), (3,5), (3,6), (4,5), (4,6), (5,6)]
+        (allPairs [3, 4, 5, 6]))
     ]

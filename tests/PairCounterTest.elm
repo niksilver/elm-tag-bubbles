@@ -18,28 +18,18 @@ all =
         (countOf x y emptyCounter))
 
     , test "Should be able to add to an empty counter and see what's added"
-      (let
-          counter = inc x y emptyCounter
-       in
-          (assertEqual
-            1
-            (countOf x y counter)))
+      (assertEqual
+        1
+        (emptyCounter |> inc x y |> countOf x y))
 
     , test "Should be able to add to an empty counter twice and see what's added"
-      (let
-          counter1 = inc x y emptyCounter
-          counter2 = inc x y counter1
-       in
-          (assertEqual
-            2
-            (countOf x y counter2)))
+      (assertEqual
+        2
+        (emptyCounter |> inc x y |> inc x y |> countOf x y))
  
     , test "Should be able to add to an empty counter and other pairs are still zero"
-      (let
-          counter = inc x y emptyCounter
-       in
-          (assertEqual
-            0
-            (countOf x z counter)))
+      (assertEqual
+        0
+        (emptyCounter |> inc x y |> countOf x z))
 
     ]

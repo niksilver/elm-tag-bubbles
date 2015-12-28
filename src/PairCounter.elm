@@ -2,7 +2,7 @@ module PairCounter
     ( Idable, Counter
     , emptyCounter, countOf, inc
     , allPairs
-    , maxCount
+    , maxCount, minCount
     )
     where
 
@@ -69,10 +69,17 @@ distribute' : a -> List a -> List (a, a)
 distribute' seed others =
     List.map (\other -> (seed, other)) others
 
-{-| Get the greatest count of all the pairs.
+{-| Get the greatest count of all the pairs, or 0 if there are none.
 -}
 
 maxCount : Counter -> Int
 maxCount (Counter dict) =
     Dict.values dict |> List.maximum |> withDefault 0
+
+{-| Get the least count of all the pairs, or 0 if there are none.
+-}
+
+minCount : Counter -> Int
+minCount (Counter dict) =
+    Dict.values dict |> List.minimum |> withDefault 0
 

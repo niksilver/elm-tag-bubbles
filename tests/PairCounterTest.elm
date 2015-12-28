@@ -14,6 +14,7 @@ all =
     [ counterTest
     , allPairsTest
     , maxCountTest
+    , minCountTest
     ]
 
 counterTest : Test
@@ -106,3 +107,33 @@ maxCountTest =
         2
         (emptyCounter |> inc x z |> inc x y |> inc z x |> maxCount)
     ]
+
+minCountTest : Test
+minCountTest =
+    suite "minCount"
+
+    [ test "minCount of emptyCounter should be zero" <|
+        assertEqual
+        0
+        (minCount emptyCounter)
+
+    , test "minCount of a once-incremented counter should be 1" <|
+        assertEqual
+        1
+        (emptyCounter |> inc x y |> minCount)
+
+    , test "minCount with a 1 and 2 should should be 1" <|
+        assertEqual
+        1
+        (emptyCounter |> inc x z |> inc x y |> inc z x |> minCount)
+
+    , test "minCount with a 3 and 2 should should be 2" <|
+        assertEqual
+        2
+        (emptyCounter
+            |> inc x z |> inc x z |> inc x z
+            |> inc x y |> inc x y
+            |> minCount)
+
+    ]
+

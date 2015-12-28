@@ -11,18 +11,16 @@ type alias Model =
     { id : String
     , x : Float
     , y : Float
-    , dx : Float
-    , dy : Float
     , size : Float
     , colour: String}
 
-type Action = Flip | Move
+type Action = Flip | Move Float Float
 
 update : Action -> Model -> Model
 update action model =
     case action of
         Flip -> flip model
-        Move -> { model | x = model.x + model.dx, y = model.y + model.dy }
+        Move dx dy -> { model | x = model.x + dx, y = model.y + dy }
 
 flip : Model -> Model
 flip model =

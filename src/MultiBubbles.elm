@@ -2,15 +2,15 @@ module MultiBubbles where
 
 -- Multiple bubbles
 
-import Bubble
+import PhysicsBubble as Phys
 
 import List exposing (reverse, length, indexedMap, map)
 import Svg exposing (Svg)
 import Signal exposing (Address, forwardTo)
 
-type alias Model = List Bubble.Model
+type alias Model = List Phys.Model
 
-type alias SingleAction = { id : String, act : Bubble.Action }
+type alias SingleAction = { id : String, act : Phys.Action }
 
 type Action =
     Tick | One SingleAction
@@ -25,31 +25,31 @@ updateOne : SingleAction -> Model -> Model
 updateOne act model =
     map (selectiveUpdate act) model
 
-selectiveUpdate : SingleAction -> Bubble.Model -> Bubble.Model
-selectiveUpdate action bubModel =
-    if action.id == bubModel.id then
-        (Bubble.update action.act bubModel)
+selectiveUpdate : SingleAction -> Phys.Model -> Phys.Model
+selectiveUpdate action physModel =
+    if action.id == physModel.bubble.id then
+        (Phys.update action.act physModel)
     else
-        bubModel
+        physModel
 
 -- Update all the bubbles with the Tick action
 
 updateAll : Model -> Model
 updateAll model =
-    map (\mod -> Bubble.update Bubble.Move mod) model
+    map (\mod -> Phys.update Phys.Move mod) model
 
--- Create a forwarding address for the Bubble.view which will enable
+-- Create a forwarding address for the PhysicsBubble.view which will enable
 -- its actions to be sent to and interpretted by this update mechanism.
 
-fwdingAddress : Address Action -> String -> Address Bubble.Action
+fwdingAddress : Address Action -> String -> Address Phys.Action
 fwdingAddress address id =
     forwardTo address (\a -> One { id = id, act = a })
 
--- A view of a Bubble, using an address at this level of the architecture
+-- A view of a PhysicsBubble, using an address at this level of the architecture
 
-fwdingView : Address Action -> Bubble.Model -> Svg
-fwdingView address bubModel =
-    Bubble.view (fwdingAddress address bubModel.id) bubModel
+fwdingView : Address Action -> Phys.Model -> Svg
+fwdingView address physModel =
+    Phys.view (fwdingAddress address physModel.bubble.id) physModel
 
 view : Address Action -> Model -> List Svg
 view address model =

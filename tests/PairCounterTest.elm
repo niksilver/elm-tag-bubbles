@@ -1,4 +1,4 @@
-module PairCounterTest where
+module PairCounterTest (all) where
 
 import PairCounter exposing (..)
 
@@ -12,7 +12,8 @@ all : Test
 all =
     suite "PairCounterTest"
     [ counterTest
-    , utilTest
+    , allPairsTest
+    , maxCountTest
     ]
 
 counterTest : Test
@@ -55,9 +56,9 @@ counterTest =
 
     ]
 
-utilTest : Test
-utilTest =
-    suite "UtilTest"
+allPairsTest : Test
+allPairsTest =
+    suite "allPairs"
 
     [ test "All pairs in [] should be []"
       (assertEqual
@@ -84,4 +85,24 @@ utilTest =
       (assertEqual
         [(3,4), (3,5), (3,6), (4,5), (4,6), (5,6)]
         (allPairs [3, 4, 5, 6]))
+    ]
+
+maxCountTest : Test
+maxCountTest =
+    suite "maxCount"
+
+    [ test "maxCount of emptyCounter should be zero" <|
+        assertEqual
+        0
+        (maxCount emptyCounter)
+
+    , test "maxCount of a once-incremented counter should be 1" <|
+        assertEqual
+        1
+        (emptyCounter |> inc x y |> maxCount)
+
+    , test "maxCount with a 1 and 2 should should be 2" <|
+        assertEqual
+        2
+        (emptyCounter |> inc x z |> inc x y |> inc z x |> maxCount)
     ]

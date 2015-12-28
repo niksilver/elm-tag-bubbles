@@ -2,6 +2,7 @@ module PairCounter
     ( Idable, Counter
     , emptyCounter, countOf, inc
     , allPairs
+    , maxCount
     )
     where
 
@@ -67,4 +68,11 @@ allPairs' next done accum =
 distribute' : a -> List a -> List (a, a)
 distribute' seed others =
     List.map (\other -> (seed, other)) others
+
+{-| Get the greatest count of all the pairs.
+-}
+
+maxCount : Counter -> Int
+maxCount (Counter dict) =
+    Dict.values dict |> List.maximum |> withDefault 0
 

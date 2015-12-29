@@ -4,6 +4,7 @@ module PairCounter
     , topN
     , allPairs
     , maxCount, minCount
+    , toDict
     )
     where
 
@@ -132,4 +133,13 @@ maxCount (Counter dict) =
 minCount : Counter -> Int
 minCount (Counter dict) =
     Dict.values dict |> List.minimum |> withDefault 0
+
+{-| Convert the counter to a dictionary. Each key is an id (string) pair;
+    each value is its count. Each id pair is represented twice - with the
+    ids both ways round.
+-}
+
+toDict : Counter -> Dict (String, String) Int
+toDict (Counter dict) =
+    dict
 

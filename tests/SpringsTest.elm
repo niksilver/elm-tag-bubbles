@@ -2,7 +2,10 @@ module SpringsTest (all) where
 
 import Springs exposing (..)
 import Constants exposing (Tag, Tags)
-import PairCounter exposing (countOf)
+import PairCounter exposing (countOf, emptyCounter, set)
+
+import Maybe exposing (Maybe(Just))
+import Dict
 
 import ElmTest exposing (..)
 
@@ -29,6 +32,7 @@ all : Test
 all =
     suite "SpringsTest"
     [ counterTest
+    , lengthsTest
     ]
 
 counterTest : Test
@@ -57,3 +61,36 @@ counterTest =
 
     ]
 
+lengthsTest : Test
+lengthsTest =
+    suite "lengthsTest"
+
+    [ test "Pair with highest count should have the shortest length" <|
+      assertEqual
+      (Just 33.3)
+      (emptyCounter
+        |> set tag1rec tag2rec 10
+        |> set tag1rec tag3rec 3
+        |> lengths 33.3 99.9
+        |> Dict.get (tag1rec.id, tag2rec.id))
+
+    , test "Pair with lowest count should have the longest length" <|
+      assertEqual
+      (Just 99.9)
+      (emptyCounter
+        |> set tag1rec tag2rec 10
+        |> set tag1rec tag3rec 3
+        |> lengths 33.3 99.9
+        |> Dict.get (tag1rec.id, tag3rec.id))
+
+    , test "Pair with middling count should have proportional length" <|
+      assertEqual
+      (Just (99 - 1 / 6 * 66))
+      (emptyCounter
+        |> set tag1rec tag2rec 10
+        |> set tag1rec tag3rec 4
+        |> set tag2rec tag3rec 5   -- This count is 1/6 of the count range
+        |> lengths 33 99
+        |> Dict.get (tag2rec.id, tag3rec.id))
+
+    ]

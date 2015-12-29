@@ -2,6 +2,8 @@ module PairCounterTest (all) where
 
 import PairCounter exposing (..)
 
+import Dict
+
 import ElmTest exposing (..)
 
 u = { id = "u" }
@@ -17,6 +19,7 @@ all =
     [ counterTest
     , allPairsTest
     , setTest
+    , toDictTest
     , maxCountTest
     , minCountTest
     , sizeTest
@@ -275,3 +278,37 @@ topNTest =
 
     ]
 
+toDictTest : Test
+toDictTest =
+    suite "toDict"
+
+    [ test "toDict of empty counter should be empty dict" <|
+      assertEqual
+      0
+      (emptyCounter |> toDict |> Dict.size)
+
+    , test "toDict of counter with one pair should contain pair" <|
+      assertEqual
+      (Just 1)
+      (emptyCounter
+        |> inc x y
+        |> toDict
+        |> Dict.get (x.id, y.id))
+
+    , test "toDict of counter with one pair should contain pair reversed" <|
+      assertEqual
+      (Just 1)
+      (emptyCounter
+        |> inc x y
+        |> toDict
+        |> Dict.get (y.id, x.id))
+
+    , test "toDict of counter with one pair should not contain another pair" <|
+      assertEqual
+      Nothing
+      (emptyCounter
+        |> inc x y
+        |> toDict
+        |> Dict.get (z.id, y.id))
+
+    ]

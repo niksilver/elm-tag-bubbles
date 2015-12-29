@@ -13,6 +13,7 @@ all =
     suite "PairCounterTest"
     [ counterTest
     , allPairsTest
+    , setTest
     , maxCountTest
     , minCountTest
     ]
@@ -54,6 +55,22 @@ counterTest =
       (assertEqual
         1
         (emptyCounter |> inc x y |> countOf y x))
+
+    ]
+
+setTest : Test
+setTest =
+    suite "setTest"
+
+    [ test "Setting 3 on an empty counter should yield 3" <|
+      assertEqual
+      3
+      (emptyCounter |> set x y 3 |> countOf x y)
+
+    , test "Setting 3 on an empty counter should yield 3 on the pair reversed" <|
+      assertEqual
+      3
+      (emptyCounter |> set x y 3 |> countOf y x)
 
     ]
 

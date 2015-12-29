@@ -1,6 +1,6 @@
 module PairCounter
     ( Idable, Counter
-    , emptyCounter, countOf, inc
+    , emptyCounter, countOf, inc, set
     , allPairs
     , maxCount, minCount
     )
@@ -30,8 +30,9 @@ countOf : Idable a -> Idable a -> Counter -> Int
 countOf x y (Counter dict) =
     dict |> get (x.id, y.id) |> withDefault 0
 
--- Increment a counter.
--- Incrementing x,y will also increment y,x
+{- Increment a counter.
+   Incrementing x,y will also increment y,x
+-}
 
 inc : Idable a -> Idable a -> Counter -> Counter
 inc x y counter =
@@ -44,6 +45,20 @@ inc' x y (Counter dict as counter) =
     dict
         |> insert (x.id, y.id) (countOf x y counter + 1)
         |> Counter
+
+{- Set a count for a particular pair.
+-}
+
+set : Idable a -> Idable a -> Int -> Counter -> Counter
+set x y v (Counter dict) =
+    dict
+        |> set' x y v
+        |> set' y x v
+        |> Counter
+
+set' : Idable a -> Idable a -> Int -> Dict (String,String) Int -> Dict (String,String) Int
+set' x y v dict =
+    dict |> insert (x.id, y.id) v
 
 -- Get all pairs (ignoring symmetry) of elements of a list.
 -- It comes out in a predictable order (the order the numbers appear in

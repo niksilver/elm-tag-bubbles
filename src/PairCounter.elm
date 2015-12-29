@@ -50,15 +50,16 @@ inc' x y (Counter dict as counter) =
 -}
 
 set : Idable a -> Idable a -> Int -> Counter -> Counter
-set x y v (Counter dict) =
-    dict
-        |> set' x y v
-        |> set' y x v
-        |> Counter
+set x y val counter =
+    counter
+        |> set' x y val
+        |> set' y x val
 
-set' : Idable a -> Idable a -> Int -> Dict (String,String) Int -> Dict (String,String) Int
-set' x y v dict =
-    dict |> insert (x.id, y.id) v
+set' : Idable a -> Idable a -> Int -> Counter -> Counter
+set' x y val (Counter dict) =
+    dict
+        |> insert (x.id, y.id) val
+        |> Counter
 
 -- Get all pairs (ignoring symmetry) of elements of a list.
 -- It comes out in a predictable order (the order the numbers appear in

@@ -1,14 +1,15 @@
 module PairCounter
     ( Idable, Counter
-    , emptyCounter, countOf, inc, set
+    , emptyCounter, countOf, inc, set, size
+    , topN
     , allPairs
     , maxCount, minCount
     )
     where
 
-import List exposing (append, reverse)
+import List exposing (append, reverse, take, filter, sortBy)
 import Maybe exposing (withDefault)
-import Dict exposing (Dict, empty, get, insert)
+import Dict exposing (Dict, empty, get, insert, toList, fromList)
 
 -- Something that tracks counts of pairs of records which have a String id.
 -- The order of pairs doesn't matter, so setting or getting x,y is the
@@ -30,7 +31,7 @@ countOf : Idable a -> Idable a -> Counter -> Int
 countOf x y (Counter dict) =
     dict |> get (x.id, y.id) |> withDefault 0
 
-{- Increment a counter.
+{-| Increment a counter.
    Incrementing x,y will also increment y,x
 -}
 
@@ -46,7 +47,7 @@ inc' x y (Counter dict as counter) =
         |> insert (x.id, y.id) (countOf x y counter + 1)
         |> Counter
 
-{- Set a count for a particular pair.
+{-| Set a count for a particular pair.
 -}
 
 set : Idable a -> Idable a -> Int -> Counter -> Counter
@@ -60,6 +61,39 @@ set' x y val (Counter dict) =
     dict
         |> insert (x.id, y.id) val
         |> Counter
+
+{-| Find the number of pairs (ignoring symmetry) in the counter.
+-}
+
+size : Counter -> Int
+size (Counter dict) =
+    Dict.size dict // 2
+
+{- Reduce this counter to one of at most `n` pairs, including only
+   the pairs with largest counts.
+-}
+
+topN : Int -> Counter -> Counter
+topN n (Counter dict) =
+    dict
+        |> toList
+        |> filter (\((x,y),i) -> x < y)
+        |> sortBy (\((x,y),i) -> -i)
+        |> take n
+        |> mirror' []
+        |> fromList
+        |> Counter
+
+-- Go from [ ((x,y),i), ... ]
+--      to [ ((x,y),i), ((y,x),i), ... ]
+
+type alias PairCount = ((String, String), Int)
+
+mirror' : List PairCount -> List PairCount -> List PairCount
+mirror' countsOut countsIn =
+    case countsIn of
+        ((x,y),i) :: tl -> mirror' ( ((x,y),i) :: ((y,x),i) :: countsOut ) tl
+        [] -> countsOut
 
 -- Get all pairs (ignoring symmetry) of elements of a list.
 -- It comes out in a predictable order (the order the numbers appear in

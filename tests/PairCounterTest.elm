@@ -4,6 +4,9 @@ import PairCounter exposing (..)
 
 import ElmTest exposing (..)
 
+u = { id = "u" }
+v = { id = "v" }
+w = { id = "w" }
 x = { id = "x" }
 y = { id = "y" }
 z = { id = "z" }
@@ -16,6 +19,8 @@ all =
     , setTest
     , maxCountTest
     , minCountTest
+    , sizeTest
+    , topNTest
     ]
 
 counterTest : Test
@@ -151,6 +156,122 @@ minCountTest =
             |> inc x z |> inc x z |> inc x z
             |> inc x y |> inc x y
             |> minCount)
+
+    ]
+
+sizeTest : Test
+sizeTest =
+    suite "sizeTest"
+
+    [ test "Size of an empty counter should be zero" <|
+      assertEqual
+      0
+      (size emptyCounter)
+
+    , test "Size of a counter with one pair should be 1" <|
+      assertEqual
+      1
+      (emptyCounter |> inc x y |> size)
+
+    , test "Size of a counter with two pairs should be 2" <|
+      assertEqual
+      2
+      (emptyCounter |> inc x y |> inc y z |> size)
+
+    ]
+
+topNTest : Test
+topNTest =
+    suite "topNTest"
+
+    [ test
+      "Top 3 counter from a counter with 10, 9, 8, 7 as counts should have size 3" <|
+      assertEqual
+      3
+      (emptyCounter
+        |> set u v 10
+        |> set v w 9
+        |> set w x 8
+        |> set x y 7
+        |> topN 3
+        |> size)
+
+    , test
+      "Top 2 counter from a counter with 10, 9, 8, 7 as counts should have size 2" <|
+      assertEqual
+      2
+      (emptyCounter
+        |> set u v 10
+        |> set v w 9
+        |> set w x 8
+        |> set x y 7
+        |> topN 2
+        |> size)
+
+    , test
+      ("Top 2 counter from a counter with 10, 9, 8, 7 as counts should " ++
+       "contain top pair") <|
+      assertEqual
+      10
+      (emptyCounter
+        |> set u v 10
+        |> set v w 9
+        |> set w x 8
+        |> set x y 7
+        |> topN 2
+        |> countOf u v)
+
+    , test
+      ("Top 2 counter from a counter with 10, 9, 8, 7 as counts should " ++
+       "contain top pair reversed") <|
+      assertEqual
+      10
+      (emptyCounter
+        |> set u v 10
+        |> set v w 9
+        |> set w x 8
+        |> set x y 7
+        |> topN 2
+        |> countOf v u)
+
+    , test
+      ("Top 2 counter from a counter with 10, 9, 8, 7 as counts should " ++
+       "contain second pair") <|
+      assertEqual
+      9
+      (emptyCounter
+        |> set u v 10
+        |> set v w 9
+        |> set w x 8
+        |> set x y 7
+        |> topN 2
+        |> countOf v w)
+
+    , test
+      ("Top 2 counter from a counter with 10, 9, 8, 7 as counts should " ++
+       "contain second pair reversed") <|
+      assertEqual
+      9
+      (emptyCounter
+        |> set u v 10
+        |> set v w 9
+        |> set w x 8
+        |> set x y 7
+        |> topN 2
+        |> countOf w v)
+
+    , test
+      ("Top 2 counter from a counter with 7, 8, 9, 10 as counts should " ++
+       "contain top pair") <|
+      assertEqual
+      10
+      (emptyCounter
+        |> set u v 7
+        |> set v w 8
+        |> set w x 9
+        |> set x y 10
+        |> topN 2
+        |> countOf x y)
 
     ]
 

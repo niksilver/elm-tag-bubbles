@@ -2,7 +2,9 @@ module Constants where
 
 import Http exposing (Error)
 
-type alias Tag = { id : String, webTitle : String, sectionId : String }
+type alias Id = String
+
+type alias Tag = { id : Id, webTitle : String, sectionId : String }
 
 type alias Tags = List Tag
 

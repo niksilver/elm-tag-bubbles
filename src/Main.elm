@@ -1,7 +1,8 @@
-import Constants exposing (colour1, colour2, emptyTagsResult)
+import Constants exposing (Id, colour1, colour2, emptyTagsResult)
 import UI exposing (initialEffects, update, view, Action(Tick))
 
 import StartApp exposing (start)
+import Dict exposing (Dict, empty, insert)
 import Task exposing (Task)
 import Effects exposing (none, Never)
 import Signal
@@ -39,15 +40,29 @@ phys4Model =
         , size = 60, colour = colour2 }
     }
 
+springs : Dict (Id, Id) Float
+springs =
+    Dict.empty
+        |> insert ("b1", "b2") 200
+        |> insert ("b1", "b3") 300
+        |> insert ("b1", "b4") 150
+        |> insert ("b2", "b3") 250
+        |> insert ("b2", "b4") 350
+        |> insert ("b3", "b4") 400
+
 model : UI.Model
-model = { width = 800
+model =
+    { width = 800
     , height = 600
-    , bubbles =
-        [ phys1Model
-        , phys2Model
-        , phys3Model
-        , phys4Model
-        ]
+    , world =
+        { bubbles =
+            [ phys1Model
+            , phys2Model
+            , phys3Model
+            , phys4Model
+            ]
+        , springs = springs
+        }
     , newTags = emptyTagsResult
     }
 

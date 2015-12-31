@@ -3,7 +3,7 @@ module UI where
 -- Bubble forms captured as Html
 
 import Constants exposing (TagsResult)
-import MultiBubbles as MB
+import World
 import TagFetcher
 
 import Html exposing (Html, div, text)
@@ -15,13 +15,13 @@ import Effects exposing (Effects)
 type alias Model =
     { width : Int
     , height : Int
-    , bubbles : MB.Model
+    , world : World.Model
     , newTags : TagsResult
     }
 
 type Action
     = Resize (Int, Int)
-        | Direct MB.Action
+        | Direct World.Action
         | Tick
         | NewTags TagsResult
 
@@ -37,11 +37,11 @@ update action model =
              , Effects.none
             )
         Direct act ->
-            ({ model | bubbles = MB.update act model.bubbles }
+            ({ model | world = World.update act model.world }
              , Effects.none
             )
         Tick ->
-            ({ model | bubbles = MB.update MB.Tick model.bubbles }
+            ({ model | world = World.update World.Tick model.world }
              , Effects.none
             )
         NewTags tags ->
@@ -62,5 +62,5 @@ svgView address model =
         [ width (toString model.width)
         , height (toString model.height)
         ]
-        (MB.view (forwardTo address Direct) model.bubbles)
+        (World.view (forwardTo address Direct) model.world)
 

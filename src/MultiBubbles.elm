@@ -10,27 +10,28 @@ import Signal exposing (Address, forwardTo)
 
 type alias Model = List Phys.Model
 
-type alias SingleAction = { id : String, act : Phys.Action }
+type alias Id = String
 
-type Action =
-    Tick | One SingleAction
+type Action
+    = Tick
+    | Direct Id Phys.Action
 
 update : Action -> Model -> Model
 update action model =
     case action of
-        One act -> updateOne act model
+        Direct id physAct -> updateOne id physAct model
         Tick -> updateAll model
 
-updateOne : SingleAction -> Model -> Model
-updateOne act model =
-    map (selectiveUpdate act) model
-
-selectiveUpdate : SingleAction -> Phys.Model -> Phys.Model
-selectiveUpdate action physModel =
-    if action.id == physModel.bubble.id then
-        (Phys.update action.act physModel)
-    else
-        physModel
+updateOne : Id -> Phys.Action -> Model -> Model
+updateOne id physAct model =
+    let
+        selectiveUpdate physModel =
+            if id == physModel.bubble.id then
+                (Phys.update physAct physModel)
+            else
+                physModel
+    in
+        map selectiveUpdate model
 
 -- Update all the bubbles with the Tick action
 
@@ -43,7 +44,7 @@ updateAll model =
 
 fwdingAddress : Address Action -> String -> Address Phys.Action
 fwdingAddress address id =
-    forwardTo address (\a -> One { id = id, act = a })
+    forwardTo address (\a -> Direct id a )
 
 -- A view of a PhysicsBubble, using an address at this level of the architecture
 

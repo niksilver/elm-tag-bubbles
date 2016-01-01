@@ -162,5 +162,30 @@ accelerationTest =
           (stiffness * -springXExtension / (80 * 80))
           (acceleration stiffness springs bubble2 bubble1)
 
+    , test "Acceleration of bubble2 x-axis (too far left, stretched spring)" <|
+      let
+          bubble1 =
+              { id = "b1"
+              , x = 480, y = 350
+              , size = 80, colour = "irrelevant" }
+          bubble2 =
+              { id = "b2"
+              , x = 400, y = 400
+              , size = 60, colour = "irrelevant" }
+          stiffness = 20.0
+          springLength = 60.0
+          springs =
+              empty
+                  |> insert ("b1", "b2") springLength
+                  |> insert ("b2", "b1") springLength
+          bubbleXDistance = 400 - 480
+          bubbleDistance = sqrt (80^2 + 50^2)
+          springXLength = bubbleXDistance / bubbleDistance * springLength
+          springXExtension = bubbleXDistance - springXLength
+      in
+          assertEqualTo4DP
+          (stiffness * -springXExtension / (60 * 60))
+          (acceleration stiffness springs bubble1 bubble2)
+
     ]
 

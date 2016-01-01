@@ -43,26 +43,35 @@ lengths shortest longest counter =
         PairCounter.toDict counter
         |> Dict.map (\pair count -> conv (toFloat count))
 
-{-| Calculate the acceleration along a given access for a bubble.
+{-| Calculate the acceleration for a bubble.
     Parameters are:
     stiffness of the springs;
     the springs `Dict`;
     the bubble that's pulling the bubble in question;
     the bubble in question.
+    Return value the acceleration in the x and y directions.
 -}
 
-acceleration : Float -> Dict (Id,Id) Float -> Bubble.Model -> Bubble.Model -> Float
+acceleration : Float -> Dict (Id,Id) Float -> Bubble.Model -> Bubble.Model ->
+    (Float, Float)
 acceleration stiffness springs bubble2 bubble1 =
     let
         id1 = bubble1.id
         id2 = bubble2.id
+        mass = bubble1.size ^ 2
         springLength = Dict.get (id1, id2) springs |> withDefault 0
+
         bubbleXDistance = bubble1.x - bubble2.x
         bubbleYDistance = bubble1.y - bubble2.y
         bubbleDistance = sqrt (bubbleXDistance^2 + bubbleYDistance^2)
+
         springXLength = bubbleXDistance / bubbleDistance * springLength
         springXExtension = bubbleXDistance - springXLength
-        mass = bubble1.size ^ 2
+        accelX = -stiffness * springXExtension / mass
+
+        springYLength = bubbleYDistance / bubbleDistance * springLength
+        springYExtension = bubbleYDistance - springYLength
+        accelY = -stiffness * springYExtension / mass
     in
-        -stiffness * springXExtension / mass
+        (accelX, accelY)
 

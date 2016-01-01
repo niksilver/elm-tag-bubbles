@@ -135,7 +135,7 @@ accelerationTest =
       in
           assertEqualTo4DP
           (stiffness * -springXExtension / (80 * 80))
-          (acceleration stiffness springs bubble2 bubble1)
+          (acceleration stiffness springs bubble2 bubble1 |> fst)
 
     , test "Acceleration of bubble1 x-axis (too far left, compressed spring)" <|
       let
@@ -160,7 +160,7 @@ accelerationTest =
       in
           assertEqualTo4DP
           (stiffness * -springXExtension / (80 * 80))
-          (acceleration stiffness springs bubble2 bubble1)
+          (acceleration stiffness springs bubble2 bubble1 |> fst)
 
     , test "Acceleration of bubble2 x-axis (too far left, stretched spring)" <|
       let
@@ -185,7 +185,7 @@ accelerationTest =
       in
           assertEqualTo4DP
           (stiffness * -springXExtension / (60 * 60))
-          (acceleration stiffness springs bubble1 bubble2)
+          (acceleration stiffness springs bubble1 bubble2 |> fst)
 
     , test "Acceleration of bubble2 x-axis (too far right, compressed spring)" <|
       let
@@ -213,7 +213,36 @@ accelerationTest =
           -- springXLength = -100
           -- springXExtension = 20
           (stiffness * -springXExtension / (60 * 60))
-          (acceleration stiffness springs bubble1 bubble2)
+          (acceleration stiffness springs bubble1 bubble2 |> fst)
+
+
+    , test "Acceleration of bubble1 y-axis (too far up, stretched spring)" <|
+      let
+          bubble1 =
+              { id = "b1"
+              , x = 480, y = 350
+              , size = 80, colour = "irrelevant" }
+          bubble2 =
+              { id = "b2"
+              , x = 400, y = 400
+              , size = 60, colour = "irrelevant" }
+          stiffness = 20.0
+          springLength = 60.0
+          springs =
+              empty
+                  |> insert ("b1", "b2") springLength
+                  |> insert ("b2", "b1") springLength
+          bubbleYDistance = 350 - 400
+          bubbleDistance = sqrt (80^2 + 50^2)
+          springYLength = bubbleYDistance / bubbleDistance * springLength
+          springYExtension = bubbleYDistance - springYLength
+      in
+          assertEqualTo4DP
+          -- bubbleYDistance = -50
+          -- springYLength = -30
+          -- springYExtension = -20
+          (stiffness * -springYExtension / (80 * 80))
+          (acceleration stiffness springs bubble2 bubble1 |> snd)
 
     ]
 

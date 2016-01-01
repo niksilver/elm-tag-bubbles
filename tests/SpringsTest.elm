@@ -8,6 +8,7 @@ import Maybe exposing (Maybe(Just))
 import Dict exposing (empty, insert)
 
 import ElmTest exposing (..)
+import ElmTestExtras exposing (..)
 
 tag1rec = Tag "world/bali-nine" "Bali Nine" "world"
 
@@ -111,7 +112,7 @@ accelerationTest =
     -- acceleration = (stiffness x distance) / mass
     -- mass is size squared
 
-    [ test "Acceleration check of bubble1 x (too far right)" <|
+    [ test "Acceleration of bubble1 x-axis (too far right, stretched spring)" <|
       let
           bubble1 =
               { id = "b1"
@@ -122,14 +123,18 @@ accelerationTest =
               , x = 400, y = 400
               , size = 60, colour = "irrelevant" }
           stiffness = 20.0
-          length = 60.0
+          springLength = 60.0
           springs =
               empty
-                  |> insert ("b1", "b2") length
-                  |> insert ("b2", "b1") length
+                  |> insert ("b1", "b2") springLength
+                  |> insert ("b2", "b1") springLength
+          bubbleXDistance = 480 - 400
+          bubbleDistance = sqrt (80^2 + 50^2)
+          springXLength = bubbleXDistance / bubbleDistance * springLength
+          springXExtension = bubbleXDistance - springXLength
       in
-          assertEqual
-          (stiffness * (length-(480-400)) / (80 * 80))
+          assertEqualTo4DP
+          (-(stiffness * springXExtension) / (80 * 80))
           (acceleration stiffness springs bubble2 bubble1)
 
     ]

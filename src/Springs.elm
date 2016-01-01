@@ -57,9 +57,12 @@ acceleration stiffness springs bubble2 bubble1 =
         id1 = bubble1.id
         id2 = bubble2.id
         springLength = Dict.get (id1, id2) springs |> withDefault 0
-        bubbleDistance = bubble1.x - bubble2.x
-        extension = springLength - bubbleDistance
+        bubbleXDistance = bubble1.x - bubble2.x
+        bubbleYDistance = bubble1.y - bubble2.y
+        bubbleDistance = sqrt (bubbleXDistance^2 + bubbleYDistance^2)
+        springXLength = bubbleXDistance / bubbleDistance * springLength
+        springXExtension = bubbleXDistance - springXLength
         mass = bubble1.size ^ 2
     in
-        stiffness * extension / mass
+        -stiffness * springXExtension / mass
 

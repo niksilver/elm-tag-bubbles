@@ -244,5 +244,33 @@ accelerationTest =
           (stiffness * -springYExtension / (80 * 80))
           (acceleration stiffness springs bubble2 bubble1 |> snd)
 
+    , test "Acceleration of bubble1 y-axis (too far down, compressed spring)" <|
+      let
+          bubble1 =
+              { id = "b1"
+              , x = 480, y = 350
+              , size = 80, colour = "irrelevant" }
+          bubble2 =
+              { id = "b2"
+              , x = 400, y = 400
+              , size = 60, colour = "irrelevant" }
+          stiffness = 20.0
+          springLength = 120.0
+          springs =
+              empty
+                  |> insert ("b1", "b2") springLength
+                  |> insert ("b2", "b1") springLength
+          bubbleYDistance = 350 - 400
+          bubbleDistance = sqrt (80^2 + 50^2)
+          springYLength = bubbleYDistance / bubbleDistance * springLength
+          springYExtension = bubbleYDistance - springYLength
+      in
+          assertEqualTo4DP
+          -- bubbleYDistance = -50
+          -- springYLength = -63
+          -- springYExtension = 13
+          (stiffness * -springYExtension / (80 * 80))
+          (acceleration stiffness springs bubble2 bubble1 |> snd)
+
     ]
 

@@ -272,5 +272,23 @@ accelerationTest =
           (stiffness * -springYExtension / (80 * 80))
           (acceleration stiffness springs bubble2 bubble1 |> snd)
 
+    , test "Acceleration of bubbles not linked should give zero acceleration" <|
+      let
+          bubble1 =
+              { id = "b1"
+              , x = 480, y = 350
+              , size = 80, colour = "irrelevant" }
+          bubble2 =
+              { id = "b2"
+              , x = 400, y = 400
+              , size = 60, colour = "irrelevant" }
+          stiffness = 20.0
+          springLength = 120.0
+          springs = empty
+      in
+          assertEqual
+          (0, 0)
+          (acceleration stiffness springs bubble2 bubble1)
+
     ]
 

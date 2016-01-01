@@ -55,23 +55,24 @@ lengths shortest longest counter =
 acceleration : Float -> Dict (Id,Id) Float -> Bubble.Model -> Bubble.Model ->
     (Float, Float)
 acceleration stiffness springs bubble2 bubble1 =
-    let
-        id1 = bubble1.id
-        id2 = bubble2.id
-        mass = bubble1.size ^ 2
-        springLength = Dict.get (id1, id2) springs |> withDefault 0
+    case Dict.get (bubble1.id, bubble2.id) springs of
+        Nothing ->
+            (0, 0)
+        Just springLength ->
+            let
+                mass = bubble1.size ^ 2
 
-        bubbleXDistance = bubble1.x - bubble2.x
-        bubbleYDistance = bubble1.y - bubble2.y
-        bubbleDistance = sqrt (bubbleXDistance^2 + bubbleYDistance^2)
+                bubbleXDistance = bubble1.x - bubble2.x
+                bubbleYDistance = bubble1.y - bubble2.y
+                bubbleDistance = sqrt (bubbleXDistance^2 + bubbleYDistance^2)
 
-        springXLength = bubbleXDistance / bubbleDistance * springLength
-        springXExtension = bubbleXDistance - springXLength
-        accelX = -stiffness * springXExtension / mass
+                springXLength = bubbleXDistance / bubbleDistance * springLength
+                springXExtension = bubbleXDistance - springXLength
+                accelX = -stiffness * springXExtension / mass
 
-        springYLength = bubbleYDistance / bubbleDistance * springLength
-        springYExtension = bubbleYDistance - springYLength
-        accelY = -stiffness * springYExtension / mass
-    in
-        (accelX, accelY)
+                springYLength = bubbleYDistance / bubbleDistance * springLength
+                springYExtension = bubbleYDistance - springYLength
+                accelY = -stiffness * springYExtension / mass
+            in
+                (accelX, accelY)
 

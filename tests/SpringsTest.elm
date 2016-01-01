@@ -5,7 +5,7 @@ import Constants exposing (Tag, Tags)
 import PairCounter exposing (countOf, emptyCounter, set)
 
 import Maybe exposing (Maybe(Just))
-import Dict
+import Dict exposing (empty, insert)
 
 import ElmTest exposing (..)
 
@@ -33,6 +33,7 @@ all =
     suite "SpringsTest"
     [ counterTest
     , lengthsTest
+    , accelerationTest
     ]
 
 counterTest : Test
@@ -74,6 +75,15 @@ lengthsTest =
         |> lengths 33.3 99.9
         |> Dict.get (tag1rec.id, tag2rec.id))
 
+    , test "Pair with highest count should have the shortest length when reveresed" <|
+      assertEqual
+      (Just 33.3)
+      (emptyCounter
+        |> set tag1rec tag2rec 10
+        |> set tag1rec tag3rec 3
+        |> lengths 33.3 99.9
+        |> Dict.get (tag2rec.id, tag1rec.id))
+
     , test "Pair with lowest count should have the longest length" <|
       assertEqual
       (Just 99.9)
@@ -94,3 +104,33 @@ lengthsTest =
         |> Dict.get (tag2rec.id, tag3rec.id))
 
     ]
+
+accelerationTest : Test
+accelerationTest =
+    suite "accelerationTest"
+    -- acceleration = (stiffness x distance) / mass
+    -- mass is size squared
+
+    [ test "Acceleration check of bubble1 x (too far right)" <|
+      let
+          bubble1 =
+              { id = "b1"
+              , x = 480, y = 350
+              , size = 80, colour = "irrelevant" }
+          bubble2 =
+              { id = "b2"
+              , x = 400, y = 400
+              , size = 60, colour = "irrelevant" }
+          stiffness = 20.0
+          length = 60.0
+          springs =
+              empty
+                  |> insert ("b1", "b2") length
+                  |> insert ("b2", "b1") length
+      in
+          assertEqual
+          (stiffness * (length-(480-400)) / (80 * 80))
+          (acceleration stiffness springs bubble2 bubble1)
+
+    ]
+

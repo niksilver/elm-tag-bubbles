@@ -1,10 +1,12 @@
-module Springs (counter, lengths) where
+module Springs (counter, lengths, acceleration) where
 
-import Constants exposing (Tag, Tags)
+import Constants exposing (Tag, Tags, Id)
 import PairCounter exposing (Counter, emptyCounter, allPairs, inc)
+import Bubble
 
 import List
 import Dict exposing (Dict)
+import Maybe exposing (withDefault)
 
 {-| Generate a `Counter` from a list of list of tags.
 -}
@@ -40,4 +42,24 @@ lengths shortest longest counter =
     in
         PairCounter.toDict counter
         |> Dict.map (\pair count -> conv (toFloat count))
+
+{-| Calculate the acceleration along a given access for a bubble.
+    Parameters are:
+    stiffness of the springs;
+    the springs `Dict`;
+    the bubble that's pulling the bubble in question;
+    the bubble in question.
+-}
+
+acceleration : Float -> Dict (Id,Id) Float -> Bubble.Model -> Bubble.Model -> Float
+acceleration stiffness springs bubble2 bubble1 =
+    let
+        id1 = bubble1.id
+        id2 = bubble2.id
+        springLength = Dict.get (id1, id2) springs |> withDefault 0
+        bubbleDistance = bubble1.x - bubble2.x
+        extension = springLength - bubbleDistance
+        mass = bubble1.size ^ 2
+    in
+        stiffness * extension / mass
 

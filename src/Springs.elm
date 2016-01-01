@@ -45,16 +45,16 @@ lengths shortest longest counter =
 
 {-| Calculate the acceleration for a bubble.
     Parameters are:
-    stiffness of the springs;
+    strength of the springs;
     the springs `Dict`;
-    the bubble that's pulling the bubble in question;
+    a bubble that's pulling the bubble in question;
     the bubble in question.
     Return value the acceleration in the x and y directions.
 -}
 
 acceleration : Float -> Dict (Id,Id) Float -> Bubble.Model -> Bubble.Model ->
     (Float, Float)
-acceleration stiffness springs bubble2 bubble1 =
+acceleration strength springs bubble2 bubble1 =
     case Dict.get (bubble1.id, bubble2.id) springs of
         Nothing ->
             (0, 0)
@@ -68,11 +68,11 @@ acceleration stiffness springs bubble2 bubble1 =
 
                 springXLength = bubbleXDistance / bubbleDistance * springLength
                 springXExtension = bubbleXDistance - springXLength
-                accelX = -stiffness * springXExtension / mass
+                accelX = -strength * springXExtension / mass
 
                 springYLength = bubbleYDistance / bubbleDistance * springLength
                 springYExtension = bubbleYDistance - springYLength
-                accelY = -stiffness * springYExtension / mass
+                accelY = -strength * springYExtension / mass
             in
                 (accelX, accelY)
 

@@ -407,13 +407,18 @@ accelDictTest =
           bubbles = [ bubble1, bubble2, bubble3, bubble4 ]
           accelFun : Bubble.Model -> Bubble.Model -> (Float, Float)
           accelFun bubA bubB =
-              if (bubB.id == "b1") then (1, 0) else (99, 99)
+              case (bubA.id, bubB.id) of
+                  ("b1", "b1") -> (0, 0)
+                  ("b2", "b1") -> (1, 0)
+                  ("b3", "b1") -> (1, 0)
+                  ("b4", "b1") -> (1, 0)
+                  _ -> (99, 99)
       in
           assertEqual
           (Just (3, 0))
           (accelDict bubbles accelFun |> Dict.get "b1")
 
-{-, test ("Bubble1 pulled down unequally, but never across, should have " ++
+    , test ("Bubble1 pulled down unequally, but never across, should have " ++
         "acceleration (6, 0)") <|
       let
           bubble1 = { id = "b1" , x = 0, y = 0 , size = 80, colour = "n/a" }
@@ -424,6 +429,7 @@ accelDictTest =
           accelFun : Bubble.Model -> Bubble.Model -> (Float, Float)
           accelFun bubA bubB =
               case (bubA.id, bubB.id) of
+                  ("b1", "b1") -> (0, 0)
                   ("b2", "b1") -> (1, 0)
                   ("b3", "b1") -> (2, 0)
                   ("b4", "b1") -> (3, 0)
@@ -431,6 +437,6 @@ accelDictTest =
       in
           assertEqual
           (Just (6, 0))
-          (accelDict bubbles accelFun |> Dict.get "b1") -}
+          (accelDict bubbles accelFun |> Dict.get "b1")
 
     ]

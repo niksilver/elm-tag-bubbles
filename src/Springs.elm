@@ -121,22 +121,20 @@ accelDict : List Bubble.Model ->
     (Bubble.Model -> Bubble.Model -> (Float, Float)) ->
     (Dict Id (Float, Float))
 accelDict bubbles accelFun =
-    Dict.empty
-        |> Dict.insert "b1" (3, 0)
-        {-let
-        
-    allPairs bubbles
-        |> buildAccelPairs' accelFun
-        |> addAccelPairs'
-
-buildAccelPairs' : (Bubble.Model -> Bubble.Model -> (Float, Float)) ->
-    List (Bubble.Model, Bubble.Model) ->
-    Dict (Bubble.Model, Bubble.Model) (Float, Float)
-buildAccelPairs' accelFun pairs =
     let
-        rev (a,b) = (b,a)
-        pairsRev = List.map rev pairs
-        pairsPlus = pairs ++ pairsRev
+        allAccels : Bubble.Model -> List (Float, Float)
+        allAccels bub =
+            List.map (\otherBub -> accelFun otherBub bub) bubbles
+        sumAccels : List (Float, Float) -> (Float, Float)
+        sumAccels accels =
+            List.foldl
+                (\acc1 acc2 -> (fst acc1 + fst acc2, snd acc1 + snd acc2))
+                (0, 0)
+                accels
+        accel : Bubble.Model -> (Id, (Float, Float))
+        accel bub =
+            (bub.id, allAccels bub |> sumAccels)
     in
-        List.map (\b1 b2 -> 
-        -}
+        List.map accel bubbles
+            |> Dict.fromList
+

@@ -1,4 +1,7 @@
-module Springs (counter, lengths, acceleration) where
+module Springs
+    ( counter, lengths
+    , acceleration, accelDict
+    ) where
 
 import Constants exposing (Tag, Tags, Id)
 import PairCounter exposing (Counter, emptyCounter, allPairs, inc)
@@ -61,9 +64,40 @@ acceleration strength springs bubble2 bubble1 =
         Just springLength ->
             let
                 mass = bubble1.size ^ 2
+                -- If the two bubbles are on the same spot
+                -- pretend the smaller-named one is one pixel to the
+                -- left and up
+                bubble1x =
+                    if (bubble1.x == bubble2.x
+                        && bubble1.y == bubble2.y
+                        && bubble1.id < bubble2.id) then
+                        bubble1.x - 1
+                    else 
+                        bubble1.x
+                bubble1y =
+                    if (bubble1.x == bubble2.x
+                        && bubble1.y == bubble2.y
+                        && bubble1.id < bubble2.id) then
+                        bubble1.y - 1
+                    else 
+                        bubble1.y
+                bubble2x =
+                    if (bubble1.x == bubble2.x
+                        && bubble1.y == bubble2.y
+                        && bubble2.id < bubble1.id) then
+                        bubble2.x - 1
+                    else 
+                        bubble2.x
+                bubble2y =
+                    if (bubble1.x == bubble2.x
+                        && bubble1.y == bubble2.y
+                        && bubble2.id < bubble1.id) then
+                        bubble2.y - 1
+                    else 
+                        bubble2.y
 
-                bubbleXDistance = bubble1.x - bubble2.x
-                bubbleYDistance = bubble1.y - bubble2.y
+                bubbleXDistance = bubble1x - bubble2x
+                bubbleYDistance = bubble1y - bubble2y
                 bubbleDistance = sqrt (bubbleXDistance^2 + bubbleYDistance^2)
 
                 springXLength = bubbleXDistance / bubbleDistance * springLength
@@ -76,3 +110,33 @@ acceleration strength springs bubble2 bubble1 =
             in
                 (accelX, accelY)
 
+{-| Return a dictionary of (x,y) acceleration for each bubble, identified
+    by its id. Parameters are:
+    a list of bubbles;
+    a function which takes a pulling bubble and a pulled bubble and returns
+    the pulled bubble's consequential acceleration.
+-}
+
+accelDict : List Bubble.Model ->
+    (Bubble.Model -> Bubble.Model -> (Float, Float)) ->
+    (Dict Id (Float, Float))
+accelDict bubbles accelFun =
+    Dict.empty
+        |> Dict.insert "b1" (3, 0)
+        {-let
+        
+    allPairs bubbles
+        |> buildAccelPairs' accelFun
+        |> addAccelPairs'
+
+buildAccelPairs' : (Bubble.Model -> Bubble.Model -> (Float, Float)) ->
+    List (Bubble.Model, Bubble.Model) ->
+    Dict (Bubble.Model, Bubble.Model) (Float, Float)
+buildAccelPairs' accelFun pairs =
+    let
+        rev (a,b) = (b,a)
+        pairsRev = List.map rev pairs
+        pairsPlus = pairs ++ pairsRev
+    in
+        List.map (\b1 b2 -> 
+        -}

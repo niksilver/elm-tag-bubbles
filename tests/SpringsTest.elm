@@ -3,6 +3,7 @@ module SpringsTest (all) where
 import Springs exposing (..)
 import Constants exposing (Tag, Tags)
 import PairCounter exposing (countOf, emptyCounter, set)
+import Bubble
 
 import Maybe exposing (Maybe(Just))
 import Dict exposing (empty, insert)
@@ -35,6 +36,7 @@ all =
     [ counterTest
     , lengthsTest
     , accelerationTest
+    , accelDictTest
     ]
 
 counterTest : Test
@@ -215,6 +217,105 @@ accelerationTest =
           (stiffness * -springXExtension / (60 * 60))
           (acceleration stiffness springs bubble1 bubble2 |> fst)
 
+    , test "Acceleration of bubble1 x-axis when bubble2 is same coord should be as if bubble1 is 1 pixel to the left and 1 pixel up" <|
+      let
+          bubble1 =
+              { id = "b1"
+              , x = 480, y = 350
+              , size = 80, colour = "irrelevant" }
+          bubble2 =
+              { id = "b2"
+              , x = 480, y = 350
+              , size = 60, colour = "irrelevant" }
+          stiffness = 20.0
+          springLength = 120.0
+          springs =
+              empty
+                  |> insert ("b1", "b2") springLength
+                  |> insert ("b2", "b1") springLength
+          bubbleXDistance = 479 - 480
+          bubbleDistance = sqrt (1^2 + 1^2)
+          springXLength = bubbleXDistance / bubbleDistance * springLength
+          springXExtension = bubbleXDistance - springXLength
+      in
+          assertEqualTo4DP
+          (stiffness * -springXExtension / (80 * 80))
+          (acceleration stiffness springs bubble2 bubble1 |> fst)
+
+    , test "Acceleration of bubble1 y-axis when bubble2 is same coord should be as if bubble1 is 1 pixel to the left and 1 pixel up" <|
+      let
+          bubble1 =
+              { id = "b1"
+              , x = 480, y = 350
+              , size = 80, colour = "irrelevant" }
+          bubble2 =
+              { id = "b2"
+              , x = 480, y = 350
+              , size = 60, colour = "irrelevant" }
+          stiffness = 20.0
+          springLength = 120.0
+          springs =
+              empty
+                  |> insert ("b1", "b2") springLength
+                  |> insert ("b2", "b1") springLength
+          bubbleYDistance = 349 - 350
+          bubbleDistance = sqrt (1^2 + 1^2)
+          springYLength = bubbleYDistance / bubbleDistance * springLength
+          springYExtension = bubbleYDistance - springYLength
+      in
+          assertEqualTo4DP
+          (stiffness * -springYExtension / (80 * 80))
+          (acceleration stiffness springs bubble2 bubble1 |> snd)
+
+    , test "Acceleration of bubble2 x-axis when bubble1 is same coord should be as if bubble1 is 1 pixel to the left and 1 pixel up" <|
+      let
+          bubble1 =
+              { id = "b1"
+              , x = 480, y = 350
+              , size = 80, colour = "irrelevant" }
+          bubble2 =
+              { id = "b2"
+              , x = 480, y = 350
+              , size = 60, colour = "irrelevant" }
+          stiffness = 20.0
+          springLength = 120.0
+          springs =
+              empty
+                  |> insert ("b1", "b2") springLength
+                  |> insert ("b2", "b1") springLength
+          bubbleXDistance = 480 - 479
+          bubbleDistance = sqrt (1^2 + 1^2)
+          springXLength = bubbleXDistance / bubbleDistance * springLength
+          springXExtension = bubbleXDistance - springXLength
+      in
+          assertEqualTo4DP
+          (stiffness * -springXExtension / (60 * 60))
+          (acceleration stiffness springs bubble1 bubble2 |> fst)
+
+    , test "Acceleration of bubble2 y-axis when bubble1 is same coord should be as if bubble1 is 1 pixel to the left and 1 pixel up" <|
+      let
+          bubble1 =
+              { id = "b1"
+              , x = 480, y = 350
+              , size = 80, colour = "irrelevant" }
+          bubble2 =
+              { id = "b2"
+              , x = 480, y = 350
+              , size = 60, colour = "irrelevant" }
+          stiffness = 20.0
+          springLength = 120.0
+          springs =
+              empty
+                  |> insert ("b1", "b2") springLength
+                  |> insert ("b2", "b1") springLength
+          bubbleYDistance = 350 - 349
+          bubbleDistance = sqrt (1^2 + 1^2)
+          springYLength = bubbleYDistance / bubbleDistance * springLength
+          springYExtension = bubbleYDistance - springYLength
+      in
+          assertEqualTo4DP
+          (stiffness * -springYExtension / (60 * 60))
+          (acceleration stiffness springs bubble1 bubble2 |> snd)
 
     , test "Acceleration of bubble1 y-axis (too far up, stretched spring)" <|
       let
@@ -292,3 +393,44 @@ accelerationTest =
 
     ]
 
+accelDictTest : Test
+accelDictTest =
+    suite "accelDictTest"
+
+    [ test ("Bubble1 pulled down equally, but never across, should have " ++
+        "acceleration (3, 0)") <|
+      let
+          bubble1 = { id = "b1" , x = 0, y = 0 , size = 80, colour = "n/a" }
+          bubble2 = { id = "b2" , x = 0, y = 0 , size = 80, colour = "n/a" }
+          bubble3 = { id = "b3" , x = 0, y = 0 , size = 80, colour = "n/a" }
+          bubble4 = { id = "b4" , x = 0, y = 0 , size = 80, colour = "n/a" }
+          bubbles = [ bubble1, bubble2, bubble3, bubble4 ]
+          accelFun : Bubble.Model -> Bubble.Model -> (Float, Float)
+          accelFun bubA bubB =
+              if (bubB.id == "b1") then (1, 0) else (99, 99)
+      in
+          assertEqual
+          (Just (3, 0))
+          (accelDict bubbles accelFun |> Dict.get "b1")
+
+{-, test ("Bubble1 pulled down unequally, but never across, should have " ++
+        "acceleration (6, 0)") <|
+      let
+          bubble1 = { id = "b1" , x = 0, y = 0 , size = 80, colour = "n/a" }
+          bubble2 = { id = "b2" , x = 0, y = 0 , size = 80, colour = "n/a" }
+          bubble3 = { id = "b3" , x = 0, y = 0 , size = 80, colour = "n/a" }
+          bubble4 = { id = "b4" , x = 0, y = 0 , size = 80, colour = "n/a" }
+          bubbles = [ bubble1, bubble2, bubble3, bubble4 ]
+          accelFun : Bubble.Model -> Bubble.Model -> (Float, Float)
+          accelFun bubA bubB =
+              case (bubA.id, bubB.id) of
+                  ("b2", "b1") -> (1, 0)
+                  ("b3", "b1") -> (2, 0)
+                  ("b4", "b1") -> (3, 0)
+                  _ -> (99, 99)
+      in
+          assertEqual
+          (Just (6, 0))
+          (accelDict bubbles accelFun |> Dict.get "b1") -}
+
+    ]

@@ -111,6 +111,13 @@ acceleration strength springs bubble2 bubble1 =
             in
                 (accelX, accelY)
 
+signedSqrt : Float -> Float
+signedSqrt a =
+    if a < 0 then
+        -1 * (sqrt -a)
+    else
+        sqrt a
+
 {-| Return a dictionary of (x,y) acceleration for each bubble, identified
     by its id. Parameters are:
     a list of bubbles;

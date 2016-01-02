@@ -9,7 +9,7 @@ import Signal
 import Time
 
 phys1Model =
-    { dx = 0, dy = 0 --1
+    { dx = 0, dy = 0
     , bubble =
         { id = "b1"
         , x = 340, y = 200
@@ -17,7 +17,7 @@ phys1Model =
     }
 
 phys2Model =
-    {  dx = 0 {-1-}, dy = 0
+    {  dx = 0, dy = 0
     , bubble =
         { id = "b2"
         , x = 300, y = 250
@@ -25,7 +25,7 @@ phys2Model =
     }
 
 phys3Model =
-    { dx = 0 {- -1 -}, dy = 0
+    { dx = 0, dy = 0
     , bubble =
         { id = "b3"
         , x = 480, y = 350
@@ -33,7 +33,7 @@ phys3Model =
     }
 
 phys4Model =
-    { dx = 0, dy = 0 -- -1
+    { dx = 0, dy = 0
     , bubble =
         { id = "b4"
         , x = 400, y = 400

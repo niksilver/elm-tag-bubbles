@@ -37,7 +37,7 @@ updateOne id physAct model =
 
 updateAll : Model -> Model
 updateAll model =
-    map (\mod -> Phys.update Phys.Move mod) model
+    map (Phys.update Phys.Move) model
 
 -- A view of a PhysicsBubble, using an address at this level of the architecture
 

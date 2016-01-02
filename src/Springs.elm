@@ -29,7 +29,8 @@ includePairs' tags counter =
 {-| From a counter, generate a `Dict` from each tag id pair to its
     respective spring length. The pair with the highest tag count
     has the shortest spring length; the pair with the lowest has the
-    longest spring length. Shortest and longest lengths are the first
+    longest spring length. Any id pair is represented both ways
+    round. Shortest and longest lengths are the first
     two parameters.
 -}
 

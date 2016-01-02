@@ -9,7 +9,7 @@ import Signal
 import Time
 
 phys1Model =
-    { dx = 0, dy = 1
+    { dx = 0, dy = 0 --1
     , bubble =
         { id = "b1"
         , x = 340, y = 200
@@ -17,7 +17,7 @@ phys1Model =
     }
 
 phys2Model =
-    {  dx = 1, dy = 0
+    {  dx = 0 {-1-}, dy = 0
     , bubble =
         { id = "b2"
         , x = 300, y = 250
@@ -25,7 +25,7 @@ phys2Model =
     }
 
 phys3Model =
-    { dx = -1, dy = 0
+    { dx = 0 {- -1 -}, dy = 0
     , bubble =
         { id = "b3"
         , x = 480, y = 350
@@ -33,22 +33,22 @@ phys3Model =
     }
 
 phys4Model =
-    { dx = 0, dy = -1
+    { dx = 0, dy = 0 -- -1
     , bubble =
         { id = "b4"
         , x = 400, y = 400
-        , size = 60, colour = colour2 }
+        , size = 180, colour = colour2 }
     }
 
 springs : Dict (Id, Id) Float
 springs =
     Dict.empty
-        |> insert ("b1", "b2") 200
-        |> insert ("b1", "b3") 300
-        |> insert ("b1", "b4") 150
-        |> insert ("b2", "b3") 250
-        |> insert ("b2", "b4") 350
-        |> insert ("b3", "b4") 400
+        |> insert ("b1", "b2") 100 |> insert ("b2", "b1") 100
+        |> insert ("b1", "b3") 150 |> insert ("b3", "b1") 150
+        |> insert ("b1", "b4")  75 |> insert ("b4", "b1")  75
+        |> insert ("b2", "b3") 125 |> insert ("b3", "b2") 125
+        |> insert ("b2", "b4") 175 |> insert ("b4", "b2") 175
+        |> insert ("b3", "b4") 200 |> insert ("b4", "b3") 200
 
 model : UI.Model
 model =

@@ -439,4 +439,24 @@ accelDictTest =
           (Just (6, 0))
           (accelDict bubbles accelFun |> Dict.get "b1")
 
+    , test "Bubble2 pulled in different directions" <|
+      let
+          bubble1 = { id = "b1" , x = 0, y = 0 , size = 80, colour = "n/a" }
+          bubble2 = { id = "b2" , x = 0, y = 0 , size = 80, colour = "n/a" }
+          bubble3 = { id = "b3" , x = 0, y = 0 , size = 80, colour = "n/a" }
+          bubble4 = { id = "b4" , x = 0, y = 0 , size = 80, colour = "n/a" }
+          bubbles = [ bubble1, bubble2, bubble3, bubble4 ]
+          accelFun : Bubble.Model -> Bubble.Model -> (Float, Float)
+          accelFun bubA bubB =
+              case (bubA.id, bubB.id) of
+                  ("b1", "b2") -> (-10, 5)
+                  ("b2", "b2") -> (0, 0)
+                  ("b3", "b2") -> (1, 30)
+                  ("b4", "b2") -> (2, -2)
+                  _ -> (99, 99)
+      in
+          assertEqual
+          (Just (-7, 33))
+          (accelDict bubbles accelFun |> Dict.get "b2")
+
     ]

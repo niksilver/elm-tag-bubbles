@@ -146,3 +146,18 @@ accelDict bubbles accelFun =
         List.map accel bubbles
             |> Dict.fromList
 
+{- Calculate the x and y drag given an initial dx and dy velocity.
+-}
+
+drag : Float -> Float -> (Float, Float)
+drag dx dy =
+    let
+        v = sqrt (dx^2 + dy^2)
+        drag = -0.02 * v * v
+        dragX = if v == 0 then 0 else drag * dx / v
+        dragY = if v == 0 then 0 else drag * dy / v
+        dragX' = if abs dragX > abs dx then -dx else dragX
+        dragY' = if abs dragY > abs dy then -dy else dragY
+    in
+        (dragX', dragY')
+

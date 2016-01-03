@@ -62,8 +62,8 @@ updateVelocity accels physBub =
         dragY = if v == 0 then 0 else drag * physBub.dy / v
         dragX' = if abs dragX > abs physBub.dx then -physBub.dx else dragX
         dragY' = if abs dragY > abs physBub.dy then -physBub.dy else dragY
-        dx = physBub.dx + accelX + dragX
-        dy = physBub.dy + accelY + dragY
+        dx = physBub.dx + accelX + dragX'
+        dy = physBub.dy + accelY + dragY'
     in
         { physBub | dx = dx, dy = dy }
 

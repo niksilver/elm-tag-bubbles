@@ -2,8 +2,11 @@ module Bubble where
 
 import Constants exposing (colour1, colour2, bubbleOpacity)
 
-import Svg exposing (Svg, circle)
-import Svg.Attributes exposing (cx, cy, r, fill, opacity)
+import Svg exposing (Svg, circle, text, text', g)
+import Svg.Attributes exposing
+    ( cx, cy, r, fill, opacity
+    , x, y, textAnchor, alignmentBaseline, fontSize
+    )
 import Svg.Events exposing (onClick)
 import Signal exposing (message)
 
@@ -12,7 +15,9 @@ type alias Model =
     , x : Float
     , y : Float
     , size : Float
-    , colour: String}
+    , label : String
+    , colour: String
+    }
 
 type Action = Flip | Move Float Float
 
@@ -31,12 +36,26 @@ flip model =
 
 view : Signal.Address Action -> Model -> Svg
 view address model =
-    circle
-        [ cx (toString model.x)
-        , cy (toString model.y)
-        , r (toString model.size)
-        , fill model.colour
-        , opacity bubbleOpacity
-        , onClick (message address Flip)
-        ] []
+    let
+        circleAttrs =
+            [ cx (toString model.x)
+            , cy (toString model.y)
+            , r (toString model.size)
+            , fill model.colour
+            , opacity bubbleOpacity
+            , onClick (message address Flip)
+            ]
+        textAttrs =
+            [ x (toString model.x)
+            , y (toString model.y)
+            , textAnchor "middle"
+            -- This next one doesn't work in Firefox
+            , alignmentBaseline "central"
+            , fontSize "40pt"
+            ]
+    in
+        g []
+        [ circle circleAttrs []
+        , text' textAttrs [ text model.label ]
+        ]
 

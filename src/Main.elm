@@ -37,7 +37,7 @@ phys4Model =
     , bubble =
         { id = "b4"
         , x = 400, y = 400
-        , size = 180, colour = colour2 }
+        , size = 120, colour = colour2 }
     }
 
 springs : Dict (Id, Id) Float

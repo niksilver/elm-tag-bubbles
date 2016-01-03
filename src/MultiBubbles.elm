@@ -57,7 +57,7 @@ updateVelocity accels physBub =
         accelX = fst accelXY
         accelY = snd accelXY
         v = sqrt (physBub.dx^2 + physBub.dy^2)
-        drag = -1.0 * v * v
+        drag = -0.02 * v * v
         dragX = if v == 0 then 0 else drag * physBub.dx / v
         dragY = if v == 0 then 0 else drag * physBub.dy / v
         dragX' = if abs dragX > abs physBub.dx then -physBub.dx else dragX

@@ -1,6 +1,7 @@
 module Springs
     ( counter, lengths
     , acceleration, accelDict
+    , drag
     ) where
 
 import Constants exposing (Tag, Tags, Id)

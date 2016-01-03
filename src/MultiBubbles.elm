@@ -3,6 +3,7 @@ module MultiBubbles where
 -- Multiple bubbles
 
 import PhysicsBubble as Phys
+import Springs exposing (drag)
 
 import List exposing (reverse, length, indexedMap, map)
 import Dict exposing (Dict)
@@ -56,14 +57,11 @@ updateVelocity accels physBub =
         accelXY = Dict.get physBub.bubble.id accels |> withDefault (0, 0)
         accelX = fst accelXY
         accelY = snd accelXY
-        v = sqrt (physBub.dx^2 + physBub.dy^2)
-        drag = -0.02 * v * v
-        dragX = if v == 0 then 0 else drag * physBub.dx / v
-        dragY = if v == 0 then 0 else drag * physBub.dy / v
-        dragX' = if abs dragX > abs physBub.dx then -physBub.dx else dragX
-        dragY' = if abs dragY > abs physBub.dy then -physBub.dy else dragY
-        dx = physBub.dx + accelX + dragX'
-        dy = physBub.dy + accelY + dragY'
+        dragXY = drag physBub.dx physBub.dy
+        dragX = fst dragXY
+        dragY = snd dragXY
+        dx = physBub.dx + accelX + dragX
+        dy = physBub.dy + accelY + dragY
     in
         { physBub | dx = dx, dy = dy }
 

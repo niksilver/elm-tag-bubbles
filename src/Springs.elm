@@ -4,7 +4,7 @@ module Springs
     , drag
     ) where
 
-import Constants exposing (Tag, Tags, Id)
+import Constants exposing (Tag, Tags, Id, airDragFactor)
 import PairCounter exposing (Counter, emptyCounter, allPairs, inc)
 import Bubble
 
@@ -154,7 +154,7 @@ drag : Float -> Float -> (Float, Float)
 drag dx dy =
     let
         v = sqrt (dx^2 + dy^2)
-        drag = -0.02 * v * v
+        drag = -airDragFactor * v * v
         dragX = if v == 0 then 0 else drag * dx / v
         dragY = if v == 0 then 0 else drag * dy / v
         dragX' = if abs dragX > abs dx then -dx else dragX

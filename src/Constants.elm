@@ -21,3 +21,9 @@ colour2 = "red"
 bubbleOpacity : String
 bubbleOpacity = "0.75"
 
+springStrength : Float
+springStrength = 25.0
+
+airDragFactor : Float
+airDragFactor = 0.02
+

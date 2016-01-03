@@ -1,6 +1,6 @@
 module World where
 
-import Constants exposing (Id)
+import Constants exposing (Id, springStrength)
 import MultiBubbles as MB
 import Springs exposing (acceleration, accelDict)
 
@@ -24,7 +24,7 @@ update action model =
         Direct act -> { model | bubbles = MB.update act model.bubbles }
         Tick ->
             let
-                strength = 25.0
+                strength = springStrength
                 accelFn = acceleration strength model.springs
                 bubbles = List.map .bubble model.bubbles
                 accels = accelDict bubbles accelFn

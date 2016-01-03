@@ -3,7 +3,7 @@ module MultiBubbles where
 -- Multiple bubbles
 
 import PhysicsBubble as Phys
-import Springs exposing (drag)
+import Springs exposing (drag, dampen)
 
 import List exposing (reverse, length, indexedMap, map)
 import Dict exposing (Dict)
@@ -62,8 +62,9 @@ updateVelocity accels physBub =
         dragY = snd dragXY
         dx = physBub.dx + accelX + dragX
         dy = physBub.dy + accelY + dragY
+        dampenedDxDy = dampen dx dy
     in
-        { physBub | dx = dx, dy = dy }
+        { physBub | dx = fst dampenedDxDy, dy = snd dampenedDxDy }
 
 -- A view of a PhysicsBubble, using an address at this level of the architecture
 

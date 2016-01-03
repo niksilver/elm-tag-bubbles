@@ -13,7 +13,7 @@ phys1Model =
     , bubble =
         { id = "b1"
         , x = 340, y = 200
-        , size = 180, label = "One", colour = colour2 }
+        , size = 180, label = "One" }
     }
 
 phys2Model =
@@ -21,7 +21,7 @@ phys2Model =
     , bubble =
         { id = "b2"
         , x = 300, y = 250
-        , size = 100, label = "Two", colour = colour1 }
+        , size = 100, label = "Two" }
     }
 
 phys3Model =
@@ -29,7 +29,7 @@ phys3Model =
     , bubble =
         { id = "b3"
         , x = 480, y = 350
-        , size = 80, label = "Three", colour = colour1 }
+        , size = 80, label = "Three" }
     }
 
 phys4Model =
@@ -37,7 +37,7 @@ phys4Model =
     , bubble =
         { id = "b4"
         , x = 400, y = 400
-        , size = 120, label = "Four", colour = colour2 }
+        , size = 120, label = "Four" }
     }
 
 springs : Dict (Id, Id) Float

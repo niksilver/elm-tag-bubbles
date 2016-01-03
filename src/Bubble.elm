@@ -1,6 +1,7 @@
 module Bubble where
 
 import Constants exposing (colour1, colour2, bubbleOpacity)
+import Colours exposing (pickBaseColour, pickTextColour)
 
 import Svg exposing (Svg, circle, text, text', g)
 import Svg.Attributes exposing
@@ -16,7 +17,6 @@ type alias Model =
     , y : Float
     , size : Float
     , label : String
-    , colour: String
     }
 
 type Action = Flip | Move Float Float
@@ -29,10 +29,10 @@ update action model =
 
 flip : Model -> Model
 flip model =
-    if model.colour == colour1 then
-        { model | colour = colour2 }
+    if model.label == "Flipped" then
+        { model | label = "Unflipped" }
     else
-        { model | colour = colour1 }
+        { model | label = "Flipped" }
 
 view : Signal.Address Action -> Model -> Svg
 view address model =
@@ -41,7 +41,7 @@ view address model =
             [ cx (toString model.x)
             , cy (toString model.y)
             , r (toString model.size)
-            , fill model.colour
+            , fill (pickBaseColour model.label)
             , opacity bubbleOpacity
             ]
         coveringCircleAttrs' =
@@ -58,6 +58,7 @@ view address model =
             -- This next one doesn't work in Firefox
             , alignmentBaseline "central"
             , fontSize "40pt"
+            , fill (pickTextColour model.label)
             ]
     in
         g []

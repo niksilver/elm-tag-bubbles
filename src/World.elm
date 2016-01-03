@@ -24,7 +24,7 @@ update action model =
         Direct act -> { model | bubbles = MB.update act model.bubbles }
         Tick ->
             let
-                strength = 5.0
+                strength = 20.0
                 accelFn = acceleration strength model.springs
                 bubbles = List.map .bubble model.bubbles
                 accels = accelDict bubbles accelFn

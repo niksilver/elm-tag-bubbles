@@ -56,8 +56,16 @@ updateVelocity accels physBub =
         accelXY = Dict.get physBub.bubble.id accels |> withDefault (0, 0)
         accelX = fst accelXY
         accelY = snd accelXY
+        v = sqrt (physBub.dx^2 + physBub.dy^2)
+        drag = -1.0 * v * v
+        dragX = if v == 0 then 0 else drag * physBub.dx / v
+        dragY = if v == 0 then 0 else drag * physBub.dy / v
+        dragX' = if abs dragX > abs physBub.dx then -physBub.dx else dragX
+        dragY' = if abs dragY > abs physBub.dy then -physBub.dy else dragY
+        dx = physBub.dx + accelX + dragX
+        dy = physBub.dy + accelY + dragY
     in
-        { physBub | dx = physBub.dx + accelX, dy = physBub.dy + accelY }
+        { physBub | dx = dx, dy = dy }
 
 -- A view of a PhysicsBubble, using an address at this level of the architecture
 

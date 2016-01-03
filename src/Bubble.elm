@@ -37,12 +37,18 @@ flip model =
 view : Signal.Address Action -> Model -> Svg
 view address model =
     let
-        circleAttrs =
+        baseCircleAttrs =
             [ cx (toString model.x)
             , cy (toString model.y)
             , r (toString model.size)
             , fill model.colour
             , opacity bubbleOpacity
+            ]
+        coveringCircleAttrs' =
+            [ cx (toString model.x)
+            , cy (toString model.y)
+            , r (toString model.size)
+            , opacity "0"
             , onClick (message address Flip)
             ]
         textAttrs =
@@ -55,7 +61,8 @@ view address model =
             ]
     in
         g []
-        [ circle circleAttrs []
+        [ circle baseCircleAttrs []
         , text' textAttrs [ text model.label ]
+        , circle coveringCircleAttrs' []
         ]
 

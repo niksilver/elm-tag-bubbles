@@ -24,10 +24,11 @@ type Action
         | Direct World.Action
         | Tick
         | NewTags TagsResult
+        | Click
 
 initialEffects : Effects Action
 initialEffects =
-    Effects.map NewTags TagFetcher.getTags
+    Effects.none
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
@@ -48,6 +49,10 @@ update action model =
             ({ model | newTags = tags }
              , Effects.none
             )
+        Click ->
+            ( model
+            , Effects.map NewTags TagFetcher.getTags
+            )
 
 view : Signal.Address Action -> Model -> Html
 view address model =
@@ -58,9 +63,15 @@ view address model =
 
 svgView : Signal.Address Action -> Model -> Html
 svgView address model =
-    svg
-        [ width (toString model.width)
-        , height (toString model.height)
-        ]
-        (World.view (forwardTo address Direct) model.world)
+    let
+        context =
+            { click = Signal.forwardTo address (always Click)
+            , address = Signal.forwardTo address Direct
+            }
+    in
+        svg
+            [ width (toString model.width)
+            , height (toString model.height)
+            ]
+            (World.view context model.world)
 

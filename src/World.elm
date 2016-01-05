@@ -1,11 +1,10 @@
 module World where
 
-import Constants exposing (Id, springStrength)
+import Constants exposing (Id, springStrength, Context, forwardTo)
 import MultiBubbles as MB
 import Springs exposing (acceleration, accelDict)
 
 import Dict exposing (Dict)
-import Signal exposing (forwardTo)
 import Svg exposing (Svg)
 
 
@@ -33,7 +32,7 @@ update action model =
             in
                 update (Direct MB.Tick) model'
 
-view : Signal.Address Action -> Model -> List Svg
-view address model =
-    MB.view (forwardTo address Direct) model.bubbles
+view : Context Action -> Model -> List Svg
+view context model =
+    MB.view (forwardTo context Direct) model.bubbles
 

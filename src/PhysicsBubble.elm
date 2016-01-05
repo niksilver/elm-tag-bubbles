@@ -1,9 +1,9 @@
 module PhysicsBubble where
 
+import Constants exposing (Context, forwardTo)
 import Bubble exposing (Model)
 
 import Svg exposing (Svg)
-import Signal
 
 type alias Model =
     { dx : Float
@@ -24,7 +24,7 @@ update action model =
     in
         { model | bubble = Bubble.update act model.bubble }
 
-view : Signal.Address Action -> Model -> Svg
-view address model =
-    Bubble.view (Signal.forwardTo address Direct) model.bubble
+view : Context Action -> Model -> Svg
+view context model =
+    Bubble.view (forwardTo context Direct) model.bubble
 

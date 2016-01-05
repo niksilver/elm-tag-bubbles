@@ -2,6 +2,7 @@ module MultiBubbles where
 
 -- Multiple bubbles
 
+import Constants exposing (Context, forwardTo)
 import PhysicsBubble as Phys
 import Springs exposing (drag, dampen)
 
@@ -9,7 +10,6 @@ import List exposing (reverse, length, indexedMap, map)
 import Dict exposing (Dict)
 import Maybe exposing (withDefault)
 import Svg exposing (Svg)
-import Signal exposing (Address, forwardTo)
 
 type alias Model = List Phys.Model
 
@@ -68,11 +68,11 @@ updateVelocity accels physBub =
 
 -- A view of a PhysicsBubble, using an address at this level of the architecture
 
-fwdingView : Address Action -> Phys.Model -> Svg
-fwdingView address physModel =
-    Phys.view (forwardTo address (Direct physModel.bubble.id)) physModel
+fwdingView : Context Action -> Phys.Model -> Svg
+fwdingView context physModel =
+    Phys.view (forwardTo context (Direct physModel.bubble.id)) physModel
 
-view : Address Action -> Model -> List Svg
-view address model =
-    map (fwdingView address) model
+view : Context Action -> Model -> List Svg
+view context model =
+    map (fwdingView context) model
 

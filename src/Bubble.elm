@@ -1,6 +1,6 @@
 module Bubble where
 
-import Constants exposing (colour1, colour2, bubbleOpacity)
+import Constants exposing (colour1, colour2, bubbleOpacity, Context)
 import Colours exposing (pickBaseColour, pickTextColour)
 
 import Svg exposing (Svg, circle, text, text', g)
@@ -19,12 +19,12 @@ type alias Model =
     , label : String
     }
 
-type Action = Flip | Move Float Float
+type Action = Click | Move Float Float
 
 update : Action -> Model -> Model
 update action model =
     case action of
-        Flip -> flip model
+        Click -> flip model
         Move dx dy -> { model | x = model.x + dx, y = model.y + dy }
 
 flip : Model -> Model
@@ -34,8 +34,8 @@ flip model =
     else
         { model | label = "Flipped" }
 
-view : Signal.Address Action -> Model -> Svg
-view address model =
+view : Context Action -> Model -> Svg
+view context model =
     let
         baseCircleAttrs =
             [ cx (toString model.x)
@@ -49,7 +49,7 @@ view address model =
             , cy (toString model.y)
             , r (toString model.size)
             , opacity "0"
-            , onClick (message address Flip)
+            , onClick (message context.click Click)
             ]
         textAttrs =
             [ x (toString model.x)

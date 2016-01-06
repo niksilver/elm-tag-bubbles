@@ -8,9 +8,10 @@ import Http exposing (url, get)
 import Effects exposing (Effects, task)
 import Task exposing (toMaybe)
 
-url =
+url tag =
     Http.url "http://content.guardianapis.com/search"
     [ ("show-tags", "keyword")
+    , ("tag", tag)
     , ("page-size", "10")
     , ("api-key", apiKey)
     ]
@@ -47,9 +48,10 @@ responseToTags : Decoder (List Tags)
 responseToTags =
     at ["response", "results"] resultsToTags
 
-getTags : Effects TagsResult
-getTags =
-    get responseToTags url
+getTags : String -> Effects TagsResult
+getTags tag =
+    url tag
+        |> get responseToTags
         |> Task.toResult
         |> Effects.task
 

@@ -25,7 +25,7 @@ type Action
         | Direct World.Action
         | Tick
         | NewTags TagsResult
-        | Click
+        | Click String
 
 initialEffects : Effects Action
 initialEffects =
@@ -50,9 +50,9 @@ update action model =
             ({ model | newTags = tags }
              , Effects.none
             )
-        Click ->
+        Click tag ->
             ( model
-            , Effects.map NewTags TagFetcher.getTags
+            , Effects.map NewTags (TagFetcher.getTags tag)
             )
 
 view : Signal.Address Action -> Model -> Html
@@ -65,7 +65,7 @@ view address model =
 svgView : Signal.Address Action -> Model -> Html
 svgView address model =
     let
-        context = Context.create (always Click) Direct address
+        context = Context.create Click Direct address
     in
         svg
             [ width (toString model.width)

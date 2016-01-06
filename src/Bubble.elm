@@ -50,7 +50,7 @@ view context model =
             , cy (toString model.y)
             , r (toString model.size)
             , opacity "0"
-            , onClick (message context.click Click)
+            , onClick (message context.click "football/fa-cup")
             ]
         textAttrs =
             [ x (toString model.x)

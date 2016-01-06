@@ -3,6 +3,7 @@ module UI where
 -- Bubble forms captured as Html
 
 import Constants exposing (TagsResult)
+import Context
 import World
 import TagFetcher
 
@@ -64,10 +65,7 @@ view address model =
 svgView : Signal.Address Action -> Model -> Html
 svgView address model =
     let
-        context =
-            { click = Signal.forwardTo address (always Click)
-            , address = Signal.forwardTo address Direct
-            }
+        context = Context.create (always Click) Direct address
     in
         svg
             [ width (toString model.width)

@@ -1,6 +1,7 @@
 module World where
 
-import Constants exposing (Id, springStrength, Context, forwardTo)
+import Constants exposing (Id, springStrength)
+import Context exposing (Context, forwardTo)
 import MultiBubbles as MB
 import Springs exposing (acceleration, accelDict)
 

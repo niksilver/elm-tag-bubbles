@@ -4,7 +4,6 @@ module Constants
     , colour1, colour2
     , bubbleOpacity
     , springStrength, airDragFactor
-    , Context, forwardTo
     ) where
 
 import Http exposing (Error)
@@ -19,16 +18,6 @@ type alias Tags = List Tag
 type alias TagsResult = Result Http.Error (List Tags)
 
 emptyTagsResult = Ok [[]]
-
-type alias Context a =
-    { click : Signal.Address a, address : Signal.Address a }
-
-forwardTo : Context b -> (a -> b) -> Context a
-forwardTo context fn =
-    { context
-    | click = Signal.forwardTo context.click fn
-    , address = Signal.forwardTo context.address fn
-    }
 
 colour1 : String
 colour1 = "green"

@@ -2,7 +2,7 @@ module MultiBubbles where
 
 -- Multiple bubbles
 
-import Constants exposing (Context, forwardTo)
+import Context exposing (Context, forwardTo)
 import PhysicsBubble as Phys
 import Springs exposing (drag, dampen)
 

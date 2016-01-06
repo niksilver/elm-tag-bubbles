@@ -1,6 +1,6 @@
 module PhysicsBubble where
 
-import Constants exposing (Context, forwardTo)
+import Context exposing (Context, forwardTo)
 import Bubble exposing (Model)
 
 import Svg exposing (Svg)

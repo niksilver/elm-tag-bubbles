@@ -1,6 +1,7 @@
 module Bubble where
 
-import Constants exposing (colour1, colour2, bubbleOpacity, Context)
+import Constants exposing (colour1, colour2, bubbleOpacity)
+import Context exposing (Context)
 import Colours exposing (pickBaseColour, pickTextColour)
 
 import Svg exposing (Svg, circle, text, text', g)

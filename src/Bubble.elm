@@ -1,7 +1,7 @@
 module Bubble where
 
 import Constants exposing (colour1, colour2, bubbleOpacity)
-import Context exposing (Context)
+import Context exposing (Context, toClicker)
 import Colours exposing (pickBaseColour, pickTextColour)
 
 import Svg exposing (Svg, circle, text, text', g)
@@ -50,7 +50,7 @@ view context model =
             , cy (toString model.y)
             , r (toString model.size)
             , opacity "0"
-            , onClick (message context.click "football/fa-cup")
+            , onClick (message context.click (toClicker "football/fa-cup"))
             ]
         textAttrs =
             [ x (toString model.x)

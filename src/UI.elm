@@ -3,7 +3,7 @@ module UI where
 -- Bubble forms captured as Html
 
 import Constants exposing (TagsResult)
-import Context
+import Context exposing (Clicker, fromClicker)
 import World
 import TagFetcher
 
@@ -25,7 +25,7 @@ type Action
         | Direct World.Action
         | Tick
         | NewTags TagsResult
-        | Click String
+        | Click Clicker
 
 initialEffects : Effects Action
 initialEffects =
@@ -50,9 +50,9 @@ update action model =
             ({ model | newTags = tags }
              , Effects.none
             )
-        Click tag ->
+        Click clicker ->
             ( model
-            , Effects.map NewTags (TagFetcher.getTags tag)
+            , Effects.map NewTags (TagFetcher.getTags (fromClicker clicker))
             )
 
 view : Signal.Address Action -> Model -> Html

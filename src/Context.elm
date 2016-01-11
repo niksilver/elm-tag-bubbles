@@ -11,8 +11,6 @@ module Context
 import Signal exposing (Address, foldp)
 import Time exposing (Time)
 
-import Debug
-
 -- A mouse click with a String identifier
 
 type CountedClick = NoClick | SingleClick String | DoubleClick String

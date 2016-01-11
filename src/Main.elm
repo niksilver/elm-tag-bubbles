@@ -1,5 +1,9 @@
 import Constants exposing (Id, colour1, colour2, emptyTagsResult)
-import UI exposing (initialEffects, update, view, Action(Tick))
+import UI exposing
+    ( initialEffects, update, view
+    , Action(Tick, Click)
+    , countedClicks
+    )
 
 import StartApp exposing (start)
 import Dict exposing (Dict, empty, insert)
@@ -75,7 +79,7 @@ app =
         { init = (model, initialEffects)
         , update = update
         , view = view
-        , inputs = [ticker]
+        , inputs = [ticker, countedClicks]
         }
 
 main =

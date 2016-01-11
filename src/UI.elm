@@ -3,7 +3,7 @@ module UI where
 -- Bubble forms captured as Html
 
 import Constants exposing (TagsResult)
-import Context exposing (Clicker, fromClicker)
+import Context exposing (CountedClick (NoClick, SingleClick, DoubleClick))
 import World
 import TagFetcher
 
@@ -25,11 +25,15 @@ type Action
         | Direct World.Action
         | Tick
         | NewTags TagsResult
-        | Click Clicker
+        | Click CountedClick
 
 initialEffects : Effects Action
 initialEffects =
     Effects.none
+
+countedClicks : Signal Action
+countedClicks =
+    Context.mappedCountedClicks Click
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
@@ -51,9 +55,15 @@ update action model =
              , Effects.none
             )
         Click clicker ->
-            ( model
-            , Effects.map NewTags (TagFetcher.getTags (fromClicker clicker))
-            )
+            case clicker of
+                NoClick ->
+                    ( model, Effects.none )
+                SingleClick _ ->
+                    ( model, Effects.none )
+                DoubleClick tag ->
+                    ( model
+                    , Effects.map NewTags (TagFetcher.getTags tag)
+                    )
 
 view : Signal.Address Action -> Model -> Html
 view address model =
@@ -65,7 +75,7 @@ view address model =
 svgView : Signal.Address Action -> Model -> Html
 svgView address model =
     let
-        context = Context.create Click Direct address
+        context = Context.create (Signal.forwardTo address Direct)
     in
         svg
             [ width (toString model.width)

@@ -11,6 +11,8 @@ module Context
 import Signal exposing (Address, foldp)
 import Time exposing (Time)
 
+import Debug
+
 -- A mouse click with a String identifier
 
 type CountedClick = NoClick | SingleClick String | DoubleClick String
@@ -47,7 +49,7 @@ toCountedClick timedString timedClick =
         time2 = fst timedClick
         tag1 = snd timedString
         click2 = snd timedClick
-        quickClicks = (time1 - time2 < 500 * Time.millisecond)
+        quickClicks = (time1 - time2 < 200 * Time.millisecond)
     in
         case click2 of
             NoClick ->

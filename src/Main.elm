@@ -15,44 +15,50 @@ import Time
 phys1Model =
     { dx = 0, dy = 0
     , bubble =
-        { id = "b1"
+        { id = "us-news/us-news"
         , x = 340, y = 200
-        , size = 180, label = "One" }
+        , size = 180, label = "US News" }
     }
 
 phys2Model =
     {  dx = 0, dy = 0
     , bubble =
-        { id = "b2"
+        { id = "uk/uk"
         , x = 300, y = 250
-        , size = 100, label = "Two" }
+        , size = 100, label = "UK" }
     }
 
 phys3Model =
     { dx = 0, dy = 0
     , bubble =
-        { id = "b3"
+        { id = "society/doctors"
         , x = 480, y = 350
-        , size = 80, label = "Three" }
+        , size = 80, label = "Doctors" }
     }
 
 phys4Model =
     { dx = 0, dy = 0
     , bubble =
-        { id = "b4"
+        { id = "football/fa-cup"
         , x = 400, y = 400
-        , size = 120, label = "Four" }
+        , size = 120, label = "FA Cup" }
     }
 
 springs : Dict (Id, Id) Float
 springs =
     Dict.empty
-        |> insert ("b1", "b2") 100 |> insert ("b2", "b1") 100
-        |> insert ("b1", "b3") 150 |> insert ("b3", "b1") 150
-        |> insert ("b1", "b4")  75 |> insert ("b4", "b1")  75
-        |> insert ("b2", "b3") 125 |> insert ("b3", "b2") 125
-        |> insert ("b2", "b4") 175 |> insert ("b4", "b2") 175
-        |> insert ("b3", "b4") 200 |> insert ("b4", "b3") 200
+        |> insert ("us-news/us-news", "uk/uk") 100
+        |> insert ("uk/uk", "us-news/us-news") 100
+        |> insert ("us-news/us-news", "society/doctors") 150
+        |> insert ("society/doctors", "us-news/us-news") 150
+        |> insert ("us-news/us-news", "football/fa-cup")  75
+        |> insert ("football/fa-cup", "us-news/us-news")  75
+        |> insert ("uk/uk", "society/doctors") 125
+        |> insert ("society/doctors", "uk/uk") 125
+        |> insert ("uk/uk", "football/fa-cup") 175
+        |> insert ("football/fa-cup", "uk/uk") 175
+        |> insert ("society/doctors", "football/fa-cup") 200
+        |> insert ("football/fa-cup", "society/doctors") 200
 
 model : UI.Model
 model =

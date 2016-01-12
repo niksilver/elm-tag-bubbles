@@ -20,12 +20,11 @@ type alias Model =
     , label : String
     }
 
-type Action = Click | Move Float Float
+type Action = Move Float Float
 
 update : Action -> Model -> Model
 update action model =
     case action of
-        Click -> flip model
         Move dx dy -> { model | x = model.x + dx, y = model.y + dy }
 
 flip : Model -> Model

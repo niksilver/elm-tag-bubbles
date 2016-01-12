@@ -1,4 +1,10 @@
-module MultiBubbles where
+module MultiBubbles
+    ( Action (Tick, Direct, AdjustVelocities)
+    , Model
+    , update
+    , view
+    , initialModel
+    ) where
 
 -- Multiple bubbles
 

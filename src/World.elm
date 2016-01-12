@@ -8,7 +8,6 @@ import Springs exposing (acceleration, accelDict)
 import Dict exposing (Dict)
 import Svg exposing (Svg)
 
-
 type alias Model =
     { bubbles : MB.Model
     , springs : Dict (Id,Id) Float

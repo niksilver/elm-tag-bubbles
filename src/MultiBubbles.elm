@@ -93,8 +93,8 @@ initialPositions width height model =
                 { physBub
                 | bubble =
                     { pb
-                    | x = centreX + 50 * toFloat idx -- centreX + 100 * (cos (turn * (toFloat idx)))
-                    , y = centreY -- centreY + 100 * (sin (turn * (toFloat idx)))
+                    | x = centreX + 40 * (cos (turn * (toFloat idx)))
+                    , y = centreY + 40 * (sin (turn * (toFloat idx)))
                     }
                 }
         indexedBubs = indexedMap (,) model

@@ -4,7 +4,11 @@ module Springs
     , drag, dampen
     ) where
 
-import Constants exposing (Tag, Tags, Id, airDragFactor)
+import Constants exposing
+    ( Tag, Tags, Id
+    , airDragFactor
+    , minimumVelocity
+    )
 import PairCounter exposing (Counter, emptyCounter, allPairs, inc)
 import Bubble
 
@@ -170,8 +174,8 @@ dampen : Float -> Float -> (Float, Float)
 dampen dx dy =
     let
         v = sqrt (dx^2 + dy^2)
-        dx' = if v < 0.1 then 0 else dx
-        dy' = if v < 0.1 then 0 else dy
+        dx' = if v < minimumVelocity then 0 else dx
+        dy' = if v < minimumVelocity then 0 else dy
     in
         (dx', dy')
 

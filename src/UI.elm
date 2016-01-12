@@ -1,4 +1,8 @@
-module UI where
+module UI
+    ( Model
+    , update, view
+    , initialEffects, initialInputs
+    ) where
 
 -- Bubble forms captured as Html
 
@@ -12,6 +16,7 @@ import Svg exposing (svg)
 import Svg.Attributes exposing (width, height, viewBox)
 import Signal exposing (forwardTo)
 import Effects exposing (Effects)
+import Time
 
 type alias Model =
     { width : Int
@@ -27,13 +32,24 @@ type Action
         | NewTags TagsResult
         | Click CountedClick
 
+-- Initial effects
+
 initialEffects : Effects Action
 initialEffects =
     Effects.none
 
+-- Initial actions
+
+ticker : Signal Action
+ticker =
+    Signal.map (always Tick) (Time.fps 30)
+
 countedClicks : Signal Action
 countedClicks =
     Context.mappedCountedClicks Click
+
+initialInputs : List (Signal Action)
+initialInputs = [ticker, countedClicks]
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =

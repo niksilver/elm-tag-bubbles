@@ -1,9 +1,5 @@
 import Constants exposing (Id, emptyTagsResult)
-import UI exposing
-    ( initialEffects, update, view
-    , Action(Tick, Click)
-    , countedClicks
-    )
+import UI
 import MultiBubbles
 import Bubble exposing (Fading(None))
 
@@ -12,7 +8,6 @@ import Dict exposing (Dict, empty, insert)
 import Task exposing (Task)
 import Effects exposing (none, Never)
 import Signal
-import Time
 
 width = 800
 
@@ -95,16 +90,12 @@ model =
     , newTags = emptyTagsResult
     }
 
-ticker : Signal Action
-ticker =
-    Signal.map (always Tick) (Time.fps 30) 
-
 app =
     start
-        { init = (model, initialEffects)
-        , update = update
-        , view = view
-        , inputs = [ticker, countedClicks]
+        { init = (model, UI.initialEffects)
+        , update = UI.update
+        , view = UI.view
+        , inputs = UI.initialInputs
         }
 
 main =

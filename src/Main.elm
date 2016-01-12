@@ -1,10 +1,11 @@
-import Constants exposing (Id, colour1, colour2, emptyTagsResult)
+import Constants exposing (Id, emptyTagsResult)
 import UI exposing
     ( initialEffects, update, view
     , Action(Tick, Click)
     , countedClicks
     )
 import MultiBubbles
+import Bubble exposing (Fading(None))
 
 import StartApp exposing (start)
 import Dict exposing (Dict, empty, insert)
@@ -22,7 +23,9 @@ phys1Model =
     , bubble =
         { id = "us-news/us-news"
         , x = 340, y = 200
-        , size = 180, label = "US News" }
+        , size = 180, label = "US News"
+        , fading = None, opacity = 0.0
+        }
     }
 
 phys2Model =
@@ -30,7 +33,9 @@ phys2Model =
     , bubble =
         { id = "uk/uk"
         , x = 300, y = 250
-        , size = 100, label = "UK" }
+        , size = 100, label = "UK"
+        , fading = None, opacity = 0.0
+        }
     }
 
 phys3Model =
@@ -38,7 +43,9 @@ phys3Model =
     , bubble =
         { id = "society/doctors"
         , x = 480, y = 350
-        , size = 80, label = "Doctors" }
+        , size = 80, label = "Doctors"
+        , fading = None, opacity = 0.0
+        }
     }
 
 phys4Model =
@@ -46,11 +53,13 @@ phys4Model =
     , bubble =
         { id = "football/fa-cup"
         , x = 400, y = 400
-        , size = 120, label = "FA Cup" }
+        , size = 120, label = "FA Cup"
+        , fading = None, opacity = 0.0
+        }
     }
 
 multiBubbleModel =
-    MultiBubbles.initialPositions
+    MultiBubbles.initialModel
         width
         height
         [ phys1Model

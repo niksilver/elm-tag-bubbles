@@ -11,18 +11,22 @@ type alias Model =
     , bubble : Bubble.Model
     }
 
-type Action = Move | Direct Bubble.Action
+type Action = Animate | Direct Bubble.Action
 
 update : Action -> Model -> Model
 update action model =
-    let
-        act : Bubble.Action
-        act =
-            case action of
-                Move -> Bubble.Move model.dx model.dy
-                Direct a -> a
-    in
-        { model | bubble = Bubble.update act model.bubble }
+    case action of
+        Direct act ->
+            { model
+            | bubble = Bubble.update act model.bubble
+            }
+        Animate ->
+            { model
+            | bubble =
+                model.bubble
+                    |> Bubble.update (Bubble.Move model.dx model.dy)
+                    |> Bubble.update Bubble.Fade
+            }
 
 view : Context Action -> Model -> Svg
 view context model =

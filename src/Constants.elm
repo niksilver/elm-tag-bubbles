@@ -1,8 +1,7 @@
 module Constants
     ( Id
     , Tag, Tags, TagsResult, emptyTagsResult
-    , colour1, colour2
-    , bubbleOpacity
+    , maxBubbleOpacity, fadeStep
     , springStrength, airDragFactor, minimumVelocity
     ) where
 
@@ -19,17 +18,14 @@ type alias TagsResult = Result Http.Error (List Tags)
 
 emptyTagsResult = Ok [[]]
 
-colour1 : String
-colour1 = "green"
+maxBubbleOpacity : Float
+maxBubbleOpacity = 0.75
 
-colour2 : String
-colour2 = "red"
-
-bubbleOpacity : String
-bubbleOpacity = "0.75"
+fadeStep : Float
+fadeStep = 0.015
 
 springStrength : Float
-springStrength = 40.0
+springStrength = 30.0
 
 airDragFactor : Float
 airDragFactor = 0.02

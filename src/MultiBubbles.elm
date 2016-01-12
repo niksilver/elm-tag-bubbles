@@ -4,6 +4,7 @@ module MultiBubbles where
 
 import Context exposing (Context, forwardTo)
 import PhysicsBubble as Phys
+import Bubble exposing (Fading(In))
 import Springs exposing (drag, dampen)
 
 import List exposing (reverse, length, indexedMap, map)
@@ -42,7 +43,7 @@ updateOne id physAct model =
 
 updateAll : Model -> Model
 updateAll model =
-    map (Phys.update Phys.Move) model
+    map (Phys.update Phys.Animate) model
 
 -- Update the velocity of all the bubbles
 -- according to a dictionary of id to acceleration
@@ -76,10 +77,10 @@ view : Context Action -> Model -> List Svg
 view context model =
     map (fwdingView context) model
 
--- Set initial positions for bubbles in a model
+-- Set initial model for multiple bubbles
 
-initialPositions : Int -> Int -> Model -> Model
-initialPositions width height model =
+initialModel : Int -> Int -> Model -> Model
+initialModel width height model =
     let
         centreX = toFloat width / 2
         centreY = toFloat height / 2
@@ -95,6 +96,8 @@ initialPositions width height model =
                     { pb
                     | x = centreX + 40 * (cos (turn * (toFloat idx)))
                     , y = centreY + 40 * (sin (turn * (toFloat idx)))
+                    , fading = In
+                    , opacity = 0.0
                     }
                 }
         indexedBubs = indexedMap (,) model

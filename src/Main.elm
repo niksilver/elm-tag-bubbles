@@ -4,6 +4,7 @@ import UI exposing
     , Action(Tick, Click)
     , countedClicks
     )
+import MultiBubbles
 
 import StartApp exposing (start)
 import Dict exposing (Dict, empty, insert)
@@ -11,6 +12,10 @@ import Task exposing (Task)
 import Effects exposing (none, Never)
 import Signal
 import Time
+
+width = 800
+
+height = 600
 
 phys1Model =
     { dx = 0, dy = 0
@@ -44,33 +49,38 @@ phys4Model =
         , size = 120, label = "FA Cup" }
     }
 
+multiBubbleModel =
+    MultiBubbles.initialPositions
+        width
+        height
+        [ phys1Model
+        -- , phys2Model
+        -- , phys3Model
+        , phys4Model
+        ]
+
 springs : Dict (Id, Id) Float
 springs =
     Dict.empty
-        |> insert ("us-news/us-news", "uk/uk") 100
-        |> insert ("uk/uk", "us-news/us-news") 100
-        |> insert ("us-news/us-news", "society/doctors") 150
-        |> insert ("society/doctors", "us-news/us-news") 150
+        -- |> insert ("us-news/us-news", "uk/uk") 100
+        -- |> insert ("uk/uk", "us-news/us-news") 100
+        -- |> insert ("us-news/us-news", "society/doctors") 150
+        -- |> insert ("society/doctors", "us-news/us-news") 150
         |> insert ("us-news/us-news", "football/fa-cup")  75
         |> insert ("football/fa-cup", "us-news/us-news")  75
-        |> insert ("uk/uk", "society/doctors") 125
-        |> insert ("society/doctors", "uk/uk") 125
-        |> insert ("uk/uk", "football/fa-cup") 175
-        |> insert ("football/fa-cup", "uk/uk") 175
-        |> insert ("society/doctors", "football/fa-cup") 200
-        |> insert ("football/fa-cup", "society/doctors") 200
+        -- |> insert ("uk/uk", "society/doctors") 125
+        -- |> insert ("society/doctors", "uk/uk") 125
+        -- |> insert ("uk/uk", "football/fa-cup") 175
+        -- |> insert ("football/fa-cup", "uk/uk") 175
+        -- |> insert ("society/doctors", "football/fa-cup") 200
+        -- |> insert ("football/fa-cup", "society/doctors") 200
 
 model : UI.Model
 model =
-    { width = 800
-    , height = 600
+    { width = width
+    , height = height
     , world =
-        { bubbles =
-            [ phys1Model
-            , phys2Model
-            , phys3Model
-            , phys4Model
-            ]
+        { bubbles = multiBubbleModel
         , springs = springs
         }
     , newTags = emptyTagsResult

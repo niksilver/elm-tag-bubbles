@@ -76,3 +76,28 @@ view : Context Action -> Model -> List Svg
 view context model =
     map (fwdingView context) model
 
+-- Set initial positions for bubbles in a model
+
+initialPositions : Int -> Int -> Model -> Model
+initialPositions width height model =
+    let
+        centreX = toFloat width / 2
+        centreY = toFloat height / 2
+        count = length model
+        turn = 2 * pi / (toFloat count)
+        rePos : Int -> Phys.Model -> Phys.Model
+        rePos idx physBub =
+            let
+                pb = physBub.bubble
+            in
+                { physBub
+                | bubble =
+                    { pb
+                    | x = centreX + 50 * toFloat idx -- centreX + 100 * (cos (turn * (toFloat idx)))
+                    , y = centreY -- centreY + 100 * (sin (turn * (toFloat idx)))
+                    }
+                }
+        indexedBubs = indexedMap (,) model
+    in
+        map (\ib -> rePos (fst ib) (snd ib)) indexedBubs
+

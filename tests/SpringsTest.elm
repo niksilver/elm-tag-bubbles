@@ -33,35 +33,35 @@ tagListA =
 all : Test
 all =
     suite "SpringsTest"
-    [ counterTest
+    [ toCounterTest
     , lengthsTest
     , accelerationTest
     , accelDictTest
     ]
 
-counterTest : Test
-counterTest =
-    suite "counter"
+toCounterTest : Test
+toCounterTest =
+    suite "toCounter"
 
     [ test "Two tags together twice should have a count of 2" <|
       assertEqual
       2
-      (counter tagListA |> countOf tag1rec tag2rec)
+      (toCounter tagListA |> countOf tag1rec tag2rec)
 
     , test "Tags together twice should have a count of 2 the other way round" <|
       assertEqual
       2
-      (counter tagListA |> countOf tag2rec tag1rec)
+      (toCounter tagListA |> countOf tag2rec tag1rec)
 
     , test "Tags not together should have a count of 0" <|
       assertEqual
       0
-      (counter tagListA |> countOf tag3rec tag4rec)
+      (toCounter tagListA |> countOf tag3rec tag4rec)
 
     , test "Tags together once should have a count of 1" <|
       assertEqual
       1
-      (counter tagListA |> countOf tag5rec tag6rec)
+      (toCounter tagListA |> countOf tag5rec tag6rec)
 
     ]
 

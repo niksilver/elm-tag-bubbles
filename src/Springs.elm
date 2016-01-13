@@ -1,5 +1,5 @@
 module Springs
-    ( counter, lengths
+    ( toCounter, lengths
     , acceleration, accelDict
     , drag, dampen
     ) where
@@ -19,8 +19,8 @@ import Maybe exposing (withDefault)
 {-| Generate a `Counter` from a list of list of tags.
 -}
 
-counter : List Tags -> Counter
-counter tagsList =
+toCounter : List Tags -> Counter
+toCounter tagsList =
     List.foldl includePairs' emptyCounter tagsList
 
 {-| Given some tags and a pair counter, take all the pairings of the

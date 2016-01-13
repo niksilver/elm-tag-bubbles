@@ -3,7 +3,7 @@ module SpringsTest (all) where
 import Springs exposing (..)
 import Constants exposing (Tag, Tags)
 import PairCounter exposing (countOf, emptyCounter, set)
-import Bubble
+import Bubble exposing (Fading(In))
 
 import Maybe exposing (Maybe(Just))
 import Dict exposing (empty, insert)
@@ -119,11 +119,15 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
-              , size = 80, label = "Bubble 1" }
+              , size = 80, label = "Bubble 1"
+              , fading = In, opacity = 0.0
+              }
           bubble2 =
               { id = "b2"
               , x = 400, y = 400
-              , size = 60, label = "Bubble 2" }
+              , size = 60, label = "Bubble 2"
+              , fading = In, opacity = 0.0
+              }
           stiffness = 20.0
           springLength = 60.0
           springs =
@@ -144,11 +148,15 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
-              , size = 80, label = "Bubble 1" }
+              , size = 80, label = "Bubble 1"
+              , fading = In, opacity = 0.0
+              }
           bubble2 =
               { id = "b2"
               , x = 400, y = 400
-              , size = 60, label = "Bubble 2" }
+              , size = 60, label = "Bubble 2"
+              , fading = In, opacity = 0.0
+              }
           stiffness = 20.0
           springLength = 120.0
           springs =
@@ -169,11 +177,15 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
-              , size = 80, label = "Bubble 1" }
+              , size = 80, label = "Bubble 1"
+              , fading = In, opacity = 0.0
+              }
           bubble2 =
               { id = "b2"
               , x = 400, y = 400
-              , size = 60, label = "Bubble 2" }
+              , size = 60, label = "Bubble 2"
+              , fading = In, opacity = 0.0
+              }
           stiffness = 20.0
           springLength = 60.0
           springs =
@@ -194,11 +206,15 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
-              , size = 80, label = "Bubble 1" }
+              , size = 80, label = "Bubble 1"
+              , fading = In, opacity = 0.0
+              }
           bubble2 =
               { id = "b2"
               , x = 400, y = 400
-              , size = 60, label = "Bubble 2" }
+              , size = 60, label = "Bubble 2"
+              , fading = In, opacity = 0.0
+              }
           stiffness = 20.0
           springLength = 120.0
           springs =
@@ -222,11 +238,15 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
-              , size = 80, label = "Bubble 1" }
+              , size = 80, label = "Bubble 1"
+              , fading = In, opacity = 0.0
+              }
           bubble2 =
               { id = "b2"
               , x = 480, y = 350
-              , size = 60, label = "Bubble 2" }
+              , size = 60, label = "Bubble 2"
+              , fading = In, opacity = 0.0
+              }
           stiffness = 20.0
           springLength = 120.0
           springs =
@@ -247,11 +267,15 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
-              , size = 80, label = "Bubble 1" }
+              , size = 80, label = "Bubble 1"
+              , fading = In, opacity = 0.0
+              }
           bubble2 =
               { id = "b2"
               , x = 480, y = 350
-              , size = 60, label = "Bubble 2" }
+              , size = 60, label = "Bubble 2"
+              , fading = In, opacity = 0.0
+              }
           stiffness = 20.0
           springLength = 120.0
           springs =
@@ -272,11 +296,15 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
-              , size = 80, label = "Bubble 1" }
+              , size = 80, label = "Bubble 1"
+              , fading = In, opacity = 0.0
+              }
           bubble2 =
               { id = "b2"
               , x = 480, y = 350
-              , size = 60, label = "Bubble 2" }
+              , size = 60, label = "Bubble 2"
+              , fading = In, opacity = 0.0
+              }
           stiffness = 20.0
           springLength = 120.0
           springs =
@@ -297,11 +325,15 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
-              , size = 80, label = "Bubble 1" }
+              , size = 80, label = "Bubble 1"
+              , fading = In, opacity = 0.0
+              }
           bubble2 =
               { id = "b2"
               , x = 480, y = 350
-              , size = 60, label = "Bubble 2" }
+              , size = 60, label = "Bubble 2"
+              , fading = In, opacity = 0.0
+              }
           stiffness = 20.0
           springLength = 120.0
           springs =
@@ -322,11 +354,15 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
-              , size = 80, label = "Bubble 1" }
+              , size = 80, label = "Bubble 1"
+              , fading = In, opacity = 0.0
+              }
           bubble2 =
               { id = "b2"
               , x = 400, y = 400
-              , size = 60, label = "Bubble 2" }
+              , size = 60, label = "Bubble 2"
+              , fading = In, opacity = 0.0
+              }
           stiffness = 20.0
           springLength = 60.0
           springs =
@@ -350,11 +386,15 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
-              , size = 80, label = "Bubble 1" }
+              , size = 80, label = "Bubble 1"
+              , fading = In, opacity = 0.0
+              }
           bubble2 =
               { id = "b2"
               , x = 400, y = 400
-              , size = 60, label = "Bubble 2" }
+              , size = 60, label = "Bubble 2"
+              , fading = In, opacity = 0.0
+              }
           stiffness = 20.0
           springLength = 120.0
           springs =
@@ -378,11 +418,15 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
-              , size = 80, label = "Bubble 1" }
+              , size = 80, label = "Bubble 1"
+              , fading = In, opacity = 0.0
+              }
           bubble2 =
               { id = "b2"
               , x = 400, y = 400
-              , size = 60, label = "Bubble 2" }
+              , size = 60, label = "Bubble 2"
+              , fading = In, opacity = 0.0
+              }
           stiffness = 20.0
           springLength = 120.0
           springs = empty
@@ -400,10 +444,13 @@ accelDictTest =
     [ test ("Bubble1 pulled down equally, but never across, should have " ++
         "acceleration (3, 0)") <|
       let
-          bubble1 = { id = "b1" , x = 0, y = 0 , size = 80, label = "B1" }
-          bubble2 = { id = "b2" , x = 0, y = 0 , size = 80, label = "B2" }
-          bubble3 = { id = "b3" , x = 0, y = 0 , size = 80, label = "B3" }
-          bubble4 = { id = "b4" , x = 0, y = 0 , size = 80, label = "B4" }
+          bubbleX =
+              { id = "n/a", x = 0, y = 0 , size = 80, label = "X"
+              , fading = In, opacity = 0.0 }
+          bubble1 = { bubbleX | id = "b1", label = "B1" }
+          bubble2 = { bubbleX | id = "b2", label = "B2" }
+          bubble3 = { bubbleX | id = "b3", label = "B3" }
+          bubble4 = { bubbleX | id = "b4", label = "B4" }
           bubbles = [ bubble1, bubble2, bubble3, bubble4 ]
           accelFun : Bubble.Model -> Bubble.Model -> (Float, Float)
           accelFun bubA bubB =
@@ -421,10 +468,13 @@ accelDictTest =
     , test ("Bubble1 pulled down unequally, but never across, should have " ++
         "acceleration (6, 0)") <|
       let
-          bubble1 = { id = "b1" , x = 0, y = 0 , size = 80, label = "B1" }
-          bubble2 = { id = "b2" , x = 0, y = 0 , size = 80, label = "B2" }
-          bubble3 = { id = "b3" , x = 0, y = 0 , size = 80, label = "B3" }
-          bubble4 = { id = "b4" , x = 0, y = 0 , size = 80, label = "B4" }
+          bubbleX =
+              { id = "n/a", x = 0, y = 0 , size = 80, label = "X"
+              , fading = In, opacity = 0.0 }
+          bubble1 = { bubbleX | id = "b1", label = "B1" }
+          bubble2 = { bubbleX | id = "b2", label = "B2" }
+          bubble3 = { bubbleX | id = "b3", label = "B3" }
+          bubble4 = { bubbleX | id = "b4", label = "B4" }
           bubbles = [ bubble1, bubble2, bubble3, bubble4 ]
           accelFun : Bubble.Model -> Bubble.Model -> (Float, Float)
           accelFun bubA bubB =
@@ -441,10 +491,13 @@ accelDictTest =
 
     , test "Bubble2 pulled in different directions" <|
       let
-          bubble1 = { id = "b1" , x = 0, y = 0 , size = 80, label = "B1" }
-          bubble2 = { id = "b2" , x = 0, y = 0 , size = 80, label = "B2" }
-          bubble3 = { id = "b3" , x = 0, y = 0 , size = 80, label = "B3" }
-          bubble4 = { id = "b4" , x = 0, y = 0 , size = 80, label = "B4" }
+          bubbleX =
+              { id = "n/a", x = 0, y = 0 , size = 80, label = "X"
+              , fading = In, opacity = 0.0 }
+          bubble1 = { bubbleX | id = "b1", label = "B1" }
+          bubble2 = { bubbleX | id = "b2", label = "B2" }
+          bubble3 = { bubbleX | id = "b3", label = "B3" }
+          bubble4 = { bubbleX | id = "b4", label = "B4" }
           bubbles = [ bubble1, bubble2, bubble3, bubble4 ]
           accelFun : Bubble.Model -> Bubble.Model -> (Float, Float)
           accelFun bubA bubB =

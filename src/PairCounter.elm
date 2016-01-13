@@ -1,5 +1,5 @@
 module PairCounter
-    ( Idable, Counter
+    ( Counter
     , emptyCounter, countOf, inc, set, size
     , topN
     , allPairs
@@ -8,6 +8,7 @@ module PairCounter
     )
     where
 
+import Constants exposing (Idable)
 import List exposing (append, reverse, take, filter, sortBy)
 import Maybe exposing (withDefault)
 import Dict exposing (Dict, empty, get, insert, toList, fromList)
@@ -15,8 +16,6 @@ import Dict exposing (Dict, empty, get, insert, toList, fromList)
 -- Something that tracks counts of pairs of records which have a String id.
 -- The order of pairs doesn't matter, so setting or getting x,y is the
 -- same as that operation on y,x.
-
-type alias Idable a = { a | id : String }
 
 type Counter = Counter (Dict (String, String) Int)
 

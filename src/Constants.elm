@@ -1,5 +1,5 @@
 module Constants
-    ( Id
+    ( Id, Idable
     , Tag, Tags, TagsResult, emptyTagsResult
     , maxBubbleOpacity, fadeStep
     , springStrength, airDragFactor, minimumVelocity
@@ -9,6 +9,8 @@ import Http exposing (Error)
 import Signal
 
 type alias Id = String
+
+type alias Idable a = { a | id : String }
 
 type alias Tag = { id : Id, webTitle : String, sectionId : String }
 

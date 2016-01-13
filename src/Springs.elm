@@ -1,5 +1,5 @@
 module Springs
-    ( toCounter, lengths
+    ( toCounter, toDict
     , acceleration, accelDict
     , drag, dampen
     ) where
@@ -39,8 +39,8 @@ includePairs' tags counter =
     two parameters.
 -}
 
-lengths : Float -> Float -> Counter -> Dict (String, String) Float
-lengths shortest longest counter =
+toDict : Float -> Float -> Counter -> Dict (String, String) Float
+toDict shortest longest counter =
     let
         min = PairCounter.minCount counter |> toFloat
         max = PairCounter.maxCount counter |> toFloat

@@ -34,7 +34,7 @@ all : Test
 all =
     suite "SpringsTest"
     [ toCounterTest
-    , lengthsTest
+    , toDictTest
     , accelerationTest
     , accelDictTest
     ]
@@ -65,9 +65,9 @@ toCounterTest =
 
     ]
 
-lengthsTest : Test
-lengthsTest =
-    suite "lengthsTest"
+toDictTest : Test
+toDictTest =
+    suite "toDictTest"
 
     [ test "Pair with highest count should have the shortest length" <|
       assertEqual
@@ -75,7 +75,7 @@ lengthsTest =
       (emptyCounter
         |> set tag1rec tag2rec 10
         |> set tag1rec tag3rec 3
-        |> lengths 33.3 99.9
+        |> toDict 33.3 99.9
         |> Dict.get (tag1rec.id, tag2rec.id))
 
     , test "Pair with highest count should have the shortest length when reveresed" <|
@@ -84,7 +84,7 @@ lengthsTest =
       (emptyCounter
         |> set tag1rec tag2rec 10
         |> set tag1rec tag3rec 3
-        |> lengths 33.3 99.9
+        |> toDict 33.3 99.9
         |> Dict.get (tag2rec.id, tag1rec.id))
 
     , test "Pair with lowest count should have the longest length" <|
@@ -93,7 +93,7 @@ lengthsTest =
       (emptyCounter
         |> set tag1rec tag2rec 10
         |> set tag1rec tag3rec 3
-        |> lengths 33.3 99.9
+        |> toDict 33.3 99.9
         |> Dict.get (tag1rec.id, tag3rec.id))
 
     , test "Pair with middling count should have proportional length" <|
@@ -103,7 +103,7 @@ lengthsTest =
         |> set tag1rec tag2rec 10
         |> set tag1rec tag3rec 4
         |> set tag2rec tag3rec 5   -- This count is 1/6 of the count range
-        |> lengths 33 99
+        |> toDict 33 99
         |> Dict.get (tag2rec.id, tag3rec.id))
 
     ]

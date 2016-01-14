@@ -11,17 +11,17 @@ import Dict exposing (empty, insert)
 import ElmTest exposing (..)
 import ElmTestExtras exposing (..)
 
-tag1rec = Tag "world/bali-nine" "Bali Nine" "world"
+tag1rec = Tag "world/bali-nine" "Bali Nine"
 
-tag2rec = Tag "australia-news/q-a" "Q&amp;A" "australia-news"
+tag2rec = Tag "australia-news/q-a" "Q&amp;A"
 
-tag3rec = Tag "environment/cecil-the-lion" "Cecil the lion" "environment"
+tag3rec = Tag "environment/cecil-the-lion" "Cecil the lion"
 
-tag4rec = Tag "world/zimbabwe" "Zimbabwe" "world"
+tag4rec = Tag "world/zimbabwe" "Zimbabwe"
 
-tag5rec = Tag "lifeandstyle/shops-and-shopping" "Shops and shopping" "lifeandstyle"
+tag5rec = Tag "lifeandstyle/shops-and-shopping" "Shops and shopping"
 
-tag6rec = Tag "money/consumer-affairs" "Consumer affairs" "money"
+tag6rec = Tag "money/consumer-affairs" "Consumer affairs"
 
 tagListA : List Tags
 tagListA =

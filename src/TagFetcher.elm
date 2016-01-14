@@ -3,7 +3,7 @@ module TagFetcher where
 import Constants exposing (Tag, Tags, TagsResult)
 import Secrets exposing (apiKey)
 
-import Json.Decode exposing (Decoder, (:=), string, object3, list, at)
+import Json.Decode exposing (Decoder, (:=), string, object2, list, at)
 import Http exposing (url, get)
 import Effects exposing (Effects, task)
 import Task exposing (toMaybe)
@@ -22,15 +22,11 @@ tagToId = ("id" := string)
 tagToWebTitle : Decoder String
 tagToWebTitle = ("webTitle" := string)
 
-tagToSectionId : Decoder String
-tagToSectionId = ("sectionId" := string)
-
 tagToTag : Decoder Tag
 tagToTag =
-    object3 Tag
+    object2 Tag
         tagToId
         tagToWebTitle
-        tagToSectionId
 
 tagsToTags : Decoder Tags
 tagsToTags =

@@ -13,7 +13,7 @@ type alias Id = String
 
 type alias Idable a = { a | id : String }
 
-type alias Tag = { id : Id, webTitle : String, sectionId : String }
+type alias Tag = { id : Id, webTitle : String }
 
 type alias Tags = List Tag
 

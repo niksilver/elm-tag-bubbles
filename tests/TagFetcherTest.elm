@@ -18,7 +18,7 @@ tag1 = """
     }
 """
 
-tag1rec = Tag "world/bali-nine" "Bali Nine" "world"
+tag1rec = Tag "world/bali-nine" "Bali Nine"
 
 tag2 = """
     { "id": "australia-news/q-a"
@@ -32,7 +32,7 @@ tag2 = """
     }
 """
 
-tag2rec = Tag "australia-news/q-a" "Q&amp;A" "australia-news"
+tag2rec = Tag "australia-news/q-a" "Q&amp;A"
 
 tag3 = """
     { "id": "environment/cecil-the-lion"
@@ -45,7 +45,7 @@ tag3 = """
     }
 """
 
-tag3rec = Tag "environment/cecil-the-lion" "Cecil the lion" "environment"
+tag3rec = Tag "environment/cecil-the-lion" "Cecil the lion"
 
 tag4 = """
     { "id": "world/zimbabwe"
@@ -58,7 +58,7 @@ tag4 = """
 }
 """
 
-tag4rec = Tag "world/zimbabwe" "Zimbabwe" "world"
+tag4rec = Tag "world/zimbabwe" "Zimbabwe"
 
 tag5 = """
     { "id": "lifeandstyle/shops-and-shopping"
@@ -72,7 +72,7 @@ tag5 = """
 }
 """
 
-tag5rec = Tag "lifeandstyle/shops-and-shopping" "Shops and shopping" "lifeandstyle"
+tag5rec = Tag "lifeandstyle/shops-and-shopping" "Shops and shopping"
 
 tag6 = """
     { "id": "money/consumer-affairs"
@@ -85,7 +85,7 @@ tag6 = """
 }
 """
 
-tag6rec = Tag "money/consumer-affairs" "Consumer affairs" "money"
+tag6rec = Tag "money/consumer-affairs" "Consumer affairs"
 
 tags1 = "[" ++ tag1 ++ "," ++ tag2 ++ "," ++ tag3 ++ "]"
 
@@ -144,16 +144,10 @@ all =
           (Ok "Bali Nine")
           (decodeString tagToWebTitle tag1))
 
-    , test "Tag to sectionId"
-      (assertEqual
-          (Ok "world")
-          (decodeString tagToSectionId tag1))
-
     , test "Json tag to Tag"
       (assertEqual
           (Ok { id = "world/bali-nine"
               , webTitle = "Bali Nine"
-              , sectionId = "world"
               })
           (decodeString tagToTag tag1))
 

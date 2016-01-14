@@ -7,17 +7,17 @@ import Dict
 
 import ElmTest exposing (..)
 
-tag1rec = Tag "tag/1" "Tag one" "tag-one"
+tag1rec = Tag "tag/1" "Tag one"
 
-tag2rec = Tag "tag/2" "Tag two" "tag-two"
+tag2rec = Tag "tag/2" "Tag two"
 
-tag3rec = Tag "tag/3" "Tag three" "tag-three"
+tag3rec = Tag "tag/3" "Tag three"
 
-tag4rec = Tag "tag/4" "Tag four" "tag-four"
+tag4rec = Tag "tag/4" "Tag four"
 
-tag5rec = Tag "tag/5" "Tag five" "tag-five"
+tag5rec = Tag "tag/5" "Tag five"
 
-tag6rec = Tag "tag/6" "Tag six" "tag-six"
+tag6rec = Tag "tag/6" "Tag six"
 
 tagListA : List Tags
 tagListA =

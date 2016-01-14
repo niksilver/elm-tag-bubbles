@@ -27,7 +27,6 @@ update action model =
                 model.bubble
                     |> Bubble.update (Bubble.Move model.dx model.dy)
                     |> Bubble.update (Bubble.Fade time)
-                    |> Bubble.update (Bubble.MarkTime time)
             }
 
 view : Context Action -> Model -> Svg

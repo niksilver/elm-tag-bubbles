@@ -1,6 +1,6 @@
 module Bubble
     ( Model
-    , Action (Move, Fade, MarkTime)
+    , Action (Move, Fade)
     , noAnimation, fadeInAnimation, setToFadeIn
     , update, view
     ) where
@@ -19,7 +19,6 @@ import Svg.Attributes exposing
 import Svg.Events exposing (onClick)
 import Signal exposing (message)
 import Easing exposing (ease, linear, float)
-import Debug
 
 type alias Model =
     { id : String
@@ -33,7 +32,7 @@ type alias Model =
 type alias Animation =
     { fadeStart : Maybe Time  -- Time if the fading has started
     , fading : Fading         -- How it's fading, if it is to fade
-    , opacity : Float
+    , opacity : Float         -- Current opacity
     }
 
 -- Fading from and to an opacity, or not fading
@@ -42,7 +41,6 @@ type Fading = Fading Float Float | NotFading
 type Action
     = Move Float Float
         | Fade Time
-        | MarkTime Time
 
 noAnimation : Animation
 noAnimation =
@@ -77,9 +75,6 @@ setToFadeIn model =
 
 update : Action -> Model -> Model
 update action model =
-    let
-        func label = (if (model.id == "uk/uk") then Debug.log label else identity)
-    in
     case action of
         Fade time ->
             { model
@@ -87,8 +82,6 @@ update action model =
             }
         Move dx dy ->
             { model | x = model.x + dx, y = model.y + dy }
-        MarkTime time ->
-            (func "MarkTime") model
 
 updateFade : String -> Animation -> Time -> Animation
 updateFade id animation time =

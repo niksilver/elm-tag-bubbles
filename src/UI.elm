@@ -16,7 +16,7 @@ import Svg exposing (svg)
 import Svg.Attributes exposing (width, height, viewBox)
 import Signal exposing (forwardTo)
 import Effects exposing (Effects)
-import Time
+import Time exposing (Time, millisecond)
 
 type alias Model =
     { width : Int
@@ -28,7 +28,7 @@ type alias Model =
 type Action
     = Resize (Int, Int)
         | Direct World.Action
-        | Tick
+        | Tick Time
         | NewTags TagsResult
         | Click CountedClick
 
@@ -42,7 +42,7 @@ initialEffects =
 
 ticker : Signal Action
 ticker =
-    Signal.map (always Tick) (Time.fps 30)
+    Signal.map Tick (Time.every (30 * millisecond))
 
 countedClicks : Signal Action
 countedClicks =
@@ -62,8 +62,8 @@ update action model =
             ({ model | world = World.update act model.world }
              , Effects.none
             )
-        Tick ->
-            ({ model | world = World.update World.Tick model.world }
+        Tick time ->
+            ({ model | world = World.update (World.Tick time) model.world }
              , Effects.none
             )
         NewTags tags ->

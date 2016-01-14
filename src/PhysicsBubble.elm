@@ -4,6 +4,7 @@ import Context exposing (Context, forwardTo)
 import Bubble exposing (Model)
 
 import Svg exposing (Svg)
+import Time exposing (Time)
 
 type alias Model =
     { dx : Float
@@ -11,7 +12,7 @@ type alias Model =
     , bubble : Bubble.Model
     }
 
-type Action = Animate | Direct Bubble.Action
+type Action = Animate Time | Direct Bubble.Action
 
 update : Action -> Model -> Model
 update action model =
@@ -20,12 +21,13 @@ update action model =
             { model
             | bubble = Bubble.update act model.bubble
             }
-        Animate ->
+        Animate time ->
             { model
             | bubble =
                 model.bubble
                     |> Bubble.update (Bubble.Move model.dx model.dy)
-                    |> Bubble.update Bubble.Fade
+                    |> Bubble.update (Bubble.Fade time)
+                    |> Bubble.update (Bubble.MarkTime time)
             }
 
 view : Context Action -> Model -> Svg

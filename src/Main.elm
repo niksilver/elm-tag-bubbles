@@ -1,10 +1,11 @@
 import Constants exposing (Id, emptyTagsResult)
 import UI
 import MultiBubbles
-import Bubble exposing (Fading(None))
+import Bubble
 
 import StartApp exposing (start)
 import Dict exposing (Dict, empty, insert)
+import Maybe exposing (Maybe(Nothing))
 import Task exposing (Task)
 import Effects exposing (none, Never)
 import Signal
@@ -19,7 +20,7 @@ phys1Model =
         { id = "us-news/us-news"
         , x = 340, y = 200
         , size = 180, label = "US News"
-        , fading = None, opacity = 0.0
+        , animation = Bubble.fadeInAnimation
         }
     }
 
@@ -29,7 +30,7 @@ phys2Model =
         { id = "uk/uk"
         , x = 300, y = 250
         , size = 100, label = "UK"
-        , fading = None, opacity = 0.0
+        , animation = Bubble.fadeInAnimation
         }
     }
 
@@ -39,7 +40,7 @@ phys3Model =
         { id = "society/doctors"
         , x = 480, y = 350
         , size = 80, label = "Doctors"
-        , fading = None, opacity = 0.0
+        , animation = Bubble.fadeInAnimation
         }
     }
 
@@ -49,7 +50,7 @@ phys4Model =
         { id = "football/fa-cup"
         , x = 400, y = 400
         , size = 120, label = "FA Cup"
-        , fading = None, opacity = 0.0
+        , animation = Bubble.fadeInAnimation
         }
     }
 

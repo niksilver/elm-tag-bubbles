@@ -10,20 +10,21 @@ module MultiBubbles
 
 import Context exposing (Context, forwardTo)
 import PhysicsBubble as Phys
-import Bubble exposing (Fading(In))
+import Bubble
 import Springs exposing (drag, dampen)
 
 import List exposing (reverse, length, indexedMap, map)
 import Dict exposing (Dict)
 import Maybe exposing (withDefault)
 import Svg exposing (Svg)
+import Time exposing (Time)
 
 type alias Model = List Phys.Model
 
 type alias Id = String
 
 type Action
-    = Tick
+    = Tick Time
     | Direct Id Phys.Action
     | AdjustVelocities (Dict Id (Float, Float))
 
@@ -31,7 +32,7 @@ update : Action -> Model -> Model
 update action model =
     case action of
         Direct id physAct -> updateOne id physAct model
-        Tick -> updateAll model
+        Tick time -> updateAll model time
         AdjustVelocities accels -> updateVelocities accels model
 
 updateOne : Id -> Phys.Action -> Model -> Model
@@ -47,9 +48,9 @@ updateOne id physAct model =
 
 -- Update all the bubbles with the Tick action
 
-updateAll : Model -> Model
-updateAll model =
-    map (Phys.update Phys.Animate) model
+updateAll : Model -> Time -> Model
+updateAll model time =
+    map (Phys.update (Phys.Animate time)) model
 
 -- Update the velocity of all the bubbles
 -- according to a dictionary of id to acceleration
@@ -102,9 +103,8 @@ initialModel width height model =
                     { pb
                     | x = centreX + 40 * (cos (turn * (toFloat idx)))
                     , y = centreY + 40 * (sin (turn * (toFloat idx)))
-                    , fading = In
-                    , opacity = 0.0
                     }
+                        |> Bubble.setToFadeIn
                 }
         indexedBubs = indexedMap (,) model
     in

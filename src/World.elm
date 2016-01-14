@@ -7,6 +7,7 @@ import Springs exposing (acceleration, accelDict)
 
 import Dict exposing (Dict)
 import Svg exposing (Svg)
+import Time exposing (Time)
 
 type alias Model =
     { bubbles : MB.Model
@@ -15,13 +16,13 @@ type alias Model =
 
 type Action
     = Direct MB.Action
-    | Tick
+    | Tick Time
 
 update : Action -> Model -> Model
 update action model =
     case action of
         Direct act -> { model | bubbles = MB.update act model.bubbles }
-        Tick ->
+        Tick time ->
             let
                 strength = springStrength
                 accelFn = acceleration strength model.springs
@@ -30,7 +31,7 @@ update action model =
                 bubsMod = MB.update (MB.AdjustVelocities accels) model.bubbles
                 model' = { model | bubbles = bubsMod }
             in
-                update (Direct MB.Tick) model'
+                update (Direct (MB.Tick time)) model'
 
 view : Context Action -> Model -> List Svg
 view context model =

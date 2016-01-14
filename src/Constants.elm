@@ -1,11 +1,12 @@
 module Constants
     ( Id, Idable
     , Tag, Tags, TagsResult, emptyTagsResult
-    , maxBubbleOpacity, fadeStep
+    , maxBubbleOpacity, fadeDuration
     , springStrength, airDragFactor, minimumVelocity
     ) where
 
 import Http exposing (Error)
+import Time exposing (Time)
 import Signal
 
 type alias Id = String
@@ -23,8 +24,8 @@ emptyTagsResult = Ok [[]]
 maxBubbleOpacity : Float
 maxBubbleOpacity = 0.75
 
-fadeStep : Float
-fadeStep = 0.015
+fadeDuration : Time
+fadeDuration = Time.second
 
 springStrength : Float
 springStrength = 30.0

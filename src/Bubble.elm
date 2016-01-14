@@ -78,13 +78,13 @@ update action model =
     case action of
         Fade time ->
             { model
-            | animation = updateFade model.id model.animation time
+            | animation = updateFade model.animation time
             }
         Move dx dy ->
             { model | x = model.x + dx, y = model.y + dy }
 
-updateFade : String -> Animation -> Time -> Animation
-updateFade id animation time =
+updateFade : Animation -> Time -> Animation
+updateFade animation time =
     case animation.fading of
         NotFading -> animation
         Fading from to ->

@@ -1,4 +1,9 @@
-module Bubble where
+module Bubble
+    ( Model
+    , Fading (In, Out, None)
+    , Action (Move, Fade)
+    , update, view
+    ) where
 
 import Constants exposing (maxBubbleOpacity, fadeStep)
 import Context exposing (Context)

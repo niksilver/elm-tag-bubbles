@@ -1,4 +1,8 @@
-module World where
+module World
+    ( Model, Action
+    , update, view
+    , Diff, tagDiff
+    ) where
 
 import Constants exposing (Id, Tags, springStrength)
 import Context exposing (Context, forwardTo)
@@ -18,6 +22,11 @@ type Action
     = Direct MB.Action
     | Tick Time
     | NewTags (List Tags)
+
+-- The difference between tags already in the world and tags fetched
+-- via the API.
+
+type alias Diff = { old : Tags, new : Tags, both : Tags }
 
 update : Action -> Model -> Model
 update action model =
@@ -39,4 +48,16 @@ update action model =
 view : Context Action -> Model -> List Svg
 view context model =
     MB.view (forwardTo context Direct) model.bubbles
+
+-- Find the difference between tags represented in the world
+-- and tags fetched by the API
+
+tagDiff : Tags -> Tags -> Diff
+tagDiff current latest =
+    let
+        old = List.filter (\e -> not(List.member e latest)) current
+        new = List.filter (\e -> not(List.member e current)) latest
+        both = List.filter (\e -> List.member e current) latest
+    in
+        Diff old new both
 

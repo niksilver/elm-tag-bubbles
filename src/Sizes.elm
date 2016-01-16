@@ -1,4 +1,4 @@
-module Sizes (toDict) where
+module Sizes (toDict, rescale) where
 
 import Constants exposing (Tag, Tags)
 
@@ -6,12 +6,11 @@ import Dict exposing (Dict)
 import List
 import Maybe exposing (withDefault)
 
--- Work out bubble sizes
+-- Count the number of times each bubble appears
 
-toDict : Float -> Float -> List Tags -> Dict String Float
-toDict min max listTags =
+toDict : List Tags -> Dict String Int
+toDict listTags =
     List.foldl includeTags Dict.empty listTags
-        |> rescale min max
 
 -- Include all the tags in a dict of tag counts
 

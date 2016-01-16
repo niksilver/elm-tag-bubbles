@@ -31,6 +31,7 @@ all : Test
 all =
     suite "SizesTest"
     [ toDictTest
+    , rescaleTest
     ]
 
 toDictTest : Test
@@ -40,27 +41,58 @@ toDictTest =
     [ test "Empty list should yield empty dict" <|
       assertEqual
       0
-      (toDict 11 22 [] |> Dict.size)
+      (toDict [] |> Dict.size)
 
     , test "Empty list of lists should yield empty dict" <|
       assertEqual
       0
-      (toDict 11 22 [[]] |> Dict.size)
+      (toDict [[]] |> Dict.size)
+
+    , test "Tag appearing once should have count of 1" <|
+      assertEqual
+      (Just 1)
+      (toDict tagListA |> Dict.get "tag/6")
+
+    , test "Tag appearing three times should have count of 3" <|
+      assertEqual
+      (Just 3)
+      (toDict tagListA |> Dict.get "tag/1")
+
+    , test "Tag appearing two times should have count of 2" <|
+      assertEqual
+      (Just 2)
+      (toDict tagListA |> Dict.get "tag/2")
+
+    ]
+
+rescaleTest : Test
+rescaleTest =
+    suite "rescaleTest"
+
+    [ test "Empty list should yield empty dict" <|
+      assertEqual
+      0
+      (toDict [] |> rescale 11 22 |> Dict.size)
+
+    , test "Empty list of lists should yield empty dict" <|
+      assertEqual
+      0
+      (toDict [[]] |> rescale 11 22 |> Dict.size)
 
     , test "Tag appearing once should have min size" <|
       assertEqual
       (Just 11)
-      (toDict 11 22 tagListA |> Dict.get "tag/6")
+      (toDict tagListA |> rescale 11 22 |> Dict.get "tag/6")
 
     , test "Tag appearing most times should have max size" <|
       assertEqual
       (Just 22)
-      (toDict 11 22 tagListA |> Dict.get "tag/1")
+      (toDict tagListA |> rescale 11 22 |> Dict.get "tag/1")
 
     , test "Tag appearing middling times should have middling size" <|
       assertEqual
       (Just 16.5)
-      (toDict 11 22 tagListA |> Dict.get "tag/2")
+      (toDict tagListA |> rescale 11 22 |> Dict.get "tag/2")
 
     ]
 

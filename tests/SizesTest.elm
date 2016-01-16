@@ -32,6 +32,7 @@ all =
     suite "SizesTest"
     [ toDictTest
     , rescaleTest
+    , topNTest
     ]
 
 toDictTest : Test
@@ -93,6 +94,42 @@ rescaleTest =
       assertEqual
       (Just 16.5)
       (toDict tagListA |> rescale 11 22 |> Dict.get "tag/2")
+
+    ]
+
+topNTest : Test
+topNTest =
+    suite "topNTest"
+
+    [ test "Top 3 of [] should be empty list" <|
+      assertEqual
+      []
+      (topN 3 [])
+
+    , test "Top 3 of [[]] should be empty list" <|
+      assertEqual
+      []
+      (topN 3 [[]])
+
+    , test "Top 1 of a normal collection should contain just the top one" <|
+      assertEqual
+      [tag1rec]
+      (topN 1 tagListA)
+
+    , test "Top 2 of a normal collection should contain just the top one" <|
+      assertEqual
+      [tag1rec, tag2rec]
+      (topN 2 tagListA)
+
+    , test "Top 4 of a normal collection should contain four items" <|
+      assertEqual
+      4
+      (topN 4 tagListA |> List.length)
+
+    , test "Top 10 of a collection with six tags should contain six items" <|
+      assertEqual
+      6
+      (topN 10 tagListA |> List.length)
 
     ]
 

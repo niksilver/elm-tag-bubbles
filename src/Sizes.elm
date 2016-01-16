@@ -1,4 +1,4 @@
-module Sizes (toDict, rescale) where
+module Sizes (toDict, rescale, topN) where
 
 import Constants exposing (Tag, Tags)
 
@@ -43,4 +43,21 @@ rescale minSize maxSize dict =
             maxSize - (maxCount - toFloat count) * scale
     in
         Dict.map trans dict
+
+-- Pick out the top N most frequently used tags
+
+topN : Int -> List Tags -> Tags
+topN n listTags =
+    let
+        tagsDupe = List.concat listTags
+        idTag = List.map (\tag -> (tag.id, tag)) tagsDupe
+        id2Tag = Dict.fromList idTag
+    in
+    toDict listTags
+        |> Dict.toList
+        |> List.sortBy (\idCount -> -1 * (snd idCount))
+        |> List.take n
+        |> List.map fst
+        |> List.map (\id -> Dict.get id id2Tag)
+        |> List.map (withDefault (Tag "x" "x"))
 

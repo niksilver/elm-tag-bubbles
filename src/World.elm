@@ -56,7 +56,8 @@ update action model =
                 tags = TagFetcher.tags listListTag
                 pairCounter = Springs.toCounter listListTag
                 springs = Springs.toDict minSpringLength maxSpringLength pairCounter
-                sizes = Sizes.toDict minBubbleSize maxBubbleSize listListTag
+                sizes = Sizes.toDict listListTag
+                    |> Sizes.rescale minBubbleSize maxBubbleSize
                 makePhysBubble tag =
                     { dx = 0.0
                     , dy = 0.0

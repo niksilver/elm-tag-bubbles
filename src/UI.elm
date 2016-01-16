@@ -22,7 +22,7 @@ type alias Model =
     { width : Int
     , height : Int
     , world : World.Model
-    , newTags : TagsResult
+    , status : String
     }
 
 type Action
@@ -67,9 +67,19 @@ update action model =
              , Effects.none
             )
         NewTags tags ->
-            ({ model | newTags = tags }
-             , Effects.none
-            )
+            case tags of
+                Ok data ->
+                    ({ model
+                     | status = "OK: " ++ (toString data)
+                     }
+                     , Effects.none
+                    )
+                Err error ->
+                    ({ model
+                     | status = "Errro: " ++ (toString error)
+                     }
+                     , Effects.none
+                    )
         Click clicker ->
             case clicker of
                 NoClick ->
@@ -85,7 +95,7 @@ view : Signal.Address Action -> Model -> Html
 view address model =
     div []
     [ svgView address model
-    , text (toString model.newTags)
+    , text (model.status)
     ]
 
 svgView : Signal.Address Action -> Model -> Html

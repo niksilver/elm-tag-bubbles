@@ -1,4 +1,4 @@
-import Constants exposing (Id, emptyTagsResult)
+import Constants exposing (Id)
 import UI
 import MultiBubbles
 import Bubble
@@ -88,7 +88,7 @@ model =
         { bubbles = multiBubbleModel
         , springs = springs
         }
-    , newTags = emptyTagsResult
+    , status = "Welcome"
     }
 
 app =

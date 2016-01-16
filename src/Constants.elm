@@ -1,6 +1,6 @@
 module Constants
     ( Id, Idable
-    , Tag, Tags, TagsResult, emptyTagsResult
+    , Tag, Tags, TagsResult
     , maxBubbleOpacity, fadeDuration
     , springStrength, airDragFactor, minimumVelocity
     ) where
@@ -18,8 +18,6 @@ type alias Tag = { id : Id, webTitle : String }
 type alias Tags = List Tag
 
 type alias TagsResult = Result Http.Error (List Tags)
-
-emptyTagsResult = Ok [[]]
 
 maxBubbleOpacity : Float
 maxBubbleOpacity = 0.75

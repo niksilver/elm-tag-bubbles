@@ -8,19 +8,19 @@ import Maybe exposing (withDefault)
 
 -- Count the number of times each bubble appears
 
-toDict : List Tags -> Dict String Int
+toDict : List Tags -> Dict Id Int
 toDict listTags =
     List.foldl includeTags Dict.empty listTags
 
 -- Include all the tags in a dict of tag counts
 
-includeTags : List Tag -> Dict String Int -> Dict String Int
+includeTags : List Tag -> Dict Id Int -> Dict Id Int
 includeTags tags dict =
     List.foldl includeTag dict tags
 
 -- Incude a tag in a dict of tag counts
 
-includeTag : Tag -> Dict String Int -> Dict String Int
+includeTag : Tag -> Dict Id Int -> Dict Id Int
 includeTag tag dict =
     Dict.update tag.id inc dict
 
@@ -32,7 +32,7 @@ inc mCount =
 
 -- Rescale the dict according to max and min values
 
-rescale : Float -> Float -> Dict String Int -> Dict String Float
+rescale : Float -> Float -> Dict Id Int -> Dict Id Float
 rescale minSize maxSize dict =
     let
         counts = Dict.values dict

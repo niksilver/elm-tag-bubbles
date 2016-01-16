@@ -1,6 +1,6 @@
-module Sizes (toDict, rescale, topN) where
+module Sizes (toDict, rescale, idDict, topN) where
 
-import Constants exposing (Tag, Tags)
+import Constants exposing (Id, Tag, Tags)
 
 import Dict exposing (Dict)
 import List
@@ -44,14 +44,20 @@ rescale minSize maxSize dict =
     in
         Dict.map trans dict
 
+-- Get a mapping from id to tag
+
+idDict : List Tags -> Dict Id Tag
+idDict listTags =
+        List.concat listTags
+            |> List.map (\tag -> (tag.id, tag))
+            |> Dict.fromList
+
 -- Pick out the top N most frequently used tags
 
 topN : Int -> List Tags -> Tags
 topN n listTags =
     let
-        tagsDupe = List.concat listTags
-        idTag = List.map (\tag -> (tag.id, tag)) tagsDupe
-        id2Tag = Dict.fromList idTag
+        id2Tag = idDict listTags
     in
     toDict listTags
         |> Dict.toList

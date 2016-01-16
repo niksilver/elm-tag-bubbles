@@ -1,14 +1,23 @@
 module World
-    ( Model, Action
+    ( Model
+    , Action (Tick, NewTags)
     , update, view
     , Diff, tagDiff
     ) where
 
-import Constants exposing (Id, Tags, springStrength)
+import Constants exposing
+    ( Id, Tag, Tags
+    , minBubbleSize, maxBubbleSize
+    , minSpringLength, maxSpringLength
+    , springStrength)
 import Context exposing (Context, forwardTo)
 import MultiBubbles as MB
-import Springs exposing (acceleration, accelDict)
+import Bubble exposing (fadeInAnimation)
+import Springs exposing (toCounter, acceleration, accelDict)
+import Sizes exposing (toDict)
+import TagFetcher
 
+import Maybe exposing (withDefault)
 import Dict exposing (Dict)
 import Svg exposing (Svg)
 import Time exposing (Time)
@@ -43,7 +52,29 @@ update action model =
             in
                 update (Direct (MB.Tick time)) model'
         NewTags listListTag ->
-            model
+            let
+                tags = TagFetcher.tags listListTag
+                pairCounter = Springs.toCounter listListTag
+                springs = Springs.toDict minSpringLength maxSpringLength pairCounter
+                sizes = Sizes.toDict minBubbleSize maxBubbleSize listListTag
+                makePhysBubble tag =
+                    { dx = 0.0
+                    , dy = 0.0
+                    , bubble =
+                        { id = tag.id
+                        , x = 0.0
+                        , y = 0.0
+                        , size = Dict.get tag.id sizes |> withDefault 10.0
+                        , label = tag.webTitle
+                        , animation = fadeInAnimation
+                        }
+                    }
+                physBubbles = List.map makePhysBubble tags
+                physBubbles' = MB.initialModel 800 600 physBubbles
+            in
+                { bubbles = physBubbles'
+                , springs = springs
+                }
 
 view : Context Action -> Model -> List Svg
 view context model =

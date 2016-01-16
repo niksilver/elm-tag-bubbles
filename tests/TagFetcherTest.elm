@@ -133,6 +133,13 @@ response = """
 all : Test
 all =
     suite "TagFetcherTest"
+    [ parserTests
+    , tagsTest
+    ]
+
+parserTests : Test
+parserTests =
+    suite "parserTests"
 
     [ test "Tag to id"
       (assertEqual
@@ -173,3 +180,33 @@ all =
 
     ]
 
+tagsTest : Test
+tagsTest =
+    suite "tagsTest"
+
+    [ test "Empty list should produce no tags" <|
+      assertEqual
+      []
+      (tags [])
+
+    , test "List of [] should produce no tags" <|
+      assertEqual
+      []
+      (tags [[]])
+
+    , test "List of one list of tags should produce those tags" <|
+      assertEqual
+      [tag1rec, tag2rec]
+      (tags [[tag1rec, tag2rec]])
+
+    , test "Two distinct lists of tags should produce those tags" <|
+      assertEqual
+      [tag1rec, tag2rec, tag3rec, tag4rec]
+      (tags [[tag1rec, tag2rec], [tag3rec, tag4rec]])
+
+    , test "Two overlapping lists of tags should produce only unique tags" <|
+      assertEqual
+      [tag1rec, tag2rec, tag3rec, tag4rec]
+      (tags [[tag1rec, tag2rec, tag3rec], [tag1rec, tag3rec, tag4rec]])
+
+    ]

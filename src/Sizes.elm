@@ -54,16 +54,11 @@ idDict listTags =
 
 -- Pick out the top N most frequently used tags
 
-topN : Int -> List Tags -> Tags
+topN : Int -> List Tags -> List Id
 topN n listTags =
-    let
-        id2Tag = idDict listTags
-    in
     toDict listTags
         |> Dict.toList
         |> List.sortBy (\idCount -> -1 * (snd idCount))
         |> List.take n
         |> List.map fst
-        |> List.map (\id -> Dict.get id id2Tag)
-        |> List.map (withDefault (Tag "x" "x"))
 

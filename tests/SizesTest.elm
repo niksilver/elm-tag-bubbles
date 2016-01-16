@@ -113,12 +113,12 @@ topNTest =
 
     , test "Top 1 of a normal collection should contain just the top one" <|
       assertEqual
-      [tag1rec]
+      [tag1rec.id]
       (topN 1 tagListA)
 
     , test "Top 2 of a normal collection should contain just the top one" <|
       assertEqual
-      [tag1rec, tag2rec]
+      [tag1rec.id, tag2rec.id]
       (topN 2 tagListA)
 
     , test "Top 4 of a normal collection should contain four items" <|

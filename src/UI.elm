@@ -70,7 +70,8 @@ update action model =
             case tags of
                 Ok data ->
                     ({ model
-                     | status = "OK: " ++ (toString data)
+                     | world = World.update (World.NewTags data) model.world
+                     , status = "OK: " ++ (toString data)
                      }
                      , Effects.none
                     )

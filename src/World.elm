@@ -1,6 +1,6 @@
 module World where
 
-import Constants exposing (Id, springStrength)
+import Constants exposing (Id, Tags, springStrength)
 import Context exposing (Context, forwardTo)
 import MultiBubbles as MB
 import Springs exposing (acceleration, accelDict)
@@ -17,6 +17,7 @@ type alias Model =
 type Action
     = Direct MB.Action
     | Tick Time
+    | NewTags (List Tags)
 
 update : Action -> Model -> Model
 update action model =
@@ -32,6 +33,8 @@ update action model =
                 model' = { model | bubbles = bubsMod }
             in
                 update (Direct (MB.Tick time)) model'
+        NewTags listListTag ->
+            model
 
 view : Context Action -> Model -> List Svg
 view context model =

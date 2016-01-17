@@ -7,6 +7,7 @@ module World
 
 import Constants exposing
     ( Id, Tag, Tags
+    , maxBubbles
     , minBubbleSize, maxBubbleSize
     , minSpringLength, maxSpringLength
     , springStrength)
@@ -53,7 +54,7 @@ update action model =
                 update (Direct (MB.Tick time)) model'
         NewTags listListTag ->
             let
-                topN = Sizes.topN 10 listListTag
+                topN = Sizes.topN maxBubbles listListTag
                 listListTag' = Sizes.filter listListTag topN
                 tags = Sizes.idDict listListTag' |> Dict.values
                 pairCounter = Springs.toCounter listListTag'

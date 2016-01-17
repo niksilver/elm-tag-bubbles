@@ -5,7 +5,7 @@ module Bubble
     , update, view
     ) where
 
-import Constants exposing (maxBubbleOpacity, fadeDuration)
+import Constants exposing (bubbleLabelFontSize, maxBubbleOpacity, fadeDuration)
 import Context exposing (Context)
 import Colours exposing (pickBaseColour, pickTextColour)
 import Time exposing (Time)
@@ -122,7 +122,7 @@ view context model =
             , opacity (model.animation.opacity |> toString)
             -- This next one doesn't work in Firefox
             , alignmentBaseline "central"
-            , fontSize "40pt"
+            , fontSize bubbleLabelFontSize
             , fill (pickTextColour model.label)
             ]
     in

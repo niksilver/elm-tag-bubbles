@@ -12,7 +12,7 @@ url tag =
     Http.url "http://content.guardianapis.com/search"
     [ ("show-tags", "keyword")
     , ("tag", tag)
-    , ("page-size", "10")
+    , ("page-size", "20")
     , ("api-key", apiKey)
     ]
 

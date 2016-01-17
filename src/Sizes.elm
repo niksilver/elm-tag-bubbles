@@ -1,4 +1,4 @@
-module Sizes (toDict, rescale, idDict, topN) where
+module Sizes (toDict, rescale, idDict, topN, filter) where
 
 import Constants exposing (Id, Tag, Tags)
 
@@ -61,4 +61,16 @@ topN n listTags =
         |> List.sortBy (\idCount -> -1 * (snd idCount))
         |> List.take n
         |> List.map fst
+
+-- Filter in only those tags with the given names
+
+filter : List Tags -> List Id -> List Tags
+filter listTags ids =
+    listTags
+        |> List.map (reduce ids)
+        |> List.filter (not << List.isEmpty)
+
+reduce : List Id -> List Tag -> List Tag
+reduce ids tags =
+    List.filter (\tag -> List.member tag.id ids) tags
 

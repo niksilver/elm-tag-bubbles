@@ -33,6 +33,7 @@ all =
     [ toDictTest
     , rescaleTest
     , topNTest
+    , filterTest
     ]
 
 toDictTest : Test
@@ -133,3 +134,35 @@ topNTest =
 
     ]
 
+filterTest : Test
+filterTest =
+    suite "filterTest"
+
+    [ test "Filtering on two tags should yield sensible result" <|
+      assertEqual
+      [ [ tag1rec, tag2rec ]
+      , [ tag1rec, tag2rec ]
+      , [ tag1rec ]
+      ]
+      (filter tagListA [ tag1rec.id, tag2rec.id ])
+
+    , test "Filtering on just one tag should be okay" <|
+      assertEqual
+      [ [ tag2rec ]
+      , [ tag2rec ]
+      ]
+      (filter tagListA [ tag2rec.id ])
+
+    , test "Filtering on all tags should yield same as we started with" <|
+      assertEqual
+      tagListA
+      (filter
+        tagListA
+        [ tag1rec.id, tag2rec.id, tag3rec.id, tag4rec.id, tag5rec.id, tag6rec.id])
+
+    , test "Filtering on no tags should yield empty list" <|
+      assertEqual
+      []
+      (filter tagListA [])
+
+    ]

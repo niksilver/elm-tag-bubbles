@@ -51,27 +51,3 @@ getTags tag =
         |> Task.toResult
         |> Effects.task
 
--- Get the unique tags from a list of list of tags
-
-tags : List Tags -> List Tag
-tags listTags =
-    tags' listTags []
-
-tags' : List Tags -> List Tag -> List Tag
-tags' remaining accum =
-    case remaining of
-        [] ->
-            List.reverse accum
-        headList :: tailList ->
-            tags' tailList (tags'' headList accum)
-
-tags'' : List Tag -> List Tag -> List Tag
-tags'' list accum =
-    case list of
-        [] -> accum
-        hd :: tl ->
-            if (List.member hd accum) then
-                tags'' tl accum
-            else
-                tags'' tl (hd :: accum)
-

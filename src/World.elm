@@ -14,7 +14,7 @@ import Context exposing (Context, forwardTo)
 import MultiBubbles as MB
 import Bubble exposing (fadeInAnimation)
 import Springs exposing (toCounter, acceleration, accelDict)
-import Sizes exposing (toDict)
+import Sizes
 import TagFetcher
 
 import Maybe exposing (withDefault)
@@ -53,10 +53,12 @@ update action model =
                 update (Direct (MB.Tick time)) model'
         NewTags listListTag ->
             let
-                tags = TagFetcher.tags listListTag
-                pairCounter = Springs.toCounter listListTag
+                topN = Sizes.topN 10 listListTag
+                listListTag' = Sizes.filter listListTag topN
+                tags = Sizes.idDict listListTag' |> Dict.values
+                pairCounter = Springs.toCounter listListTag'
                 springs = Springs.toDict minSpringLength maxSpringLength pairCounter
-                sizes = Sizes.toDict listListTag
+                sizes = Sizes.toDict listListTag'
                     |> Sizes.rescale minBubbleSize maxBubbleSize
                 makePhysBubble tag =
                     { dx = 0.0

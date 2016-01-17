@@ -50,7 +50,7 @@ springStrength : Float
 springStrength = 25.0
 
 airDragFactor : Float
-airDragFactor = 0.02
+airDragFactor = 0.04
 
 minimumVelocity : Float
 minimumVelocity = 0.1

@@ -21,6 +21,7 @@ import Svg.Attributes exposing
     )
 import Html
 import Html.Attributes
+import Html.Events
 import Svg.Events exposing (onClick)
 import Signal exposing (message)
 import Easing exposing (ease, linear, float)
@@ -117,6 +118,7 @@ view context model =
                 , ("font-family", "Arial")
                 , ("opacity", (model.animation.opacity |> toString))
                 ]
+            , Html.Events.onClick context.click model.id
             ]
             [ text model.label ]
         foreignObjectAttrs =

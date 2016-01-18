@@ -13,13 +13,14 @@ import Time exposing (Time)
 import Maybe exposing (withDefault)
 import Svg exposing 
     ( Svg
-    , circle, text, text', g
+    , circle, text, text', foreignObject, g
     )
 import Svg.Attributes exposing
     ( cx, cy, r, fill, opacity
     , x, y, textAnchor, alignmentBaseline, fontSize
     )
 import Html
+import Html.Attributes
 import Svg.Events exposing (onClick)
 import Signal exposing (message)
 import Easing exposing (ease, linear, float)
@@ -105,16 +106,24 @@ updateFade animation time =
 view : Context Action -> Model -> Svg
 view context model =
     let
-        fo =
-            Svg.foreignObject
+        textDiv =
+            Html.div
+            [ Html.Attributes.style
+                [ ("position", "relative")
+                , ("top", "50%")
+                , ("transform", "translateY(-50%)")
+                , ("text-align", "center")
+                , ("color", (pickTextColour model.label))
+                , ("font-family", "Arial")
+                , ("opacity", (model.animation.opacity |> toString))
+                ]
+            ]
+            [ text model.label ]
+        foreignObjectAttrs =
             [ Svg.Attributes.x (toString (model.x - model.size * 0.85))
             , Svg.Attributes.y (toString (model.y - model.size * 0.35))
             , Svg.Attributes.width  (toString (model.size * 2 * 0.85))
             , Svg.Attributes.height (toString (model.size * 2 * 0.35))
-            , opacity (model.animation.opacity |> toString)
-            ]
-            [
-                Html.div [] [ text model.label ]
             ]
         baseCircleAttrs =
             [ cx (toString model.x)
@@ -130,21 +139,10 @@ view context model =
             , opacity "0"
             , onClick (message context.click model.id)
             ]
-        textAttrs =
-            [ x (toString model.x)
-            , y (toString model.y)
-            , textAnchor "middle"
-            , opacity (model.animation.opacity |> toString)
-            -- This next one doesn't work in Firefox
-            , alignmentBaseline "central"
-            , fontSize bubbleLabelFontSize
-            , fill (pickTextColour model.label)
-            ]
     in
         g []
         [ circle baseCircleAttrs []
-        -- , text' textAttrs [ text model.label ]
-        , fo
+        , foreignObject foreignObjectAttrs [ textDiv ]
         , circle coveringCircleAttrs' []
         ]
 

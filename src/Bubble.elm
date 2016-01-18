@@ -11,11 +11,15 @@ import Colours exposing (pickBaseColour, pickTextColour)
 import Time exposing (Time)
 
 import Maybe exposing (withDefault)
-import Svg exposing (Svg, circle, text, text', g)
+import Svg exposing 
+    ( Svg
+    , circle, text, text', g
+    )
 import Svg.Attributes exposing
     ( cx, cy, r, fill, opacity
     , x, y, textAnchor, alignmentBaseline, fontSize
     )
+import Html
 import Svg.Events exposing (onClick)
 import Signal exposing (message)
 import Easing exposing (ease, linear, float)
@@ -101,6 +105,17 @@ updateFade animation time =
 view : Context Action -> Model -> Svg
 view context model =
     let
+        fo =
+            Svg.foreignObject
+            [ Svg.Attributes.x (toString (model.x - model.size * 0.85))
+            , Svg.Attributes.y (toString (model.y - model.size * 0.35))
+            , Svg.Attributes.width  (toString (model.size * 2 * 0.85))
+            , Svg.Attributes.height (toString (model.size * 2 * 0.35))
+            , opacity (model.animation.opacity |> toString)
+            ]
+            [
+                Html.div [] [ text model.label ]
+            ]
         baseCircleAttrs =
             [ cx (toString model.x)
             , cy (toString model.y)
@@ -128,7 +143,8 @@ view context model =
     in
         g []
         [ circle baseCircleAttrs []
-        , text' textAttrs [ text model.label ]
+        -- , text' textAttrs [ text model.label ]
+        , fo
         , circle coveringCircleAttrs' []
         ]
 

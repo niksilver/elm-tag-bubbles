@@ -115,7 +115,7 @@ view context model =
                 , ("transform", "translateY(-50%)")
                 , ("text-align", "center")
                 , ("color", (pickTextColour model.label))
-                , ("font-family", "Arial")
+                , ("font-family", "Arial, Helvetica, sans-serif")
                 , ("opacity", (model.animation.opacity |> toString))
                 ]
             , Html.Events.onClick context.click model.id

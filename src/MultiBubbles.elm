@@ -1,13 +1,15 @@
 module MultiBubbles
     ( Action (Tick, Direct, AdjustVelocities)
     , Model
+    , Diff, tagDiff, replace
+    , initialModel
     , update
     , view
-    , initialModel
     ) where
 
 -- Multiple bubbles
 
+import Constants exposing (Id, Tag, Tags)
 import Context exposing (Context, forwardTo)
 import PhysicsBubble as Phys
 import Bubble
@@ -21,12 +23,58 @@ import Time exposing (Time)
 
 type alias Model = List Phys.Model
 
-type alias Id = String
-
 type Action
     = Tick Time
     | Direct Id Phys.Action
     | AdjustVelocities (Dict Id (Float, Float))
+
+-- The difference between tags already in the world and tags fetched
+-- via the API.
+
+type alias Diff = { old : Tags, new : Tags, both : Tags }
+
+-- Set initial model for multiple bubbles
+
+initialModel : Float -> Float -> Model -> Model
+initialModel centreX centreY model =
+    let
+        count = length model
+        turn = 2 * pi / (toFloat count)
+        rePos : Int -> Phys.Model -> Phys.Model
+        rePos idx physBub =
+            let
+                pb = physBub.bubble
+            in
+                { physBub
+                | bubble =
+                    { pb
+                    | x = centreX + 40 * (cos (turn * (toFloat idx)))
+                    , y = centreY + 40 * (sin (turn * (toFloat idx)))
+                    }
+                        |> Bubble.setToFadeIn
+                }
+        indexedBubs = indexedMap (,) model
+    in
+        map (\ib -> rePos (fst ib) (snd ib)) indexedBubs
+
+-- Replace an old model with a new model.
+-- Old bubbles will fade out; new bubbles will fade in; remaining bubbles remain
+
+replace : Model -> Model -> Model
+replace oldModel newModel =
+    newModel
+
+-- Find the difference between tags represented in the world
+-- and tags fetched by the API
+
+tagDiff : Tags -> Tags -> Diff
+tagDiff current latest =
+    let
+        old = List.filter (\e -> not(List.member e latest)) current
+        new = List.filter (\e -> not(List.member e current)) latest
+        both = List.filter (\e -> List.member e current) latest
+    in
+        Diff old new both
 
 update : Action -> Model -> Model
 update action model =
@@ -83,28 +131,4 @@ fwdingView context physModel =
 view : Context Action -> Model -> List Svg
 view context model =
     map (fwdingView context) model
-
--- Set initial model for multiple bubbles
-
-initialModel : Float -> Float -> Model -> Model
-initialModel centreX centreY model =
-    let
-        count = length model
-        turn = 2 * pi / (toFloat count)
-        rePos : Int -> Phys.Model -> Phys.Model
-        rePos idx physBub =
-            let
-                pb = physBub.bubble
-            in
-                { physBub
-                | bubble =
-                    { pb
-                    | x = centreX + 40 * (cos (turn * (toFloat idx)))
-                    , y = centreY + 40 * (sin (turn * (toFloat idx)))
-                    }
-                        |> Bubble.setToFadeIn
-                }
-        indexedBubs = indexedMap (,) model
-    in
-        map (\ib -> rePos (fst ib) (snd ib)) indexedBubs
 

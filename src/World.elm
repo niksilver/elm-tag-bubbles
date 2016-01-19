@@ -2,7 +2,6 @@ module World
     ( Model
     , Action (Tick, NewTags)
     , update, view
-    , Diff, tagDiff
     ) where
 
 import Constants exposing
@@ -32,11 +31,6 @@ type Action
     = Direct MB.Action
     | Tick Time
     | NewTags (List Tags)
-
--- The difference between tags already in the world and tags fetched
--- via the API.
-
-type alias Diff = { old : Tags, new : Tags, both : Tags }
 
 update : Action -> Model -> Model
 update action model =
@@ -77,23 +71,11 @@ update action model =
                     |> List.sortBy (\physBub -> -1 * (physBub.bubble.size))
                 physBubbles' = MB.initialModel 400 300 physBubbles
             in
-                { bubbles = physBubbles'
+                { bubbles = MB.replace model.bubbles physBubbles'
                 , springs = springs
                 }
 
 view : Context Action -> Model -> List Svg
 view context model =
     MB.view (forwardTo context Direct) model.bubbles
-
--- Find the difference between tags represented in the world
--- and tags fetched by the API
-
-tagDiff : Tags -> Tags -> Diff
-tagDiff current latest =
-    let
-        old = List.filter (\e -> not(List.member e latest)) current
-        new = List.filter (\e -> not(List.member e current)) latest
-        both = List.filter (\e -> List.member e current) latest
-    in
-        Diff old new both
 

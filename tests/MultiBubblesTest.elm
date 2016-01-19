@@ -1,7 +1,7 @@
-module WorldTest (all) where
+module MultiBubblesTest (all) where
 
 import Constants exposing (Tag)
-import World exposing (..)
+import MultiBubbles exposing (..)
 
 import ElmTest exposing (..)
 
@@ -13,7 +13,7 @@ tag5Rec = Tag "tag/five" "Tag five"
 
 all : Test
 all =
-    suite "WorldTest"
+    suite "MultiBubbles"
     [ tagDiffTest
     ]
 

@@ -5,7 +5,7 @@ module World
     ) where
 
 import Constants exposing
-    ( Id, Tag, Tags
+    ( Id, Tags
     , maxBubbles
     , minBubbleSize, maxBubbleSize
     , minSpringLength, maxSpringLength

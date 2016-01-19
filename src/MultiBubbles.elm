@@ -80,6 +80,7 @@ replace oldModel newModel =
         oldModel
             |> fadeIn newModel diff.new
             |> fadeOut diff.old
+            |> reorder
 
 fadeIn : Model -> List Id -> Model -> Model
 fadeIn newModel newIds oldModel =
@@ -96,6 +97,13 @@ fadeOut oldIds oldModel =
                 pb
     in
         map selectedFade oldModel
+
+-- Reorder the bubbles with the largest first
+
+reorder : Model -> Model
+reorder model =
+    model
+        |> List.sortBy (\physBub -> -1 * (physBub.bubble.size))
 
 -- Update the model
 

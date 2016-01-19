@@ -68,7 +68,6 @@ update action model =
                         }
                     }
                 physBubbles = List.map makePhysBubble tags
-                    |> List.sortBy (\physBub -> -1 * (physBub.bubble.size))
                 physBubbles' = MB.initialModel 400 300 physBubbles
             in
                 { bubbles = MB.replace model.bubbles physBubbles'

@@ -31,7 +31,19 @@ type Action
 -- The difference between tags already in the world and tags fetched
 -- via the API.
 
-type alias Diff = { old : Tags, new : Tags, both : Tags }
+type alias Diff a = { old : List a, new : List a, both : List a }
+
+-- Find the difference between tags represented in the world
+-- and tags fetched by the API
+
+tagDiff : List a -> List a -> Diff a
+tagDiff current latest =
+    let
+        old = List.filter (\e -> not(List.member e latest)) current
+        new = List.filter (\e -> not(List.member e current)) latest
+        both = List.filter (\e -> List.member e current) latest
+    in
+        Diff old new both
 
 -- Set initial model for multiple bubbles
 
@@ -64,17 +76,7 @@ replace : Model -> Model -> Model
 replace oldModel newModel =
     newModel
 
--- Find the difference between tags represented in the world
--- and tags fetched by the API
-
-tagDiff : Tags -> Tags -> Diff
-tagDiff current latest =
-    let
-        old = List.filter (\e -> not(List.member e latest)) current
-        new = List.filter (\e -> not(List.member e current)) latest
-        both = List.filter (\e -> List.member e current) latest
-    in
-        Diff old new both
+-- Update the model
 
 update : Action -> Model -> Model
 update action model =

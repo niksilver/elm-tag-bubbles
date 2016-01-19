@@ -56,8 +56,8 @@ phys4Model =
 
 multiBubbleModel =
     MultiBubbles.initialModel
-        width
-        height
+        (width / 2)
+        (height / 2)
         [ phys1Model
         , phys2Model
         , phys3Model

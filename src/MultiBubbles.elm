@@ -86,11 +86,9 @@ view context model =
 
 -- Set initial model for multiple bubbles
 
-initialModel : Int -> Int -> Model -> Model
-initialModel width height model =
+initialModel : Float -> Float -> Model -> Model
+initialModel centreX centreY model =
     let
-        centreX = toFloat width / 2
-        centreY = toFloat height / 2
         count = length model
         turn = 2 * pi / (toFloat count)
         rePos : Int -> Phys.Model -> Phys.Model

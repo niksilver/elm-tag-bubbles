@@ -74,7 +74,16 @@ initialModel centreX centreY model =
 
 replace : Model -> Model -> Model
 replace oldModel newModel =
-    newModel
+    let
+        diff = tagDiff (map (.bubble >> .id) oldModel) (map (.bubble >> .id) newModel)
+    in
+        oldModel
+            |> fadeIn newModel diff.new
+
+fadeIn : Model -> List Id -> Model -> Model
+fadeIn newModel newIds oldModel =
+    List.filter (\pb -> List.member pb.bubble.id newIds) newModel
+        |> List.append oldModel
 
 -- Update the model
 

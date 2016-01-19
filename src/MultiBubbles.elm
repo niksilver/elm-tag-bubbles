@@ -15,7 +15,7 @@ import PhysicsBubble as Phys
 import Bubble
 import Springs exposing (drag, dampen)
 
-import List exposing (reverse, length, indexedMap, map)
+import List exposing (reverse, length, indexedMap, map, append, filter, member)
 import Dict exposing (Dict)
 import Maybe exposing (withDefault)
 import Svg exposing (Svg)
@@ -39,9 +39,9 @@ type alias Diff a = { old : List a, new : List a, both : List a }
 tagDiff : List a -> List a -> Diff a
 tagDiff current latest =
     let
-        old = List.filter (\e -> not(List.member e latest)) current
-        new = List.filter (\e -> not(List.member e current)) latest
-        both = List.filter (\e -> List.member e current) latest
+        old = filter (\e -> not(member e latest)) current
+        new = filter (\e -> not(member e current)) latest
+        both = filter (\e -> member e current) latest
     in
         Diff old new both
 
@@ -79,11 +79,23 @@ replace oldModel newModel =
     in
         oldModel
             |> fadeIn newModel diff.new
+            |> fadeOut diff.old
 
 fadeIn : Model -> List Id -> Model -> Model
 fadeIn newModel newIds oldModel =
-    List.filter (\pb -> List.member pb.bubble.id newIds) newModel
-        |> List.append oldModel
+    filter (\pb -> member pb.bubble.id newIds) newModel
+        |> append oldModel
+
+fadeOut : List Id -> Model -> Model
+fadeOut oldIds oldModel =
+    let
+        selectedFade pb =
+            if (member pb.bubble.id oldIds) then
+                { pb | bubble = Bubble.setToFadeOut pb.bubble }
+            else
+                pb
+    in
+        map selectedFade oldModel
 
 -- Update the model
 
@@ -110,6 +122,11 @@ updateOne id physAct model =
 updateAll : Model -> Time -> Model
 updateAll model time =
     map (Phys.update (Phys.Animate time)) model
+        |> removeFadedOut
+
+removeFadedOut : Model -> Model
+removeFadedOut model =
+    filter (\pb -> not(Bubble.isFadedOut pb.bubble)) model
 
 -- Update the velocity of all the bubbles
 -- according to a dictionary of id to acceleration

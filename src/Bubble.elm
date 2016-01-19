@@ -1,11 +1,15 @@
 module Bubble
     ( Model
     , Action (Move, Fade)
-    , noAnimation, fadeInAnimation, setToFadeIn
+    , noAnimation, fadeInAnimation, setToFadeIn, setToFadeOut, isFadedOut
     , update, view
     ) where
 
-import Constants exposing (bubbleLabelFontSize, maxBubbleOpacity, fadeDuration)
+import Constants exposing
+    ( bubbleLabelFontSize
+    , maxBubbleOpacity
+    , fadeDuration
+    )
 import Context exposing (Context)
 import Colours exposing (pickBaseColour, pickTextColour)
 import Time exposing (Time)
@@ -79,6 +83,31 @@ setToFadeIn model =
             }
         }
 
+setToFadeOut : Model -> Model
+setToFadeOut model =
+    let
+        animation = model.animation
+        fromOpacity =
+            case animation.fading of
+                Fading from to -> animation.opacity
+                NotFading -> maxBubbleOpacity
+    in
+        { model
+        | animation =
+            { animation
+            | fadeStart = Nothing
+            , fading = Fading fromOpacity 0.0
+            }
+        }
+
+isFadedOut : Model -> Bool
+isFadedOut model =
+    case model.animation.fading of
+        Fading from to ->
+            (to == 0.0) && (model.animation.opacity == 0.0)
+        NotFading ->
+            False
+ 
 update : Action -> Model -> Model
 update action model =
     case action of

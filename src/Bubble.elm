@@ -107,6 +107,8 @@ updateFade animation time =
 view : Context Action -> Model -> Svg
 view context model =
     let
+        workaroundForChromeTextClick =
+            Html.Events.onClick context.click model.id
         textDiv =
             Html.div
             [ Html.Attributes.style
@@ -118,14 +120,14 @@ view context model =
                 , ("font-family", "Arial, Helvetica, sans-serif")
                 , ("opacity", (model.animation.opacity |> toString))
                 ]
-            , Html.Events.onClick context.click model.id
+            , workaroundForChromeTextClick
             ]
             [ text model.label ]
         foreignObjectAttrs =
             [ Svg.Attributes.x (toString (model.x - model.size * 0.85))
-            , Svg.Attributes.y (toString (model.y - model.size * 0.35))
+            , Svg.Attributes.y (toString (model.y - model.size * 0.40))
             , Svg.Attributes.width  (toString (model.size * 2 * 0.85))
-            , Svg.Attributes.height (toString (model.size * 2 * 0.35))
+            , Svg.Attributes.height (toString (model.size * 2 * 0.40))
             ]
         baseCircleAttrs =
             [ cx (toString model.x)

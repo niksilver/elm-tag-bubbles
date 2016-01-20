@@ -2,6 +2,7 @@ module MultiBubbles
     ( Action (Tick, Direct, AdjustVelocities)
     , Model
     , Diff, tagDiff
+    , makeBubbles
     , initialArrangement
     , update
     , view
@@ -43,6 +44,24 @@ tagDiff current latest =
         both = filter (\e -> member e current) latest
     in
         Diff old new both
+
+-- Make some new bubbles using a dictionary of tags and a dictionary of sizes
+
+makeBubbles : List Tag -> Dict Id Float -> Model
+makeBubbles tags sizeDict =
+    let
+        makeBubble tag =
+            { id = tag.id
+            , x = 0.0
+            , y = 0.0
+            , dx = 0.0
+            , dy = 0.0
+            , size = Dict.get tag.id sizeDict |> withDefault 10.0
+            , label = tag.webTitle
+            , animation = Bubble.fadeInAnimation
+            }
+    in
+        List.map makeBubble tags
 
 -- Create an initial arrangement for a number of new bubbles.
 -- Old bubbles will fade out; new bubbles will fade in; remaining bubbles remain

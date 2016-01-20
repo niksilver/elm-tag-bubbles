@@ -55,17 +55,7 @@ update action model =
                 springs = Springs.toDict minSpringLength maxSpringLength pairCounter
                 sizes = Sizes.toDict listListTag'
                     |> Sizes.rescale minBubbleSize maxBubbleSize
-                makeBubble tag =
-                    { id = tag.id
-                    , x = 0.0
-                    , y = 0.0
-                    , dx = 0.0
-                    , dy = 0.0
-                    , size = Dict.get tag.id sizes |> withDefault 10.0
-                    , label = tag.webTitle
-                    , animation = fadeInAnimation
-                    }
-                bubbles = List.map makeBubble tags
+                bubbles = MB.makeBubbles tags sizes
             in
                 { bubbles = MB.initialArrangement 400 300 model.bubbles bubbles
                 , springs = springs

@@ -1,6 +1,6 @@
 module Bubble
     ( Model
-    , Action (Move, Fade)
+    , Action (Animate)
     , noAnimation, fadeInAnimation, setToFadeIn, setToFadeOut, isFadedOut
     , update, view
     ) where
@@ -34,6 +34,8 @@ type alias Model =
     { id : String
     , x : Float
     , y : Float
+    , dx : Float
+    , dy : Float
     , size : Float
     , label : String
     , animation : Animation
@@ -48,7 +50,9 @@ type alias Animation =
 -- Fading from and to an opacity, or not fading
 type Fading = Fading Float Float | NotFading
 
-type Action
+type Action = Animate Time
+
+type SubAction
     = Move Float Float
         | Fade Time
 
@@ -107,10 +111,18 @@ isFadedOut model =
             (to == 0.0) && (model.animation.opacity == 0.0)
         NotFading ->
             False
- 
+
+-- Update the model
+
 update : Action -> Model -> Model
-update action model =
-    case action of
+update (Animate time) model =
+    model
+        |> subUpdate (Move model.dx model.dy)
+        |> subUpdate (Fade time)
+ 
+subUpdate : SubAction -> Model -> Model
+subUpdate subAction model =
+    case subAction of
         Fade time ->
             { model
             | animation = updateFade model.animation time

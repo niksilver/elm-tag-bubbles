@@ -11,7 +11,6 @@ module MultiBubbles
 
 import Constants exposing (Id, Tag, Tags)
 import Context exposing (Context, forwardTo)
-import PhysicsBubble as Phys
 import Bubble
 import Springs exposing (drag, dampen)
 
@@ -21,11 +20,11 @@ import Maybe exposing (withDefault)
 import Svg exposing (Svg)
 import Time exposing (Time)
 
-type alias Model = List Phys.Model
+type alias Model = List Bubble.Model
 
 type Action
     = Tick Time
-    | Direct Id Phys.Action
+    | Direct Id Bubble.Action
     | AdjustVelocities (Dict Id (Float, Float))
 
 -- The difference between tags already in the world and tags fetched
@@ -52,19 +51,13 @@ initialModel centreX centreY model =
     let
         count = length model
         turn = 2 * pi / (toFloat count)
-        rePos : Int -> Phys.Model -> Phys.Model
-        rePos idx physBub =
-            let
-                pb = physBub.bubble
-            in
-                { physBub
-                | bubble =
-                    { pb
-                    | x = centreX + 40 * (cos (turn * (toFloat idx)))
-                    , y = centreY + 40 * (sin (turn * (toFloat idx)))
-                    }
-                        |> Bubble.setToFadeIn
-                }
+        rePos : Int -> Bubble.Model -> Bubble.Model
+        rePos idx bubble =
+            { bubble
+            | x = centreX + 40 * (cos (turn * (toFloat idx)))
+            , y = centreY + 40 * (sin (turn * (toFloat idx)))
+            }
+                |> Bubble.setToFadeIn
         indexedBubs = indexedMap (,) model
     in
         map (\ib -> rePos (fst ib) (snd ib)) indexedBubs
@@ -75,7 +68,7 @@ initialModel centreX centreY model =
 replace : Model -> Model -> Model
 replace oldModel newModel =
     let
-        diff = tagDiff (map (.bubble >> .id) oldModel) (map (.bubble >> .id) newModel)
+        diff = tagDiff (map .id oldModel) (map .id newModel)
     in
         oldModel
             |> fadeIn newModel diff.new
@@ -84,17 +77,17 @@ replace oldModel newModel =
 
 fadeIn : Model -> List Id -> Model -> Model
 fadeIn newModel newIds oldModel =
-    filter (\pb -> member pb.bubble.id newIds) newModel
+    filter (\bubble -> member bubble.id newIds) newModel
         |> append oldModel
 
 fadeOut : List Id -> Model -> Model
 fadeOut oldIds oldModel =
     let
-        selectedFade pb =
-            if (member pb.bubble.id oldIds) then
-                { pb | bubble = Bubble.setToFadeOut pb.bubble }
+        selectedFade bubble =
+            if (member bubble.id oldIds) then
+                Bubble.setToFadeOut bubble
             else
-                pb
+                bubble
     in
         map selectedFade oldModel
 
@@ -103,25 +96,25 @@ fadeOut oldIds oldModel =
 reorder : Model -> Model
 reorder model =
     model
-        |> List.sortBy (\physBub -> -1 * (physBub.bubble.size))
+        |> List.sortBy (\bubble -> -1 * (bubble.size))
 
 -- Update the model
 
 update : Action -> Model -> Model
 update action model =
     case action of
-        Direct id physAct -> updateOne id physAct model
+        Direct id bubAct -> updateOne id bubAct model
         Tick time -> updateAll model time
         AdjustVelocities accels -> updateVelocities accels model
 
-updateOne : Id -> Phys.Action -> Model -> Model
-updateOne id physAct model =
+updateOne : Id -> Bubble.Action -> Model -> Model
+updateOne id bubAct model =
     let
-        selectiveUpdate physModel =
-            if id == physModel.bubble.id then
-                (Phys.update physAct physModel)
+        selectiveUpdate bubModel =
+            if id == bubModel.id then
+                (Bubble.update bubAct bubModel)
             else
-                physModel
+                bubModel
     in
         map selectiveUpdate model
 
@@ -129,12 +122,12 @@ updateOne id physAct model =
 
 updateAll : Model -> Time -> Model
 updateAll model time =
-    map (Phys.update (Phys.Animate time)) model
+    map (Bubble.update (Bubble.Animate time)) model
         |> removeFadedOut
 
 removeFadedOut : Model -> Model
 removeFadedOut model =
-    filter (\pb -> not(Bubble.isFadedOut pb.bubble)) model
+    filter (\bubble -> not(Bubble.isFadedOut bubble)) model
 
 -- Update the velocity of all the bubbles
 -- according to a dictionary of id to acceleration
@@ -143,26 +136,26 @@ updateVelocities : Dict Id (Float, Float) -> Model -> Model
 updateVelocities accels model =
     map (updateVelocity accels) model
 
-updateVelocity : Dict Id (Float, Float) -> Phys.Model -> Phys.Model
-updateVelocity accels physBub =
+updateVelocity : Dict Id (Float, Float) -> Bubble.Model -> Bubble.Model
+updateVelocity accels bubble =
     let
-        accelXY = Dict.get physBub.bubble.id accels |> withDefault (0, 0)
+        accelXY = Dict.get bubble.id accels |> withDefault (0, 0)
         accelX = fst accelXY
         accelY = snd accelXY
-        dragXY = drag physBub.dx physBub.dy
+        dragXY = drag bubble.dx bubble.dy
         dragX = fst dragXY
         dragY = snd dragXY
-        dx = physBub.dx + accelX + dragX
-        dy = physBub.dy + accelY + dragY
+        dx = bubble.dx + accelX + dragX
+        dy = bubble.dy + accelY + dragY
         dampenedDxDy = dampen dx dy
     in
-        { physBub | dx = fst dampenedDxDy, dy = snd dampenedDxDy }
+        { bubble | dx = fst dampenedDxDy, dy = snd dampenedDxDy }
 
--- A view of a PhysicsBubble, using an address at this level of the architecture
+-- A view of a Bubble, using an address at this level of the architecture
 
-fwdingView : Context Action -> Phys.Model -> Svg
-fwdingView context physModel =
-    Phys.view (forwardTo context (Direct physModel.bubble.id)) physModel
+fwdingView : Context Action -> Bubble.Model -> Svg
+fwdingView context bubble =
+    Bubble.view (forwardTo context (Direct bubble.id)) bubble
 
 view : Context Action -> Model -> List Svg
 view context model =

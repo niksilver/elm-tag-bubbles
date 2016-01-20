@@ -14,54 +14,46 @@ width = 800
 
 height = 600
 
-phys1Model =
-    { dx = 0, dy = 0
-    , bubble =
-        { id = "us-news/us-news"
-        , x = 340, y = 200
-        , size = 180, label = "US News"
-        , animation = Bubble.fadeInAnimation
-        }
+bubble1Model =
+    { id = "us-news/us-news"
+    , x = 340, y = 200
+    , dx = 0, dy = 0
+    , size = 180, label = "US News"
+    , animation = Bubble.fadeInAnimation
     }
 
-phys2Model =
-    {  dx = 0, dy = 0
-    , bubble =
-        { id = "uk/uk"
-        , x = 300, y = 250
-        , size = 100, label = "UK"
-        , animation = Bubble.fadeInAnimation
-        }
+bubble2Model =
+    { id = "uk/uk"
+    , x = 300, y = 250
+    ,  dx = 0, dy = 0
+    , size = 100, label = "UK"
+    , animation = Bubble.fadeInAnimation
     }
 
-phys3Model =
-    { dx = 0, dy = 0
-    , bubble =
-        { id = "society/doctors"
-        , x = 480, y = 350
-        , size = 80, label = "Doctors"
-        , animation = Bubble.fadeInAnimation
-        }
+bubble3Model =
+    { id = "society/doctors"
+    , x = 480, y = 350
+    , dx = 0, dy = 0
+    , size = 80, label = "Doctors"
+    , animation = Bubble.fadeInAnimation
     }
 
-phys4Model =
-    { dx = 0, dy = 0
-    , bubble =
-        { id = "football/fa-cup"
-        , x = 400, y = 400
-        , size = 120, label = "FA Cup"
-        , animation = Bubble.fadeInAnimation
-        }
+bubble4Model =
+    { id = "football/fa-cup"
+    , x = 400, y = 400
+    , dx = 0, dy = 0
+    , size = 120, label = "FA Cup"
+    , animation = Bubble.fadeInAnimation
     }
 
 multiBubbleModel =
     MultiBubbles.initialModel
         (width / 2)
         (height / 2)
-        [ phys1Model
-        , phys2Model
-        , phys3Model
-        , phys4Model
+        [ bubble1Model
+        , bubble2Model
+        , bubble3Model
+        , bubble4Model
         ]
 
 springs : Dict (Id, Id) Float

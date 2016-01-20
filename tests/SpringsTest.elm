@@ -119,12 +119,14 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 80, label = "Bubble 1"
               , animation = Bubble.noAnimation
               }
           bubble2 =
               { id = "b2"
               , x = 400, y = 400
+              , dx = 0.0, dy = 0.0
               , size = 60, label = "Bubble 2"
               , animation = Bubble.noAnimation
               }
@@ -148,12 +150,14 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 80, label = "Bubble 1"
               , animation = Bubble.noAnimation
               }
           bubble2 =
               { id = "b2"
               , x = 400, y = 400
+              , dx = 0.0, dy = 0.0
               , size = 60, label = "Bubble 2"
               , animation = Bubble.noAnimation
               }
@@ -177,12 +181,14 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 80, label = "Bubble 1"
               , animation = Bubble.noAnimation
               }
           bubble2 =
               { id = "b2"
               , x = 400, y = 400
+              , dx = 0.0, dy = 0.0
               , size = 60, label = "Bubble 2"
               , animation = Bubble.noAnimation
               }
@@ -206,12 +212,14 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 80, label = "Bubble 1"
               , animation = Bubble.noAnimation
               }
           bubble2 =
               { id = "b2"
               , x = 400, y = 400
+              , dx = 0.0, dy = 0.0
               , size = 60, label = "Bubble 2"
               , animation = Bubble.noAnimation
               }
@@ -238,12 +246,14 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 80, label = "Bubble 1"
               , animation = Bubble.noAnimation
               }
           bubble2 =
               { id = "b2"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 60, label = "Bubble 2"
               , animation = Bubble.noAnimation
               }
@@ -267,12 +277,14 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 80, label = "Bubble 1"
               , animation = Bubble.noAnimation
               }
           bubble2 =
               { id = "b2"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 60, label = "Bubble 2"
               , animation = Bubble.noAnimation
               }
@@ -296,12 +308,14 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 80, label = "Bubble 1"
               , animation = Bubble.noAnimation
               }
           bubble2 =
               { id = "b2"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 60, label = "Bubble 2"
               , animation = Bubble.noAnimation
               }
@@ -325,12 +339,14 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 80, label = "Bubble 1"
               , animation = Bubble.noAnimation
               }
           bubble2 =
               { id = "b2"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 60, label = "Bubble 2"
               , animation = Bubble.noAnimation
               }
@@ -354,12 +370,14 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 80, label = "Bubble 1"
               , animation = Bubble.noAnimation
               }
           bubble2 =
               { id = "b2"
               , x = 400, y = 400
+              , dx = 0.0, dy = 0.0
               , size = 60, label = "Bubble 2"
               , animation = Bubble.noAnimation
               }
@@ -386,12 +404,14 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 80, label = "Bubble 1"
               , animation = Bubble.noAnimation
               }
           bubble2 =
               { id = "b2"
               , x = 400, y = 400
+              , dx = 0.0, dy = 0.0
               , size = 60, label = "Bubble 2"
               , animation = Bubble.noAnimation
               }
@@ -418,6 +438,7 @@ accelerationTest =
           bubble1 =
               { id = "b1"
               , x = 480, y = 350
+              , dx = 0.0, dy = 0.0
               , size = 80, label = "Bubble 1"
               , animation = Bubble.noAnimation
               }
@@ -425,6 +446,7 @@ accelerationTest =
               { id = "b2"
               , x = 400, y = 400
               , size = 60, label = "Bubble 2"
+              , dx = 0.0, dy = 0.0
               , animation = Bubble.noAnimation
               }
           stiffness = 20.0
@@ -445,7 +467,8 @@ accelDictTest =
         "acceleration (3, 0)") <|
       let
           bubbleX =
-              { id = "n/a", x = 0, y = 0 , size = 80, label = "X"
+              { id = "n/a", x = 0, y = 0, dx = 0, dy = 0
+              , size = 80, label = "X"
               , animation = Bubble.noAnimation
               }
           bubble1 = { bubbleX | id = "b1", label = "B1" }
@@ -470,7 +493,8 @@ accelDictTest =
         "acceleration (6, 0)") <|
       let
           bubbleX =
-              { id = "n/a", x = 0, y = 0 , size = 80, label = "X"
+              { id = "n/a", x = 0, y = 0, dx = 0, dy = 0
+              , size = 80, label = "X"
               , animation = Bubble.noAnimation
               }
           bubble1 = { bubbleX | id = "b1", label = "B1" }
@@ -494,7 +518,8 @@ accelDictTest =
     , test "Bubble2 pulled in different directions" <|
       let
           bubbleX =
-              { id = "n/a", x = 0, y = 0 , size = 80, label = "X"
+              { id = "n/a", x = 0, y = 0, dx = 0, dy = 0
+              , size = 80, label = "X"
               , animation = Bubble.noAnimation
               }
           bubble1 = { bubbleX | id = "b1", label = "B1" }

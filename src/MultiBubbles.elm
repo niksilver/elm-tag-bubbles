@@ -134,7 +134,7 @@ find test list =
 reorder : Model -> Model
 reorder model =
     model
-        |> List.sortBy (\bubble -> -1 * (bubble.size))
+        |> List.sortBy (\bubble -> -1 * (Bubble.targetSize bubble))
 
 -- Update the model
 

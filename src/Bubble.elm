@@ -3,6 +3,7 @@ module Bubble
     , Action (Animate)
     , noAnimation, fadeInAnimation, setToFadeIn, setToFadeOut, isFadedOut
     , setToResize, cancelFinishedResize
+    , targetSize
     , makeBubble
     , update, view
     ) where
@@ -158,6 +159,14 @@ cancelFinishedResize model =
             }
         else
             model
+
+-- What size should a bubble be?
+
+targetSize : Model -> Float
+targetSize model =
+    case model.animation.resizing of
+        NotResizing -> model.size
+        Resizing from to -> to
 
 -- Making a basic bubble
 

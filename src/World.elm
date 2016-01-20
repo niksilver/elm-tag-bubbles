@@ -66,9 +66,8 @@ update action model =
                     , animation = fadeInAnimation
                     }
                 bubbles = List.map makeBubble tags
-                bubbles' = MB.initialModel 400 300 bubbles
             in
-                { bubbles = MB.replace model.bubbles bubbles'
+                { bubbles = MB.initialArrangement 400 300 model.bubbles bubbles
                 , springs = springs
                 }
 

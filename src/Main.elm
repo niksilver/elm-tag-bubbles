@@ -47,9 +47,10 @@ bubble4Model =
     }
 
 multiBubbleModel =
-    MultiBubbles.initialModel
+    MultiBubbles.initialArrangement
         (width / 2)
         (height / 2)
+        []
         [ bubble1Model
         , bubble2Model
         , bubble3Model

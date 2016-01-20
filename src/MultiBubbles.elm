@@ -1,8 +1,8 @@
 module MultiBubbles
     ( Action (Tick, Direct, AdjustVelocities)
     , Model
-    , Diff, tagDiff, replace
-    , initialModel
+    , Diff, tagDiff
+    , initialArrangement
     , update
     , view
     ) where
@@ -44,10 +44,17 @@ tagDiff current latest =
     in
         Diff old new both
 
--- Set initial model for multiple bubbles
+-- Create an initial arrangement for a number of new bubbles.
+-- Old bubbles will fade out; new bubbles will fade in; remaining bubbles remain
 
-initialModel : Float -> Float -> Model -> Model
-initialModel centreX centreY model =
+initialArrangement : Float -> Float -> Model -> Model -> Model
+initialArrangement centreX centreY oldModel newModel =
+    arrangeCentre centreX centreY newModel
+        |> replace oldModel
+        |> reorder
+
+arrangeCentre : Float -> Float -> Model -> Model
+arrangeCentre centreX centreY model =
     let
         count = length model
         turn = 2 * pi / (toFloat count)
@@ -63,7 +70,6 @@ initialModel centreX centreY model =
         map (\ib -> rePos (fst ib) (snd ib)) indexedBubs
 
 -- Replace an old model with a new model.
--- Old bubbles will fade out; new bubbles will fade in; remaining bubbles remain
 
 replace : Model -> Model -> Model
 replace oldModel newModel =
@@ -73,7 +79,6 @@ replace oldModel newModel =
         oldModel
             |> fadeIn newModel diff.new
             |> fadeOut diff.old
-            |> reorder
 
 fadeIn : Model -> List Id -> Model -> Model
 fadeIn newModel newIds oldModel =

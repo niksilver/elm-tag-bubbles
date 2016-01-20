@@ -10,7 +10,7 @@ module MultiBubbles
 
 -- Multiple bubbles
 
-import Constants exposing (Id, Tag, Tags)
+import Constants exposing (Id, Tag)
 import Context exposing (Context, forwardTo)
 import Bubble
 import Springs exposing (drag, dampen)

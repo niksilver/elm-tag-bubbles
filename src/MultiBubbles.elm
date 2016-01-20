@@ -90,6 +90,7 @@ replace oldModel newModel =
         oldModel
             |> fadeIn newModel diff.new
             |> fadeOut diff.old
+            |> resize newModel diff.both
 
 fadeIn : Model -> List Id -> Model -> Model
 fadeIn newModel newIds oldModel =
@@ -106,6 +107,27 @@ fadeOut oldIds oldModel =
                 bubble
     in
         map selectedFade oldModel
+
+resize : Model -> List Id -> Model -> Model
+resize newModel ids model =
+    let
+        newBubbleSize id =
+            find (\b -> b.id == id) newModel
+                |> Maybe.map .size
+                |> withDefault 10.0
+        selectedResize bubble =
+            if (member bubble.id ids) then
+                Bubble.setToResize (newBubbleSize bubble.id) bubble
+            else
+                bubble
+    in
+        map selectedResize model
+
+-- Find the first element in a list that passes a given test
+
+find : (a -> Bool) -> List a -> Maybe a
+find test list =
+    List.filter test list |> List.head
 
 -- Reorder the bubbles with the largest first
 
@@ -140,10 +162,15 @@ updateAll : Model -> Time -> Model
 updateAll model time =
     map (Bubble.update (Bubble.Animate time)) model
         |> removeFadedOut
+        |> cancelFinishedResizes
 
 removeFadedOut : Model -> Model
 removeFadedOut model =
     filter (Bubble.isFadedOut >> not) model
+
+cancelFinishedResizes : Model -> Model
+cancelFinishedResizes model =
+    map Bubble.cancelFinishedResize model
 
 -- Update the velocity of all the bubbles
 -- according to a dictionary of id to acceleration

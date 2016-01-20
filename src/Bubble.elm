@@ -2,6 +2,7 @@ module Bubble
     ( Model
     , Action (Animate)
     , noAnimation, fadeInAnimation, setToFadeIn, setToFadeOut, isFadedOut
+    , setToResize, cancelFinishedResize
     , makeBubble
     , update, view
     ) where
@@ -47,23 +48,32 @@ type alias Animation =
     { fadeStart : Maybe Time  -- Time if the fading has started
     , fading : Fading         -- How it's fading, if it is to fade
     , opacity : Float         -- Current opacity
+    , resizeStart : Maybe Time  -- Time if resizing has started
+    , resizing : Resizing       -- How it's resizing, if it is to resize
     }
 
 -- Fading from and to an opacity, or not fading
 
 type Fading = Fading Float Float | NotFading
 
+type Resizing = Resizing Float Float | NotResizing
+
 type Action = Animate Time
 
 type SubAction
     = Move
         | Fade Time
+        | Resize Time
+
+-- Fading functions
 
 noAnimation : Animation
 noAnimation =
     { fadeStart = Nothing
     , fading = NotFading
     , opacity = maxBubbleOpacity
+    , resizeStart = Nothing
+    , resizing = NotResizing
     }
 
 fadeInAnimation : Animation
@@ -71,6 +81,8 @@ fadeInAnimation =
     { fadeStart = Nothing
     , fading = Fading 0.0 maxBubbleOpacity
     , opacity = 0.0
+    , resizeStart = Nothing
+    , resizing = NotResizing
     }
 
 setToFadeIn : Model -> Model
@@ -115,6 +127,38 @@ isFadedOut model =
         NotFading ->
             False
 
+-- Resizing functions
+
+setToResize : Float -> Model -> Model
+setToResize size model =
+    let
+        animation = model.animation
+    in
+        { model
+        | animation = { animation | resizing = Resizing model.size size }
+        }
+
+cancelFinishedResize : Model -> Model
+cancelFinishedResize model =
+    let
+        animation = model.animation
+        resizing = animation.resizing
+        cancel =
+            case resizing of
+                NotResizing -> False
+                Resizing from to -> to == model.size
+    in
+        if cancel then
+            { model
+            | animation =
+                { animation
+                | resizeStart = Nothing
+                , resizing = NotResizing
+                }
+            }
+        else
+            model
+
 -- Making a basic bubble
 
 makeBubble : Tag -> Float -> Model
@@ -134,16 +178,19 @@ update (Animate time) model =
     model
         |> subUpdate Move
         |> subUpdate (Fade time)
+        |> subUpdate (Resize time)
  
 subUpdate : SubAction -> Model -> Model
 subUpdate subAction model =
     case subAction of
+        Move ->
+            { model | x = model.x + model.dx, y = model.y + model.dy }
         Fade time ->
             { model
             | animation = updateFade model.animation time
             }
-        Move ->
-            { model | x = model.x + model.dx, y = model.y + model.dy }
+        Resize time ->
+            updateResize model time
 
 updateFade : Animation -> Time -> Animation
 updateFade animation time =
@@ -158,6 +205,22 @@ updateFade animation time =
                 { animation
                 | fadeStart = Just fadeStart
                 , opacity = opacity
+                }
+
+updateResize : Model -> Time -> Model
+updateResize model time =
+    case model.animation.resizing of
+        NotResizing -> model
+        Resizing from to ->
+            let
+                animation = model.animation
+                resizeStart = animation.resizeStart |> withDefault time
+                elapsed = time - resizeStart
+                size = ease linear float from to fadeDuration elapsed
+            in
+                { model
+                | size = size
+                , animation = { animation | resizeStart = Just resizeStart }
                 }
 
 view : Context Action -> Model -> Svg

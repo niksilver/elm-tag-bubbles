@@ -11,7 +11,7 @@ import Constants exposing
     ( Tag
     , bubbleLabelFontSize
     , maxBubbleOpacity
-    , fadeDuration
+    , transitionDuration
     )
 import Context exposing (Context)
 import Colours exposing (pickBaseColour, pickTextColour)
@@ -200,7 +200,7 @@ updateFade animation time =
             let
                 fadeStart = animation.fadeStart |> withDefault time
                 elapsed = time - fadeStart
-                opacity = ease linear float from to fadeDuration elapsed
+                opacity = ease linear float from to transitionDuration elapsed
             in
                 { animation
                 | fadeStart = Just fadeStart
@@ -216,7 +216,7 @@ updateResize model time =
                 animation = model.animation
                 resizeStart = animation.resizeStart |> withDefault time
                 elapsed = time - resizeStart
-                size = ease linear float from to fadeDuration elapsed
+                size = ease linear float from to transitionDuration elapsed
             in
                 { model
                 | size = size

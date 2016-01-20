@@ -4,7 +4,7 @@ module Constants
     , maxBubbles, bubbleLabelFontSize
     , minBubbleSize, maxBubbleSize
     , minSpringLength, maxSpringLength
-    , maxBubbleOpacity, fadeDuration
+    , maxBubbleOpacity, transitionDuration
     , springStrength, airDragFactor, minimumVelocity
     ) where
 
@@ -43,8 +43,8 @@ maxSpringLength = 350.0
 maxBubbleOpacity : Float
 maxBubbleOpacity = 0.75
 
-fadeDuration : Time
-fadeDuration = Time.second
+transitionDuration : Time
+transitionDuration = Time.second
 
 springStrength : Float
 springStrength = 25.0

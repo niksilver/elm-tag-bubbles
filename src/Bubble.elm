@@ -56,7 +56,7 @@ type Fading = Fading Float Float | NotFading
 type Action = Animate Time
 
 type SubAction
-    = Move Float Float
+    = Move
         | Fade Time
 
 noAnimation : Animation
@@ -132,7 +132,7 @@ makeBubble tag size =
 update : Action -> Model -> Model
 update (Animate time) model =
     model
-        |> subUpdate (Move model.dx model.dy)
+        |> subUpdate Move
         |> subUpdate (Fade time)
  
 subUpdate : SubAction -> Model -> Model
@@ -142,8 +142,8 @@ subUpdate subAction model =
             { model
             | animation = updateFade model.animation time
             }
-        Move dx dy ->
-            { model | x = model.x + dx, y = model.y + dy }
+        Move ->
+            { model | x = model.x + model.dx, y = model.y + model.dy }
 
 updateFade : Animation -> Time -> Animation
 updateFade animation time =

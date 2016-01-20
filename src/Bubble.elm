@@ -2,11 +2,13 @@ module Bubble
     ( Model
     , Action (Animate)
     , noAnimation, fadeInAnimation, setToFadeIn, setToFadeOut, isFadedOut
+    , makeBubble
     , update, view
     ) where
 
 import Constants exposing
-    ( bubbleLabelFontSize
+    ( Tag
+    , bubbleLabelFontSize
     , maxBubbleOpacity
     , fadeDuration
     )
@@ -48,6 +50,7 @@ type alias Animation =
     }
 
 -- Fading from and to an opacity, or not fading
+
 type Fading = Fading Float Float | NotFading
 
 type Action = Animate Time
@@ -111,6 +114,18 @@ isFadedOut model =
             (to == 0.0) && (model.animation.opacity == 0.0)
         NotFading ->
             False
+
+-- Making a basic bubble
+
+makeBubble : Tag -> Float -> Model
+makeBubble tag size =
+    { id = tag.id
+    , x = 0.0 , y = 0.0
+    , dx = 0.0 , dy = 0.0
+    , size = size
+    , label = tag.webTitle
+    , animation = noAnimation
+    }
 
 -- Update the model
 

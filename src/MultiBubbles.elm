@@ -127,7 +127,7 @@ updateAll model time =
 
 removeFadedOut : Model -> Model
 removeFadedOut model =
-    filter (\bubble -> not(Bubble.isFadedOut bubble)) model
+    filter (Bubble.isFadedOut >> not) model
 
 -- Update the velocity of all the bubbles
 -- according to a dictionary of id to acceleration

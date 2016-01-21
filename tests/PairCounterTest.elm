@@ -24,6 +24,7 @@ all =
     , minCountTest
     , sizeTest
     , missingPairsTest
+    , includeMissingPairsTest
     , topNTest
     ]
 
@@ -214,6 +215,41 @@ missingPairsTest =
       (emptyCounter
         |> inc u v |> inc u w |> inc w x
         |> missingPairs)
+
+    ]
+
+includeMissingPairsTest : Test
+includeMissingPairsTest =
+    suite "includeMissingPairsTest"
+
+    [ test "Including missing pairs in empty counter should be empty counter" <|
+      assertEqual
+      0
+      (emptyCounter |> includeMissingPairs |> size)
+
+    , test "Including missing pairs in 1-pair ctr should be 1-pair ctr" <|
+      assertEqual
+      1
+      (emptyCounter |> inc x y |> includeMissingPairs |> size)
+
+    , test "Including missing pairs in ctr with 2/3 pairs should have 3 pairs" <|
+      assertEqual
+      3
+      (emptyCounter
+          |> inc x y |> inc y z |> includeMissingPairs |> size)
+
+    , test "Including missing pairs in ctr with 2/3 pairs should include missing pair, even if converted to Dict" <|
+      assertEqual
+      (Just 0)
+      (emptyCounter
+          |> inc x y |> inc y z |> includeMissingPairs
+          |> toDict |> Dict.get (x.id, z.id))
+
+    , test "Including missing pairs in ctr with 2/3 pairs should retain old pair" <|
+      assertEqual
+      1
+      (emptyCounter
+          |> inc x y |> inc y z |> includeMissingPairs |> countOf x y)
 
     ]
 

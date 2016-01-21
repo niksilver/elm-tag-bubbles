@@ -4,13 +4,13 @@ module PairCounter
     , topN
     , allPairs
     , maxCount, minCount
-    , missingPairs
+    , missingPairs, includeMissingPairs
     , toDict
     )
     where
 
 import Constants exposing (Idable)
-import List exposing (append, reverse, take, filter, sortBy, member)
+import List exposing (append, reverse, take, filter, sortBy, member, foldl)
 import Maybe exposing (withDefault)
 import Dict exposing (Dict, empty, get, insert, toList, fromList)
 
@@ -51,14 +51,18 @@ inc' x y (Counter dict as counter) =
 
 set : Idable a -> Idable a -> Int -> Counter -> Counter
 set x y val counter =
-    counter
-        |> set' x y val
-        |> set' y x val
+    set' x.id y.id val counter
 
-set' : Idable a -> Idable a -> Int -> Counter -> Counter
-set' x y val (Counter dict) =
+set' : String -> String -> Int -> Counter -> Counter
+set' x y val counter =
+    counter
+        |> set'' x y val
+        |> set'' y x val
+
+set'' : String -> String -> Int -> Counter -> Counter
+set'' x y val (Counter dict) =
     dict
-        |> insert (x.id, y.id) val
+        |> insert (x, y) val
         |> Counter
 
 -- Find the number of pairs (ignoring symmetry) in the counter.
@@ -98,6 +102,17 @@ addOneUniquely' elt list =
         list
     else
         elt :: list
+
+-- Include in a counter all the missing pairs (and give them a count of zero).
+
+includeMissingPairs : Counter -> Counter
+includeMissingPairs dict =
+    let
+        missing = missingPairs dict
+        include pair dict' = set' (fst pair) (snd pair) 0 dict'
+    in
+        foldl (\pair dict' -> include pair dict') dict missing
+
 
 -- Reduce this counter to one of at most `n` pairs, including only
 -- the pairs with largest counts.

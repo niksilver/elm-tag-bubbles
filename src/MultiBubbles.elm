@@ -3,7 +3,7 @@ module MultiBubbles
     , Model
     , Diff, tagDiff
     , makeBubbles
-    , initialArrangement
+    , initialArrangement, arrangeCentre
     , update
     , view
     ) where

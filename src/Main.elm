@@ -1,4 +1,4 @@
-import Constants exposing (Id)
+import Constants exposing (Id, Tag)
 import UI
 import MultiBubbles
 import Bubble
@@ -14,48 +14,16 @@ width = 800
 
 height = 600
 
-bubble1Model =
-    { id = "us-news/us-news"
-    , x = 340, y = 200
-    , dx = 0, dy = 0
-    , size = 180, label = "US News"
-    , animation = Bubble.fadeInAnimation
-    }
-
-bubble2Model =
-    { id = "uk/uk"
-    , x = 300, y = 250
-    ,  dx = 0, dy = 0
-    , size = 100, label = "UK"
-    , animation = Bubble.fadeInAnimation
-    }
-
-bubble3Model =
-    { id = "society/doctors"
-    , x = 480, y = 350
-    , dx = 0, dy = 0
-    , size = 80, label = "Doctors"
-    , animation = Bubble.fadeInAnimation
-    }
-
-bubble4Model =
-    { id = "football/fa-cup"
-    , x = 400, y = 400
-    , dx = 0, dy = 0
-    , size = 120, label = "FA Cup"
-    , animation = Bubble.fadeInAnimation
-    }
-
 multiBubbleModel =
-    MultiBubbles.initialArrangement
-        (width / 2)
-        (height / 2)
-        []
-        [ bubble1Model
-        , bubble2Model
-        , bubble3Model
-        , bubble4Model
-        ]
+    [ (Tag "us-news/us-news" "US News", 150)
+    , (Tag "uk/uk" "UK", 100)
+    , (Tag "society/doctors" "Doctors", 80)
+    , (Tag "football/fa-cup" "FA Cup", 120)
+    ]
+        |> List.map (\p -> Bubble.makeBubble (fst p) (snd p))
+        |> List.map Bubble.setToFadeIn
+        |> MultiBubbles.arrangeCentre (width/2) (height/2)
+
 
 springs : Dict (Id, Id) Float
 springs =

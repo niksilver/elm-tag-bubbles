@@ -16,19 +16,20 @@ z = { id = "z" }
 all : Test
 all =
     suite "PairCounterTest"
-    [ counterTest
+    [ incTest
     , allPairsTest
     , setTest
     , toDictTest
     , maxCountTest
     , minCountTest
     , sizeTest
+    , missingPairsTest
     , topNTest
     ]
 
-counterTest : Test
-counterTest =
-    suite "Counter functions"
+incTest : Test
+incTest =
+    suite "incTest"
 
     [ test "Empty counter should give zero for anything"
       (assertEqual
@@ -180,6 +181,39 @@ sizeTest =
       assertEqual
       2
       (emptyCounter |> inc x y |> inc y z |> size)
+
+    ]
+
+missingPairsTest : Test
+missingPairsTest =
+    suite "missingPairsTest"
+
+    [ test "Missing pairs from empty counter should be empty list" <|
+      assertEqual
+      []
+      (emptyCounter |> missingPairs)
+
+    , test "Missing pairs from counter with one pair should be empty list" <|
+      assertEqual
+      []
+      (emptyCounter |> inc x y |> missingPairs)
+
+    , test "Missing pairs from ctr with 2/3 pairs should reveal other pair" <|
+      assertEqual
+      [(x.id, z.id)]
+      (emptyCounter |> inc x y |> inc y z |> missingPairs)
+
+    , test "Missing pairs from ctr with 3/6 pairs should reveal other 3 pairs" <|
+      -- We have       We're missing
+      --    u -- v         u    v
+      --    |                \/ |
+      --    |                /\ |
+      --    w -- x         w    x
+      assertEqual
+      [(u.id, x.id), (v.id, w.id), (v.id, x.id)]
+      (emptyCounter
+        |> inc u v |> inc u w |> inc w x
+        |> missingPairs)
 
     ]
 

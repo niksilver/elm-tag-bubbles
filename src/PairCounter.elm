@@ -4,12 +4,13 @@ module PairCounter
     , topN
     , allPairs
     , maxCount, minCount
+    , missingPairs
     , toDict
     )
     where
 
 import Constants exposing (Idable)
-import List exposing (append, reverse, take, filter, sortBy)
+import List exposing (append, reverse, take, filter, sortBy, member)
 import Maybe exposing (withDefault)
 import Dict exposing (Dict, empty, get, insert, toList, fromList)
 
@@ -31,9 +32,8 @@ countOf : Idable a -> Idable a -> Counter -> Int
 countOf x y (Counter dict) =
     dict |> get (x.id, y.id) |> withDefault 0
 
-{-| Increment a counter.
-   Incrementing x,y will also increment y,x
--}
+-- Increment a counter.
+-- Incrementing x,y will also increment y,x
 
 inc : Idable a -> Idable a -> Counter -> Counter
 inc x y counter =
@@ -47,8 +47,7 @@ inc' x y (Counter dict as counter) =
         |> insert (x.id, y.id) (countOf x y counter + 1)
         |> Counter
 
-{-| Set a count for a particular pair.
--}
+-- Set a count for a particular pair.
 
 set : Idable a -> Idable a -> Int -> Counter -> Counter
 set x y val counter =
@@ -62,16 +61,46 @@ set' x y val (Counter dict) =
         |> insert (x.id, y.id) val
         |> Counter
 
-{-| Find the number of pairs (ignoring symmetry) in the counter.
--}
+-- Find the number of pairs (ignoring symmetry) in the counter.
 
 size : Counter -> Int
 size (Counter dict) =
     Dict.size dict // 2
 
-{- Reduce this counter to one of at most `n` pairs, including only
-   the pairs with largest counts.
--}
+-- Find all the pairs whose elements are represented in the counter
+-- which which don't have a count associated with them
+
+missingPairs : Counter -> List (String, String)
+missingPairs (Counter dict) =
+    let
+        keys = Dict.keys dict
+        elts = compileElements' keys
+        pairs = allPairs elts
+    in
+        filter (\e -> not(member e keys)) pairs
+
+compileElements' : List (a, a) -> List a
+compileElements' pairs =
+    addUniquely' pairs []
+
+addUniquely' : List (a, a) -> List a -> List a
+addUniquely' pairs accum =
+    case pairs of
+        head :: tail ->
+            addOneUniquely' (fst head) accum
+                |> addOneUniquely' (snd head)
+                |> addUniquely' tail
+        [] -> reverse accum
+
+addOneUniquely' : a -> List a -> List a
+addOneUniquely' elt list =
+    if (member elt list) then
+        list
+    else
+        elt :: list
+
+-- Reduce this counter to one of at most `n` pairs, including only
+-- the pairs with largest counts.
 
 topN : Int -> Counter -> Counter
 topN n (Counter dict) =

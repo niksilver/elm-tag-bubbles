@@ -48,14 +48,18 @@ update action model =
                 update (Direct (MB.Tick time)) model'
         NewTags listListTag ->
             let
-                topN = Sizes.topN maxBubbles listListTag
-                listListTag' = Sizes.filter listListTag topN
+                listListTag' =
+                    listListTag
+                        |> Sizes.topN maxBubbles
+                        |> Sizes.filter listListTag
+                springs =
+                    Springs.toCounter listListTag'
+                        |> Springs.toDictWithZeros minSpringLength maxSpringLength
                 tags = Sizes.idDict listListTag' |> Dict.values
-                pairCounter = Springs.toCounter listListTag'
-                springs = Springs.toDictWithZeros minSpringLength maxSpringLength pairCounter
-                sizes = Sizes.toDict listListTag'
-                    |> Sizes.rescale minBubbleSize maxBubbleSize
-                bubbles = MB.makeBubbles tags sizes
+                bubbles =
+                    Sizes.toDict listListTag'
+                        |> Sizes.rescale minBubbleSize maxBubbleSize
+                        |> MB.makeBubbles tags
             in
                 { bubbles = MB.initialArrangement 400 300 model.bubbles bubbles
                 , springs = springs

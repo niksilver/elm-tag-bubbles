@@ -52,7 +52,7 @@ update action model =
                 listListTag' = Sizes.filter listListTag topN
                 tags = Sizes.idDict listListTag' |> Dict.values
                 pairCounter = Springs.toCounter listListTag'
-                springs = Springs.toDict minSpringLength maxSpringLength pairCounter
+                springs = Springs.toDictWithZeros minSpringLength maxSpringLength pairCounter
                 sizes = Sizes.toDict listListTag'
                     |> Sizes.rescale minBubbleSize maxBubbleSize
                 bubbles = MB.makeBubbles tags sizes

@@ -33,6 +33,7 @@ multiBubbleModel : MultiBubbles.Model
 multiBubbleModel =
     tags
         |> List.map (\bubble -> Bubble.makeBubble bubble size)
+        |> List.map (Bubble.setOpacity 0.0)
         |> List.map Bubble.setToFadeIn
         |> MultiBubbles.arrangeCentre (width/2) (height/2)
 

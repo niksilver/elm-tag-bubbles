@@ -2,6 +2,7 @@ module Bubble
     ( Model
     , Action (Animate)
     , noAnimation, fadeInAnimation, setToFadeIn, setToFadeOut, isFadedOut
+    , setOpacity
     , setToResize, cancelFinishedResize
     , targetSize
     , makeBubble
@@ -127,6 +128,18 @@ isFadedOut model =
             (to == 0.0) && (model.animation.opacity == 0.0)
         NotFading ->
             False
+
+setOpacity : Float -> Model -> Model
+setOpacity opacity model =
+    let
+        animation = model.animation
+    in
+        { model
+        | animation =
+            { animation
+            | opacity = opacity
+            }
+        }
 
 -- Resizing functions
 

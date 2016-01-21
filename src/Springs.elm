@@ -50,7 +50,10 @@ toDict shortest longest counter =
         countRange = max - min
         lengthRange = longest - shortest
         conv thisCount =
-            shortest + ((max - thisCount) / countRange) * lengthRange
+            if (countRange == 0) then
+                shortest + (lengthRange / 2)
+            else
+                shortest + ((max - thisCount) / countRange) * lengthRange
     in
         PairCounter.toDict counter
         |> Dict.map (\pair count -> conv (toFloat count))

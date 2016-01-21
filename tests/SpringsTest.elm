@@ -107,6 +107,16 @@ toDictTest =
         |> toDict 33 99
         |> Dict.get (tag2rec.id, tag3rec.id))
 
+    , test "Pairs should have average length if all counts are the same" <|
+      assertEqual
+      (Just ((99 + 33)/2))
+      (emptyCounter
+        |> set tag1rec tag2rec 7
+        |> set tag1rec tag3rec 7
+        |> set tag2rec tag3rec 7
+        |> toDict 33 99
+        |> Dict.get (tag2rec.id, tag3rec.id))
+
     ]
 
 toDictWithZerosTest : Test

@@ -1,6 +1,6 @@
 module PairCounter
     ( Counter
-    , emptyCounter, countOf, inc, set, size
+    , emptyCounter, countOf, inc, incPair, set, size
     , topN
     , allPairs
     , maxCount, minCount
@@ -46,6 +46,13 @@ inc' x y (Counter dict as counter) =
     dict
         |> insert (x.id, y.id) (countOf x y counter + 1)
         |> Counter
+
+-- Increment a counter using one pair.
+-- Incrementing x,y will also increment y,x
+
+incPair : (Idable a, Idable a) -> Counter -> Counter
+incPair pair counter =
+    inc (fst pair) (snd pair) counter
 
 -- Set a count for a particular pair.
 

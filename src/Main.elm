@@ -5,7 +5,7 @@ import Constants exposing
     )
 import UI
 import MultiBubbles
-import PairCounter exposing (emptyCounter, inc)
+import PairCounter exposing (emptyCounter, incPair)
 import Springs
 import Bubble
 
@@ -29,18 +29,19 @@ tags =
 
 size = (minBubbleSize + maxBubbleSize) / 2
 
+multiBubbleModel : MultiBubbles.Model
 multiBubbleModel =
     tags
         |> List.map (\bubble -> Bubble.makeBubble bubble size)
         |> List.map Bubble.setToFadeIn
         |> MultiBubbles.arrangeCentre (width/2) (height/2)
 
+allPairs : List (Tag, Tag)
 allPairs = PairCounter.allPairs tags
 
-ctr1 = emptyCounter |> inc (Tag "uk/uk" "UK") (Tag "society/doctors" "Doctors")
 springs : Dict (Id, Id) Float
 springs =
-    List.foldl (\p ctr -> inc (fst p) (snd p) ctr) ctr1 allPairs
+    List.foldl incPair emptyCounter allPairs
         |> Springs.toDictWithZeros minSpringLength maxSpringLength
 
 model : UI.Model

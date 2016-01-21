@@ -1,5 +1,5 @@
 module Springs
-    ( toCounter, toDict
+    ( toCounter, toDict, toDictWithZeros
     , acceleration, accelDict
     , drag, dampen
     ) where
@@ -9,7 +9,11 @@ import Constants exposing
     , airDragFactor
     , minimumVelocity
     )
-import PairCounter exposing (Counter, emptyCounter, allPairs, inc)
+import PairCounter exposing
+    ( Counter
+    , emptyCounter, allPairs, inc
+    , includeMissingPairs
+    )
 import Bubble
 
 import List
@@ -31,13 +35,12 @@ includePairs' : List Tag -> Counter -> Counter
 includePairs' tags counter =
     List.foldl (\pair -> inc (fst pair) (snd pair)) counter (allPairs tags)
 
-{-| From a counter, generate a `Dict` from each tag id pair to its
-    respective spring length. The pair with the highest tag count
-    has the shortest spring length; the pair with the lowest has the
-    longest spring length. Any id pair is represented both ways
-    round. Shortest and longest lengths are the first
-    two parameters.
--}
+-- From a counter, generate a `Dict` from each tag id pair to its
+-- respective spring length. The pair with the highest tag count
+-- has the shortest spring length; the pair with the lowest has the
+-- longest spring length. Any id pair is represented both ways
+-- round. Shortest and longest lengths are the first
+-- two parameters.
 
 toDict : Float -> Float -> Counter -> Dict (String, String) Float
 toDict shortest longest counter =
@@ -51,6 +54,15 @@ toDict shortest longest counter =
     in
         PairCounter.toDict counter
         |> Dict.map (\pair count -> conv (toFloat count))
+
+-- Just like toDict, but include any pairs which aren't actually connected
+-- (i.e. are missing from the counts of pairs).
+
+toDictWithZeros : Float -> Float -> Counter -> Dict (String, String) Float
+toDictWithZeros shortest longest counter =
+    counter
+        |> includeMissingPairs
+        |> toDict shortest longest
 
 {-| Calculate the acceleration for a bubble.
     Parameters are:

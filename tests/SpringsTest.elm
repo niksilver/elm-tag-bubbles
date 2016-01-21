@@ -35,6 +35,7 @@ all =
     suite "SpringsTest"
     [ toCounterTest
     , toDictTest
+    , toDictWithZerosTest
     , accelerationTest
     , accelDictTest
     ]
@@ -107,6 +108,49 @@ toDictTest =
         |> Dict.get (tag2rec.id, tag3rec.id))
 
     ]
+
+toDictWithZerosTest : Test
+toDictWithZerosTest =
+    suite "toDictWithZerosTest"
+
+    [ test "Pair with highest count should have the shortest length" <|
+      assertEqual
+      (Just 33.3)
+      (emptyCounter
+        |> set tag1rec tag2rec 10
+        |> set tag1rec tag3rec 3
+        |> toDictWithZeros 33.3 99.9
+        |> Dict.get (tag1rec.id, tag2rec.id))
+
+    , test "Pair with highest count should have the shortest length when reveresed" <|
+      assertEqual
+      (Just 33.3)
+      (emptyCounter
+        |> set tag1rec tag2rec 10
+        |> set tag1rec tag3rec 3
+        |> toDictWithZeros 33.3 99.9
+        |> Dict.get (tag2rec.id, tag1rec.id))
+
+    , test "Pair which is missing should have the longest length" <|
+      assertEqual
+      (Just 99.9)
+      (emptyCounter
+        |> set tag1rec tag2rec 10
+        |> set tag1rec tag3rec 3
+        |> toDictWithZeros 33.3 99.9
+        |> Dict.get (tag2rec.id, tag3rec.id))
+
+    , test "Pair with middling count should have proportional length" <|
+      assertEqual
+      (Just (99 - 4/10 * 66))
+      (emptyCounter
+        |> set tag1rec tag2rec 10
+        |> set tag1rec tag3rec 4   -- This count is 4/10 of the count range...
+        |> toDictWithZeros 33 99   -- ...because we're including zero
+        |> Dict.get (tag1rec.id, tag3rec.id))
+
+    ]
+
 
 accelerationTest : Test
 accelerationTest =

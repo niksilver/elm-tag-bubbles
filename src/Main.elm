@@ -1,6 +1,12 @@
-import Constants exposing (Id, Tag)
+import Constants exposing
+    ( Id, Tag
+    , minBubbleSize, maxBubbleSize
+    , minSpringLength, maxSpringLength
+    )
 import UI
 import MultiBubbles
+import PairCounter exposing (emptyCounter, inc)
+import Springs
 import Bubble
 
 import StartApp exposing (start)
@@ -14,32 +20,28 @@ width = 800
 
 height = 600
 
-multiBubbleModel =
-    [ (Tag "us-news/us-news" "US News", 150)
-    , (Tag "uk/uk" "UK", 100)
-    , (Tag "society/doctors" "Doctors", 80)
-    , (Tag "football/fa-cup" "FA Cup", 120)
+tags =
+    [ Tag "us-news/us-news" "US News"
+    , Tag "uk/uk" "UK"
+    , Tag "society/doctors" "Doctors"
+    , Tag "football/fa-cup" "FA Cup"
     ]
-        |> List.map (\p -> Bubble.makeBubble (fst p) (snd p))
+
+size = (minBubbleSize + maxBubbleSize) / 2
+
+multiBubbleModel =
+    tags
+        |> List.map (\bubble -> Bubble.makeBubble bubble size)
         |> List.map Bubble.setToFadeIn
         |> MultiBubbles.arrangeCentre (width/2) (height/2)
 
+allPairs = PairCounter.allPairs tags
 
+ctr1 = emptyCounter |> inc (Tag "uk/uk" "UK") (Tag "society/doctors" "Doctors")
 springs : Dict (Id, Id) Float
 springs =
-    Dict.empty
-        |> insert ("us-news/us-news", "uk/uk") 100
-        |> insert ("uk/uk", "us-news/us-news") 100
-        |> insert ("us-news/us-news", "society/doctors") 150
-        |> insert ("society/doctors", "us-news/us-news") 150
-        |> insert ("us-news/us-news", "football/fa-cup")  75
-        |> insert ("football/fa-cup", "us-news/us-news")  75
-        |> insert ("uk/uk", "society/doctors") 125
-        |> insert ("society/doctors", "uk/uk") 125
-        |> insert ("uk/uk", "football/fa-cup") 175
-        |> insert ("football/fa-cup", "uk/uk") 175
-        |> insert ("society/doctors", "football/fa-cup") 200
-        |> insert ("football/fa-cup", "society/doctors") 200
+    List.foldl (\p ctr -> inc (fst p) (snd p) ctr) ctr1 allPairs
+        |> Springs.toDictWithZeros minSpringLength maxSpringLength
 
 model : UI.Model
 model =

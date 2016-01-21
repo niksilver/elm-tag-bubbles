@@ -21,10 +21,17 @@ width = 800
 height = 600
 
 tags =
-    [ Tag "us-news/us-news" "US News"
-    , Tag "uk/uk" "UK"
-    , Tag "society/doctors" "Doctors"
-    , Tag "football/fa-cup" "FA Cup"
+    [ Tag "uk/uk" "UK"
+    , Tag "world/world" "World"
+    , Tag "politics/politics" "Politics"
+    , Tag "sport/sport" "Sport"
+    , Tag "football/football" "Football"
+    , Tag "culture/culture" "Culture"
+    , Tag "business/business" "Business"
+    , Tag "lifeandstyle/lifeandstyle" "Life and style"
+    , Tag "environment/environment" "Environment"
+    , Tag "technology/technology" "Technology"
+    , Tag "travel/travel" "Travel"
     ]
 
 size = (minBubbleSize + maxBubbleSize) / 2

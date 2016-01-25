@@ -71,13 +71,13 @@ update action model =
                 Ok data ->
                     ({ model
                      | world = World.update (World.NewTags data) model.world
-                     , status = "OK: " ++ (toString data)
+                     , status = "Done"
                      }
                      , Effects.none
                     )
                 Err error ->
                     ({ model
-                     | status = "Errro: " ++ (toString error)
+                     | status = "Error: " ++ (toString error)
                      }
                      , Effects.none
                     )
@@ -88,7 +88,9 @@ update action model =
                 SingleClick _ ->
                     ( model, Effects.none )
                 DoubleClick tag ->
-                    ( model
+                    ( { model
+                      | status = "Fetching " ++ (tag)
+                      }
                     , Effects.map NewTags (TagFetcher.getTags tag)
                     )
 

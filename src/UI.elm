@@ -1,14 +1,18 @@
 module UI
     ( Model
     , update, view
-    , initialEffects, initialInputs
+    , initialEffects, inputs
     ) where
 
 -- Bubble forms captured as Html
 
 import Constants exposing (TagsResult)
-import Context exposing (CountedClick (NoClick, SingleClick, DoubleClick))
+import Context exposing
+    ( Context
+    , CountedClick (NoClick, SingleClick, DoubleClick)
+    )
 import World
+import RecentreButton
 import TagFetcher
 
 import Html exposing (Html, div, text)
@@ -31,6 +35,7 @@ type Action
         | Tick Time
         | NewTags TagsResult
         | Click CountedClick
+        | Recentre
 
 -- Initial effects
 
@@ -48,8 +53,14 @@ countedClicks : Signal Action
 countedClicks =
     Context.mappedCountedClicks Click
 
-initialInputs : List (Signal Action)
-initialInputs = [ticker, countedClicks]
+recentring : Signal Action
+recentring =
+    Signal.map (always Recentre) Context.recentreClicks
+
+inputs : List (Signal Action)
+inputs = [ticker, countedClicks, recentring]
+
+-- Update
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
@@ -93,22 +104,29 @@ update action model =
                       }
                     , Effects.map NewTags (TagFetcher.getTags tag)
                     )
+        Recentre ->
+            ({ model
+             | status = "Recentre me!"
+             }
+            , Effects.none
+            )
 
 view : Signal.Address Action -> Model -> Html
 view address model =
-    div []
-    [ svgView address model
-    , text (model.status)
-    ]
-
-svgView : Signal.Address Action -> Model -> Html
-svgView address model =
     let
         context = Context.create (Signal.forwardTo address Direct)
     in
-        svg
-            [ width (toString model.width)
-            , height (toString model.height)
-            ]
-            (World.view context model.world)
+        div []
+        [ RecentreButton.view context
+        , svgView context model
+        , text (model.status)
+        ]
+
+svgView : Context World.Action -> Model -> Html
+svgView context model =
+    svg
+        [ width (toString model.width)
+        , height (toString model.height)
+        ]
+        (World.view context model.world)
 

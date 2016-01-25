@@ -1,7 +1,7 @@
 module Context
     ( Context
     , CountedClick (NoClick, SingleClick, DoubleClick)
-    , mappedCountedClicks
+    , mappedCountedClicks, recentreClicks
     , create, forwardTo
     ) where
 
@@ -19,6 +19,7 @@ type CountedClick = NoClick | SingleClick String | DoubleClick String
 
 type alias Context a =
     { click : Address String
+    , recentre : Address ()
     , address : Signal.Address a
     }
 
@@ -71,15 +72,22 @@ mappedCountedClicks : (CountedClick -> a) -> Signal a
 mappedCountedClicks f =
     Signal.map f countedClicks
 
--- Create a `Context` for which the click address and main address.
--- both to a given address. But the first two parameters say
--- how to map an incoming signal from another type to the target type.
--- The first argument is the map for the click address; the second
--- for the main address.
+-- A mailbox for the recentre action
+
+recentreBox : Signal.Mailbox ()
+recentreBox = Signal.mailbox ()
+
+recentreClicks : Signal ()
+recentreClicks =
+    recentreBox.signal
+
+-- Create a `Context` for sending event data.
+-- The argument is the main address.
 
 create : Signal.Address a -> Context a
 create address =
     { click = clickBox.address
+    , recentre = recentreBox.address
     , address = address
     }
 

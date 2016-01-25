@@ -68,7 +68,7 @@ app =
         { init = (model, UI.initialEffects)
         , update = UI.update
         , view = UI.view
-        , inputs = UI.initialInputs
+        , inputs = UI.inputs
         }
 
 main =

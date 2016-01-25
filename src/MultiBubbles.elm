@@ -2,7 +2,7 @@ module MultiBubbles
     ( Action (Tick, Direct, AdjustVelocities)
     , Model
     , Diff, tagDiff
-    , makeBubbles
+    , make
     , initialArrangement, arrangeCentre
     , update
     , view
@@ -47,11 +47,11 @@ tagDiff current latest =
 
 -- Make some new bubbles using a dictionary of tags and a dictionary of sizes
 
-makeBubbles : List Tag -> Dict Id Float -> Model
-makeBubbles tags sizeDict =
+make : List Tag -> Dict Id Float -> Model
+make tags sizeDict =
     let
         size tag = Dict.get tag.id sizeDict |> withDefault 10.0
-        mkBubble tag = Bubble.makeBubble tag (size tag)
+        mkBubble tag = Bubble.make tag (size tag)
     in
         List.map mkBubble tags
 

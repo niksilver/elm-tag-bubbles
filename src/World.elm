@@ -59,7 +59,7 @@ update action model =
                 bubbles =
                     Sizes.toDict listListTag'
                         |> Sizes.rescale minBubbleSize maxBubbleSize
-                        |> MB.makeBubbles tags
+                        |> MB.make tags
             in
                 { bubbles = MB.initialArrangement 400 300 model.bubbles bubbles
                 , springs = springs

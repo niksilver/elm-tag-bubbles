@@ -5,7 +5,7 @@ module Bubble
     , setOpacity
     , setToResize, cancelFinishedResize
     , targetSize
-    , makeBubble
+    , make
     , update, view
     ) where
 
@@ -183,8 +183,8 @@ targetSize model =
 
 -- Making a basic bubble
 
-makeBubble : Tag -> Float -> Model
-makeBubble tag size =
+make : Tag -> Float -> Model
+make tag size =
     { id = tag.id
     , x = 0.0 , y = 0.0
     , dx = 0.0 , dy = 0.0

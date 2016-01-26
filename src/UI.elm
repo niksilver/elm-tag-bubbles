@@ -1,5 +1,5 @@
 module UI
-    ( Model, Action
+    ( Model, Action(NoOp)
     , update, view
     , inputs
     ) where
@@ -36,6 +36,7 @@ type Action
         | NewTags TagsResult
         | Click CountedClick
         | Recentre
+        | NoOp
 
 -- Initial actions
 
@@ -104,6 +105,8 @@ update action model =
              }
             , Effects.none
             )
+        NoOp ->
+            (model, Effects.none)
 
 view : Signal.Address Action -> Model -> Html
 view address model =

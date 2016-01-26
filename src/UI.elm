@@ -1,7 +1,7 @@
 module UI
-    ( Model
+    ( Model, Action
     , update, view
-    , initialEffects, inputs
+    , inputs
     ) where
 
 -- Bubble forms captured as Html
@@ -36,12 +36,6 @@ type Action
         | NewTags TagsResult
         | Click CountedClick
         | Recentre
-
--- Initial effects
-
-initialEffects : Effects Action
-initialEffects =
-    Effects.none
 
 -- Initial actions
 

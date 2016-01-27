@@ -21,6 +21,7 @@ import Svg.Attributes exposing (width, height, viewBox)
 import Signal exposing (forwardTo)
 import Effects exposing (Effects)
 import Time exposing (Time, millisecond)
+import Window
 
 type alias Model =
     { width : Int
@@ -52,8 +53,12 @@ recentring : Signal Action
 recentring =
     Signal.map (always Recentre) Context.recentreClicks
 
+resizing : Signal Action
+resizing =
+    Signal.map Resize Window.dimensions
+
 inputs : List (Signal Action)
-inputs = [ticker, countedClicks, recentring]
+inputs = [ticker, countedClicks, recentring, resizing]
 
 -- Update
 

@@ -6,12 +6,7 @@ import Task exposing (Task)
 import Signal exposing (Signal, foldp)
 import Effects exposing (Effects, Never)
 
-app =
-    { init = (UI.Setup.model, UI.Setup.effects)
-    , update = UI.update
-    , view = UI.view
-    , inputs = UI.inputs
-    }
+import Debug
 
 -- Mailbox for tasks run by the containing system
 

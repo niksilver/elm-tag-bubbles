@@ -28,13 +28,11 @@ actionSignals =
     let
         singleInputs : Signal UI.Action
         singleInputs = Signal.mergeMany UI.inputs
-            |> Signal.map (Debug.log "singleInputs")
 
         listedInputs : Signal (List UI.Action)
         listedInputs = Signal.map singleton singleInputs
     in
         Signal.merge listedInputs taskBox.signal
-            |> Signal.map (Debug.log "actions")
 
 init : (UI.Model, Effects UI.Action)
 init = (UI.Setup.model, UI.Setup.effects)
@@ -53,7 +51,6 @@ updates =
         initFn : List UI.Action -> (UI.Model, Effects UI.Action)
         initFn actions =
             updateMany actions init
-
     in
         foldp' updateMany initFn actionSignals
 

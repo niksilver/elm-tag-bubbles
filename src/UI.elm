@@ -23,6 +23,8 @@ import Effects exposing (Effects)
 import Time exposing (Time, millisecond)
 import Window
 
+import Debug
+
 type alias Model =
     { width : Int
     , height : Int
@@ -56,9 +58,10 @@ recentring =
 resizing : Signal Action
 resizing =
     Signal.map Resize Window.dimensions
+        |> Signal.map (Debug.log "resizing")
 
 inputs : List (Signal Action)
-inputs = [ticker, countedClicks, recentring, resizing]
+inputs = [resizing, ticker, countedClicks, recentring]
 
 -- Update
 

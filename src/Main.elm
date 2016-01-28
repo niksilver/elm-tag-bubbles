@@ -5,8 +5,7 @@ import Html exposing (Html)
 import Task exposing (Task)
 import Signal exposing (Signal, foldp)
 import Effects exposing (Effects, Never)
-
-import Debug
+import Signal.Extra exposing (foldp')
 
 -- Mailbox for tasks run by the containing system
 
@@ -29,11 +28,13 @@ actionSignals =
     let
         singleInputs : Signal UI.Action
         singleInputs = Signal.mergeMany UI.inputs
+            |> Signal.map (Debug.log "singleInputs")
 
         listedInputs : Signal (List UI.Action)
         listedInputs = Signal.map singleton singleInputs
     in
-        Signal.merge taskBox.signal listedInputs
+        Signal.merge listedInputs taskBox.signal
+            |> Signal.map (Debug.log "actions")
 
 init : (UI.Model, Effects UI.Action)
 init = (UI.Setup.model, UI.Setup.effects)
@@ -49,16 +50,12 @@ updates =
         updateMany actions modelAndEffect =
             List.foldl updateOne modelAndEffect actions
 
-        -- The first model, with the dimension signal applied once
-        dimensionOnce : Signal UI.Action
-        dimensionOnce = Signal.sampleOn (Signal.constant ()) UI.resizing
+        initFn : List UI.Action -> (UI.Model, Effects UI.Action)
+        initFn actions =
+            updateMany actions init
 
     in
-        -- The dimensions signal needs to be sampled regardless of
-        -- initial dimension values, so it's merged in, not put in the fold
-        Signal.merge
-            (Signal.map (\dim -> UI.update dim (fst init)) dimensionOnce)
-            (foldp updateMany init actionSignals)
+        foldp' updateMany initFn actionSignals
 
 models : Signal UI.Model
 models =

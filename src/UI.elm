@@ -1,7 +1,7 @@
 module UI
     ( Model, Action(NoOp)
     , update, view
-    , inputs
+    , resizing, inputs
     ) where
 
 -- Bubble forms captured as Html

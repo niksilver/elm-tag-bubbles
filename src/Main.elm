@@ -49,9 +49,16 @@ updates =
         updateMany actions modelAndEffect =
             List.foldl updateOne modelAndEffect actions
 
-        -- Signal of the model and effects
+        -- The first model, with the dimension signal applied once
+        dimensionOnce : Signal UI.Action
+        dimensionOnce = Signal.sampleOn (Signal.constant ()) UI.resizing
+
     in
-        foldp updateMany init actionSignals
+        -- The dimensions signal needs to be sampled regardless of
+        -- initial dimension values, so it's merged in, not put in the fold
+        Signal.merge
+            (Signal.map (\dim -> UI.update dim (fst init)) dimensionOnce)
+            (foldp updateMany init actionSignals)
 
 models : Signal UI.Model
 models =

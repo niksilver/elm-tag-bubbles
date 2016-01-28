@@ -127,8 +127,8 @@ view address model =
 svgView : Context World.Action -> Model -> Html
 svgView context model =
     svg
-        [ width (toString model.width)
-        , height (toString model.height)
+        [ width (model.width - 300 |> toString)
+        , height (model.height - 50 |> toString)
         ]
         (World.view context model.world)
 

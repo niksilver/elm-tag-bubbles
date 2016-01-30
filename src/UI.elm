@@ -39,6 +39,8 @@ type Action
         | Recentre
         | NoOp
 
+-- A task to run a tag fetch... or maybe there's no task to run
+
 type alias TaskOut = Maybe (Task () TagsResult)
 
 -- Initial actions

@@ -1,5 +1,6 @@
 module UI.Tasks (address, updates, tasks) where
 
+import Constants exposing (TagsResult)
 import UI
 
 import Task exposing (Task)
@@ -41,21 +42,26 @@ updates init =
     in
         foldp' updateOne initFn actionSignals
 
--- A signal of tasks sent out to be run
+-- Some useful functions for what's coming next
+
+send : Task () UI.Action -> Task () ()
+send t =
+    Task.andThen t (Signal.send taskBox.address)
+
+justValue : Maybe (Task () TagsResult) -> (Task () TagsResult)
+justValue mTask =
+    case mTask of
+        Just task -> task
+        Nothing -> Task.fail ()
+
+-- A signal of tasks sent out to be run, and results returned
+-- to the taskBox
 
 tasks : Signal UI.TaskOut -> Signal (Task () ())
 tasks out =
-    let
-        send : Task () UI.Action -> Task () ()
-        send t =
-            Task.andThen t (Signal.send taskBox.address)
-        get mTask =
-            case mTask of
-                Just task -> task
-                Nothing -> Task.fail ()
-    in
-        out
-            |> Signal.filter (\m -> m /= Nothing) Nothing
-            |> Signal.map get
-            |> Signal.map (Task.map UI.NewTags)
-            |> Signal.map send
+    out
+        |> Signal.filter (\m -> m /= Nothing) Nothing
+        |> Signal.map justValue
+        |> Signal.map (Task.map UI.NewTags)
+        |> Signal.map send
+

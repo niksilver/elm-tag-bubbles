@@ -5,8 +5,7 @@ import Secrets exposing (apiKey)
 
 import Json.Decode exposing (Decoder, (:=), string, object2, list, at)
 import Http exposing (url, get)
-import Effects exposing (Effects, task)
-import Task exposing (toMaybe)
+import Task exposing (Task)
 
 url tag =
     Http.url "http://content.guardianapis.com/search"
@@ -44,10 +43,9 @@ responseToTags : Decoder (List Tags)
 responseToTags =
     at ["response", "results"] resultsToTags
 
-getTags : String -> Effects TagsResult
+getTags : String -> Task x TagsResult
 getTags tag =
     url tag
         |> get responseToTags
         |> Task.toResult
-        |> Effects.task
 

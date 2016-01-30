@@ -1,4 +1,4 @@
-module UI.Setup (model, effects) where
+module UI.Setup (model, task) where
 
 import Constants exposing
     ( Id, Tag
@@ -12,7 +12,7 @@ import Springs
 import Bubble
 
 import Dict exposing (Dict, empty, insert)
-import Effects exposing (Effects)
+import Task exposing (Task)
 
 -- Initial model
 
@@ -63,9 +63,9 @@ model =
     , status = "Welcome"
     }
 
--- Initial effects
+-- Initial task
 
-effects : Effects UI.Action
-effects =
-    Effects.none
+task : UI.TaskOut
+task =
+    Nothing
 

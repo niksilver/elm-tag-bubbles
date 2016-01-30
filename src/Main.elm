@@ -1,58 +1,44 @@
 import UI
 import UI.Setup
 
+import Constants exposing (TagsResult)
+
 import Html exposing (Html)
 import Task exposing (Task)
 import Signal exposing (Signal, foldp)
-import Effects exposing (Effects, Never)
 import Signal.Extra exposing (foldp')
 
 -- Mailbox for tasks run by the containing system
 
-taskBox : Signal.Mailbox (List UI.Action)
+taskBox : Signal.Mailbox UI.Action
 taskBox =
-    Signal.mailbox [UI.NoOp]
-
-singleton : a -> List a
-singleton item =
-    [ item ]
-
-taskAddress : Signal.Address UI.Action
-taskAddress =
-    Signal.forwardTo taskBox.address singleton
+    Signal.mailbox UI.NoOp
 
 -- A combination of external task results and our designated inputs
 
-actionSignals : Signal (List UI.Action)
+actionSignals : Signal UI.Action
 actionSignals =
     let
         singleInputs : Signal UI.Action
         singleInputs = Signal.mergeMany UI.inputs
-
-        listedInputs : Signal (List UI.Action)
-        listedInputs = Signal.map singleton singleInputs
     in
-        Signal.merge listedInputs taskBox.signal
+        Signal.merge singleInputs taskBox.signal
 
-init : (UI.Model, Effects UI.Action)
-init = (UI.Setup.model, UI.Setup.effects)
+init : (UI.Model, UI.TaskOut)
+init = (UI.Setup.model, UI.Setup.task)
 
-updates : Signal (UI.Model, Effects UI.Action)
+updates : Signal (UI.Model, UI.TaskOut)
 updates =
     let
-        updateOne : UI.Action -> (UI.Model, Effects UI.Action) -> (UI.Model, Effects UI.Action)
+        updateOne : UI.Action -> (UI.Model, UI.TaskOut) -> (UI.Model, UI.TaskOut)
         updateOne action (model, _) =
             UI.update action model
 
-        updateMany : List UI.Action -> (UI.Model, Effects UI.Action) -> (UI.Model, Effects UI.Action)
-        updateMany actions modelAndEffect =
-            List.foldl updateOne modelAndEffect actions
-
-        initFn : List UI.Action -> (UI.Model, Effects UI.Action)
-        initFn actions =
-            updateMany actions init
+        initFn : UI.Action -> (UI.Model, UI.TaskOut)
+        initFn action =
+            UI.update action (fst init)
     in
-        foldp' updateMany initFn actionSignals
+        foldp' updateOne initFn actionSignals
 
 models : Signal UI.Model
 models =
@@ -60,18 +46,22 @@ models =
 
 main : Signal Html
 main =
-    Signal.map (UI.view taskAddress) models
+    Signal.map (UI.view taskBox.address) models
 
-port tasks : Signal (Task Never ())
+port tasks : Signal (Task () ())
 port tasks =
     let
-        taskify : Effects UI.Action -> Task Never ()
-        taskify effect =
-            Effects.toTask taskBox.address effect
-
-        effects : Signal (Effects UI.Action)
-        effects = Signal.map snd updates
-
+        send : Task () UI.Action -> Task () ()
+        send t =
+            Task.andThen t (Signal.send taskBox.address)
+        get mTask =
+            case mTask of
+                Just task -> task
+                Nothing -> Task.fail ()
     in
-        Signal.map taskify effects
+    Signal.map snd updates
+        |> Signal.filter (\m -> m /= Nothing) Nothing
+        |> Signal.map get
+        |> Signal.map (Task.map UI.NewTags)
+        |> Signal.map send
 

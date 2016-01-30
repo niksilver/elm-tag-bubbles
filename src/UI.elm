@@ -1,5 +1,5 @@
 module UI
-    ( Model, Action(NoOp)
+    ( Model, Action(NoOp, NewTags), TaskOut
     , update, view
     , inputs
     ) where
@@ -19,7 +19,7 @@ import Html exposing (Html, div, text)
 import Svg exposing (svg)
 import Svg.Attributes exposing (width, height, viewBox)
 import Signal exposing (forwardTo)
-import Effects exposing (Effects)
+import Task exposing (Task)
 import Time exposing (Time, millisecond)
 import Window
 
@@ -38,6 +38,8 @@ type Action
         | Click CountedClick
         | Recentre
         | NoOp
+
+type alias TaskOut = Maybe (Task () TagsResult)
 
 -- Initial actions
 
@@ -62,20 +64,20 @@ inputs = [resizing, ticker, countedClicks, recentring]
 
 -- Update
 
-update : Action -> Model -> (Model, Effects Action)
+update : Action -> Model -> (Model, TaskOut)
 update action model =
     case action of
         Resize (w, h) ->
             ({ model | width = w, height = h }
-             , Effects.none
+             , Nothing
             )
         Direct act ->
             ({ model | world = World.update act model.world }
-             , Effects.none
+             , Nothing
             )
         Tick time ->
             ({ model | world = World.update (World.Tick time) model.world }
-             , Effects.none
+             , Nothing
             )
         NewTags tags ->
             case tags of
@@ -84,34 +86,34 @@ update action model =
                      | world = World.update (World.NewTags data) model.world
                      , status = "Done"
                      }
-                     , Effects.none
+                     , Nothing
                     )
                 Err error ->
                     ({ model
                      | status = "Error: " ++ (toString error)
                      }
-                     , Effects.none
+                     , Nothing
                     )
         Click clicker ->
             case clicker of
                 NoClick ->
-                    ( model, Effects.none )
+                    ( model, Nothing )
                 SingleClick _ ->
-                    ( model, Effects.none )
+                    ( model, Nothing )
                 DoubleClick tag ->
                     ( { model
                       | status = "Fetching " ++ (tag)
                       }
-                    , Effects.map NewTags (TagFetcher.getTags tag)
+                    , Just (TagFetcher.getTags tag)
                     )
         Recentre ->
             ({ model
              | status = "Recentre me!"
              }
-            , Effects.none
+            , Nothing
             )
         NoOp ->
-            (model, Effects.none)
+            (model, Nothing)
 
 view : Signal.Address Action -> Model -> Html
 view address model =

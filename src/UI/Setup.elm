@@ -34,7 +34,7 @@ tags =
     , Tag "travel/travel" "Travel"
     ]
 
-size = (minBubbleSize + maxBubbleSize) / 2
+size = minBubbleSize
 
 multiBubbleModel : MultiBubbles.Model
 multiBubbleModel =

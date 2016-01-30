@@ -35,7 +35,7 @@ maxBubbleSize : Float
 maxBubbleSize = 150.0
 
 minSpringLength : Float
-minSpringLength = 100.0
+minSpringLength = 150.0
 
 maxSpringLength : Float
 maxSpringLength = 350.0

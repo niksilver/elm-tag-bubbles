@@ -1,4 +1,4 @@
-module UI.Setup (model, task) where
+module UI.Setup (init) where
 
 import Constants exposing
     ( Id, Tag
@@ -65,7 +65,7 @@ model =
 
 -- Initial task
 
-task : UI.TaskOut
-task =
-    Nothing
+init : (UI.Model, UI.TaskOut)
+init =
+    (model, Nothing)
 

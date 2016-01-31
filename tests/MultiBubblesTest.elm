@@ -49,6 +49,15 @@ bubble1 =
     , label = "Bubble One", animation = Bubble.noAnimation
     }
 
+bubble2 : Bubble.Model
+bubble2 =
+    { id = "bubble2"
+    , x = 150, y = 130
+    , dx = 0, dy = 0
+    , size = 40
+    , label = "Bubble Two", animation = Bubble.noAnimation
+    }
+
 boundsTest : Test
 boundsTest =
     suite "boundsTest"
@@ -62,5 +71,16 @@ boundsTest =
       assertEqual
         (Bounds (120 - 35) (100 + 35) (120 + 35) (100 - 35))
         (bounds [ bubble1 ])
+
+    , test "If a second bubble right and down, bounds should be correct" <|
+      assertEqual
+        (Bounds (120 - 35) (150 + 40) (130 + 40) (100 - 35))
+        (bounds [ bubble1, bubble2 ])
+
+    , test "If a second bubble left and up, bounds should be correct" <|
+      assertEqual
+        (Bounds (120 - 35) (150 + 40) (130 + 40) (100 - 35))
+        (bounds [ bubble2, bubble1 ])
+
     ]
 

@@ -92,7 +92,29 @@ bounds model =
         [] ->
             Bounds 0 0 0 0
         hd :: tl ->
-            Bounds (hd.y - hd.size) (hd.x + hd.size) (hd.y + hd.size) (hd.x - hd.size)
+            boundsOne hd |> addBounds tl
+
+addBounds : Model -> Bounds -> Bounds
+addBounds model bds =
+    case model of
+        [] -> bds
+        hd :: tl -> 
+            addOne bds hd |> addBounds tl
+
+addOne : Bounds -> Bubble.Model -> Bounds
+addOne bds bub =
+    let
+        b2 = boundsOne bub
+    in
+        Bounds
+        (min bds.top b2.top)
+        (max bds.right b2.right)
+        (max bds.bottom b2.bottom)
+        (min bds.left b2.left)
+
+boundsOne : Bubble.Model -> Bounds
+boundsOne b =
+    Bounds (b.y - b.size) (b.x + b.size) (b.y + b.size) (b.x - b.size)
 
 -- Replace an old model with a new model.
 

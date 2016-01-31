@@ -4,8 +4,8 @@ module MultiBubbles
     , Diff, tagDiff
     , make
     , initialArrangement, arrangeCentre
-    , update
-    , view
+    , Bounds, bounds
+    , update, view
     ) where
 
 -- Multiple bubbles
@@ -32,6 +32,10 @@ type Action
 -- via the API.
 
 type alias Diff a = { old : List a, new : List a, both : List a }
+
+-- The bounds of some bubbles
+
+type alias Bounds = { top : Float, right : Float, bottom : Float, left : Float }
 
 -- Find the difference between tags represented in the world
 -- and tags fetched by the API
@@ -79,6 +83,16 @@ arrangeCentre centreX centreY model =
         indexedBubs = indexedMap (,) model
     in
         map (\ib -> rePos (fst ib) (snd ib)) indexedBubs
+
+-- Find the bounds of the model
+
+bounds : Model -> Bounds
+bounds model =
+    case model of
+        [] ->
+            Bounds 0 0 0 0
+        hd :: tl ->
+            Bounds (hd.y - hd.size) (hd.x + hd.size) (hd.y + hd.size) (hd.x - hd.size)
 
 -- Replace an old model with a new model.
 

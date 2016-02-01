@@ -24,8 +24,7 @@ import Time exposing (Time, millisecond)
 import Window
 
 type alias Model =
-    { width : Int
-    , height : Int
+    { dimensions : (Int, Int)
     , world : World.Model
     , status : String
     }
@@ -64,8 +63,8 @@ inputs = [resizing, ticker, countedClicks]
 update : Action -> Model -> (Model, TaskOut)
 update action model =
     case action of
-        Resize (w, h) ->
-            ({ model | width = w, height = h }
+        Resize dims ->
+            ({ model | dimensions = dims }
              , Nothing
             )
         Direct act ->
@@ -112,16 +111,20 @@ view address model =
         context = Context.create (Signal.forwardTo address Direct)
     in
         div []
-        [ RecentreButton.view context (model.width, model.height)
+        [ RecentreButton.view context model.dimensions
         , svgView context model
         , text (model.status)
         ]
 
 svgView : Context World.Action -> Model -> Html
 svgView context model =
-    svg
-        [ width (model.width - 300 |> toString)
-        , height (model.height - 50 |> toString)
-        ]
-        (World.view context model.world)
+    let
+        wdth = fst model.dimensions
+        hght = snd model.dimensions
+    in
+        svg
+            [ width (wdth - 300 |> toString)
+            , height (hght - 50 |> toString)
+            ]
+            (World.view context model.world)
 

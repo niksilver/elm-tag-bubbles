@@ -54,8 +54,7 @@ springs =
 
 model : UI.Model
 model =
-    { width = width
-    , height = height
+    { dimensions = (width, height)
     , world =
         { bubbles = multiBubbleModel
         , springs = springs

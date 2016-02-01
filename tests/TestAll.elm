@@ -5,6 +5,7 @@ import PairCounterTest exposing (all)
 import SpringsTest exposing (all)
 import SizesTest exposing (all)
 import MultiBubblesTest exposing (all)
+import WorldTest exposing (all)
 
 import Graphics.Element exposing (Element)
 import ElmTest exposing (elementRunner, suite)
@@ -19,5 +20,6 @@ main =
             , SpringsTest.all
             , SizesTest.all
             , MultiBubblesTest.all
+            , WorldTest.all
             ]
         )

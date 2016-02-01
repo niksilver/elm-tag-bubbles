@@ -79,8 +79,13 @@ update action model =
 size : (Int, Int) -> (Int, Int)
 size (winWidth, winHeight) =
     let
-        width = min winWidth (winWidth)
-        height = winHeight - 100
+        -- World's width with borders
+        fullyBorderedWidth = winWidth - 2 * Constants.sideBorderWidth
+        -- Reduced borders if less than the preferred min width
+        idealWidth = max fullyBorderedWidth Constants.minWorldWidth
+        -- Constrained to window width
+        width = min winWidth idealWidth
+        height = winHeight - Constants.navHeight - Constants.statusBarHeight
     in
         (width, height)
 

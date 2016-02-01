@@ -16,6 +16,7 @@ import TagFetcher
 import RecentreButton
 
 import Html exposing (Html, div, text)
+import Html.Attributes exposing (style)
 import Svg exposing (svg)
 import Svg.Attributes exposing (width, height, viewBox)
 import Signal exposing (forwardTo)
@@ -113,7 +114,9 @@ view address model =
     let
         context = Context.create (Signal.forwardTo address Direct)
     in
-        div []
+        div
+        [ style [ ("display", "flex"), ("flex-direction", "column") ]
+        ]
         [ RecentreButton.view context model.dimensions
         , svgView context model
         , text (model.status)

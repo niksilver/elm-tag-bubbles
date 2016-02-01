@@ -131,10 +131,6 @@ recentre model (w, h) =
         -- Offset correction needed x and y
         offx = wcx - bcx
         offy = wcy - bcy
-        d1 = Debug.log "(w, h)" (w, h)
-        d2 = Debug.log "Bounds" bds
-        d3 = Debug.log "(bcx, bcy)" (bcy, bcy)
-        d4 = Debug.log "(offx, offy)" (offx, offy)
         -- Move a bubble
         move bubble =
             { bubble | x = bubble.x + offx, y = bubble.y + offy }

@@ -1,6 +1,7 @@
 module World
     ( Model
-    , Action (Tick, NewTags, Recentre)
+    , Action (Tick, NewTags, Recentre, Resize)
+    , size
     , update, view
     ) where
 
@@ -25,6 +26,7 @@ import Time exposing (Time)
 type alias Model =
     { bubbles : MB.Model
     , springs : Dict (Id,Id) Float
+    , dimensions : (Int, Int)
     }
 
 type Action
@@ -32,6 +34,7 @@ type Action
     | Tick Time
     | NewTags (List Tags)
     | Recentre (Int, Int)
+    | Resize (Int, Int)
 
 update : Action -> Model -> Model
 update action model =
@@ -62,11 +65,26 @@ update action model =
                         |> Sizes.rescale minBubbleSize maxBubbleSize
                         |> MB.make tags
             in
-                { bubbles = MB.initialArrangement 400 300 model.bubbles bubbles
+                { model
+                | bubbles = MB.initialArrangement 400 300 model.bubbles bubbles
                 , springs = springs
                 }
         Recentre dims ->
             { model | bubbles = MB.recentre model.bubbles dims }
+        Resize windowDims ->
+            { model | dimensions = size windowDims }
+
+-- Work out the size of the world based on the window's dimensions
+
+size : (Int, Int) -> (Int, Int)
+size (winWidth, winHeight) =
+    let
+        width = min winWidth (winWidth)
+        height = winHeight - 100
+    in
+        (width, height)
+
+-- The view
 
 view : Context Action -> Model -> List Svg
 view context model =

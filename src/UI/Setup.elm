@@ -7,6 +7,7 @@ import Constants exposing
     )
 import UI
 import MultiBubbles
+import World
 import PairCounter exposing (emptyCounter, incPair)
 import Springs
 import Bubble
@@ -58,6 +59,7 @@ model =
     , world =
         { bubbles = multiBubbleModel
         , springs = springs
+        , dimensions = World.size (width, height)
         }
     , status = "Welcome"
     }

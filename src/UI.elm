@@ -64,7 +64,10 @@ update : Action -> Model -> (Model, TaskOut)
 update action model =
     case action of
         Resize dims ->
-            ({ model | dimensions = dims }
+            ({ model
+             | dimensions = dims
+             , world = World.update (World.Resize dims) model.world
+             }
              , Nothing
             )
         Direct act ->
@@ -119,12 +122,12 @@ view address model =
 svgView : Context World.Action -> Model -> Html
 svgView context model =
     let
-        wdth = fst model.dimensions
-        hght = snd model.dimensions
+        wdth = fst model.world.dimensions
+        hght = snd model.world.dimensions
     in
         svg
-            [ width (wdth - 300 |> toString)
-            , height (hght - 50 |> toString)
+            [ width (wdth |> toString)
+            , height (hght |> toString)
             ]
             (World.view context model.world)
 

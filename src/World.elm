@@ -1,6 +1,6 @@
 module World
     ( Model
-    , Action (Tick, NewTags)
+    , Action (Tick, NewTags, Recentre)
     , update, view
     ) where
 
@@ -31,6 +31,7 @@ type Action
     = Direct MB.Action
     | Tick Time
     | NewTags (List Tags)
+    | Recentre (Int, Int)
 
 update : Action -> Model -> Model
 update action model =
@@ -64,6 +65,8 @@ update action model =
                 { bubbles = MB.initialArrangement 400 300 model.bubbles bubbles
                 , springs = springs
                 }
+        Recentre dims ->
+            { model | bubbles = MB.recentre model.bubbles dims }
 
 view : Context Action -> Model -> List Svg
 view context model =

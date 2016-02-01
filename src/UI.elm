@@ -12,8 +12,8 @@ import Context exposing
     , CountedClick (NoClick, SingleClick, DoubleClick)
     )
 import World
-import RecentreButton
 import TagFetcher
+import RecentreButton
 
 import Html exposing (Html, div, text)
 import Svg exposing (svg)
@@ -36,7 +36,6 @@ type Action
         | Tick Time
         | NewTags TagsResult
         | Click CountedClick
-        | Recentre
         | NoOp
 
 -- A task to run a tag fetch... or maybe there's no task to run
@@ -53,16 +52,12 @@ countedClicks : Signal Action
 countedClicks =
     Context.mappedCountedClicks Click
 
-recentring : Signal Action
-recentring =
-    Signal.map (always Recentre) Context.recentreClicks
-
 resizing : Signal Action
 resizing =
     Signal.map Resize Window.dimensions
 
 inputs : List (Signal Action)
-inputs = [resizing, ticker, countedClicks, recentring]
+inputs = [resizing, ticker, countedClicks]
 
 -- Update
 
@@ -108,12 +103,6 @@ update action model =
                       }
                     , Just (TagFetcher.getTags tag)
                     )
-        Recentre ->
-            ({ model
-             | status = "Recentre me!"
-             }
-            , Nothing
-            )
         NoOp ->
             (model, Nothing)
 
@@ -123,7 +112,7 @@ view address model =
         context = Context.create (Signal.forwardTo address Direct)
     in
         div []
-        [ RecentreButton.view context
+        [ RecentreButton.view context (model.width, model.height)
         , svgView context model
         , text (model.status)
         ]

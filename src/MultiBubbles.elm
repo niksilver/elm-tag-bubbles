@@ -4,7 +4,7 @@ module MultiBubbles
     , Diff, tagDiff
     , make
     , initialArrangement, arrangeCentre
-    , Bounds, bounds
+    , Bounds, bounds, recentre
     , update, view
     ) where
 
@@ -115,6 +115,31 @@ addOne bds bub =
 boundsOne : Bubble.Model -> Bounds
 boundsOne b =
     Bounds (b.y - b.size) (b.x + b.size) (b.y + b.size) (b.x - b.size)
+
+-- Recentre the bubbles
+
+recentre : Model -> (Int, Int) -> Model
+recentre model (w, h) =
+    let
+        -- window centre x, window centre y
+        wcx = toFloat w / 2
+        wcy = toFloat h / 2
+        -- Bubble bounds centre x and y
+        bds = bounds model
+        bcx = (bds.left + bds.right) / 2
+        bcy = (bds.top + bds.bottom) / 2
+        -- Offset correction needed x and y
+        offx = wcx - bcx
+        offy = wcy - bcy
+        d1 = Debug.log "(w, h)" (w, h)
+        d2 = Debug.log "Bounds" bds
+        d3 = Debug.log "(bcx, bcy)" (bcy, bcy)
+        d4 = Debug.log "(offx, offy)" (offx, offy)
+        -- Move a bubble
+        move bubble =
+            { bubble | x = bubble.x + offx, y = bubble.y + offy }
+    in
+        List.map move model
 
 -- Replace an old model with a new model.
 

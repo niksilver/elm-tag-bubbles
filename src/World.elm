@@ -66,7 +66,12 @@ update action model =
                         |> MB.make tags
             in
                 { model
-                | bubbles = MB.initialArrangement 400 300 model.bubbles bubbles
+                | bubbles =
+                    MB.initialArrangement
+                    (toFloat (fst model.dimensions) / 2)
+                    (toFloat (snd model.dimensions) / 2)
+                    model.bubbles
+                    bubbles
                 , springs = springs
                 }
         Recentre dims ->

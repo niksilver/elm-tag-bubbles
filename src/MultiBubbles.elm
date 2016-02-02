@@ -4,7 +4,7 @@ module MultiBubbles
     , Diff, tagDiff
     , make
     , initialArrangement, arrangeCentre
-    , Bounds, bounds, recentre
+    , Bounds, bounds, recentre, forNewDimensions
     , update, view
     ) where
 
@@ -134,6 +134,18 @@ recentre model (w, h) =
         -- Move a bubble
         move bubble =
             { bubble | x = bubble.x + offx, y = bubble.y + offy }
+    in
+        List.map move model
+
+-- Shift the bubbles to accommodate new world dimensions
+
+forNewDimensions : (Int, Int) -> (Int, Int) -> Model -> Model
+forNewDimensions (oldX, oldY) (newX, newY) model =
+    let
+        sX = (toFloat newX) / (toFloat oldX)
+        sY = (toFloat newY) / (toFloat oldY)
+        move bubble =
+            { bubble | x = bubble.x * sX, y = bubble.y * sY }
     in
         List.map move model
 

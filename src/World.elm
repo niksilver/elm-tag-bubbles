@@ -77,7 +77,14 @@ update action model =
         Recentre dims ->
             { model | bubbles = MB.recentre model.bubbles dims }
         Resize windowDims ->
-            { model | dimensions = size windowDims }
+            let
+                newDims = size windowDims
+                oldDims = model.dimensions
+            in
+            { model
+            | dimensions = newDims
+            , bubbles = MB.forNewDimensions oldDims newDims model.bubbles
+            }
 
 -- Work out the size of the world based on the window's dimensions
 

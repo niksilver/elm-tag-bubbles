@@ -142,10 +142,10 @@ recentre model (w, h) =
 forNewDimensions : (Int, Int) -> (Int, Int) -> Model -> Model
 forNewDimensions (oldX, oldY) (newX, newY) model =
     let
-        sX = (toFloat newX) / (toFloat oldX)
-        sY = (toFloat newY) / (toFloat oldY)
+        dX = (toFloat newX - toFloat oldX) / 2
+        dY = (toFloat newY - toFloat oldY) / 2
         move bubble =
-            { bubble | x = bubble.x * sX, y = bubble.y * sY }
+            { bubble | x = bubble.x + dX, y = bubble.y + dY }
     in
         List.map move model
 

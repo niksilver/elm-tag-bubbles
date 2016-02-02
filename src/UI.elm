@@ -13,7 +13,7 @@ import Context exposing
     )
 import World
 import TagFetcher
-import RecentreButton
+import NavBar
 
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (style)
@@ -117,7 +117,7 @@ view address model =
         div
         [ style [ ("display", "flex"), ("flex-direction", "column") ]
         ]
-        [ RecentreButton.view context model.dimensions
+        [ NavBar.view context model.dimensions
         , svgView context model
         , text (model.status)
         ]

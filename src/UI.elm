@@ -115,7 +115,10 @@ view address model =
         context = Context.create (Signal.forwardTo address Direct)
     in
         div
-        [ style [ ("display", "flex"), ("flex-direction", "column") ]
+        [ style
+          [ ("display", "flex")
+          , ("flex-direction", "column")
+          ]
         ]
         [ NavBar.view context model.dimensions
         , svgView context model
@@ -131,6 +134,11 @@ svgView context model =
         svg
             [ width (wdth |> toString)
             , height (hght |> toString)
+            -- Centre the svg box
+            , style
+              [ ("margin-left", "auto")
+              , ("margin-right", "auto")
+              ]
             ]
             (World.view context model.world)
 

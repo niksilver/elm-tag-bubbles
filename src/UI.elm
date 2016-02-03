@@ -17,8 +17,6 @@ import NavBar
 
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (style)
-import Svg exposing (svg)
-import Svg.Attributes exposing (width, height, viewBox)
 import Signal exposing (forwardTo)
 import Task exposing (Task)
 import Time exposing (Time, millisecond)
@@ -121,32 +119,7 @@ view address model =
           ]
         ]
         [ NavBar.view context model.dimensions
-        , svgView context model
+        , World.view context model.world
         , text (model.status)
         ]
-
--- The world might not yet have got its dimensions, so we have two cases
-
-svgView : Context World.Action -> Model -> Html
-svgView context model =
-    case model.world.dimensions of
-        Just dims -> svgViewWithDimensions context dims model
-        Nothing -> svgViewNoDimensions
-
-svgViewNoDimensions : Html
-svgViewNoDimensions =
-    svg [] []
-
-svgViewWithDimensions : Context World.Action -> (Int, Int) -> Model -> Html
-svgViewWithDimensions context (wdth, hght) model =
-    svg
-        [ width (wdth |> toString)
-        , height (hght |> toString)
-        -- Centre the svg box
-        , style
-          [ ("margin-left", "auto")
-          , ("margin-right", "auto")
-          ]
-        ]
-        (World.view context model.world)
 

@@ -20,7 +20,10 @@ import TagFetcher
 
 import Maybe exposing (withDefault)
 import Dict exposing (Dict)
-import Svg exposing (Svg)
+import Html exposing (Html)
+import Html.Attributes exposing (style)
+import Svg exposing (svg)
+import Svg.Attributes exposing (width, height)
 import Time exposing (Time)
 
 type alias Model =
@@ -116,8 +119,28 @@ size (winWidth, winHeight) =
         (width, height)
 
 -- The view
+-- The world might not yet have got its dimensions, so we have two cases
 
-view : Context Action -> Model -> List Svg
+view : Context Action -> Model -> Html
 view context model =
-    MB.view (forwardTo context Direct) model.bubbles
+    case model.dimensions of
+        Just dims -> viewWithDimensions context dims model
+        Nothing -> viewNoDimensions
+
+viewNoDimensions : Html
+viewNoDimensions =
+    svg [] []
+
+viewWithDimensions : Context Action -> (Int, Int) -> Model -> Html
+viewWithDimensions context (wdth, hght) model =
+    svg
+        [ width (wdth |> toString)
+        , height (hght |> toString)
+        -- Centre the svg box
+        , style
+          [ ("margin-left", "auto")
+          , ("margin-right", "auto")
+          ]
+        ]
+        (MB.view (forwardTo context Direct) model.bubbles)
 

@@ -111,15 +111,37 @@ view : Signal.Address Action -> Model -> Html
 view address model =
     let
         context = Context.create (Signal.forwardTo address Direct)
+        sideDiv =
+            div
+            [ style
+              [ ("height", "100%")
+              , ("width", "auto")
+              , ("flex-grow", "1")
+              ]
+            ]
+            []
+        rowDiv =
+            div
+            [ style
+              [ ("display", "flex")
+              , ("flex-direction", "row")
+              ]
+            ]
+        columnDiv =
+            div
+            [ style
+              [ ("display", "flex")
+              , ("flex-direction", "column")
+              ]
+            ]
     in
-        div
-        [ style
-          [ ("display", "flex")
-          , ("flex-direction", "column")
-          ]
-        ]
+        columnDiv
         [ NavBar.view context
-        , World.view context model.world
-        , text (model.status)
+        , rowDiv
+          [ sideDiv
+          , World.view context model.world
+          , sideDiv
+          ]
+        , div [] [ text (model.status) ]
         ]
 

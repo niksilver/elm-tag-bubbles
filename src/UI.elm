@@ -125,20 +125,28 @@ view address model =
         , text (model.status)
         ]
 
+-- The world might not yet have got its dimensions, so we have two cases
+
 svgView : Context World.Action -> Model -> Html
 svgView context model =
-    let
-        wdth = fst model.world.dimensions
-        hght = snd model.world.dimensions
-    in
-        svg
-            [ width (wdth |> toString)
-            , height (hght |> toString)
-            -- Centre the svg box
-            , style
-              [ ("margin-left", "auto")
-              , ("margin-right", "auto")
-              ]
-            ]
-            (World.view context model.world)
+    case model.world.dimensions of
+        Just dims -> svgViewWithDimensions context dims model
+        Nothing -> svgViewNoDimensions
+
+svgViewNoDimensions : Html
+svgViewNoDimensions =
+    svg [] []
+
+svgViewWithDimensions : Context World.Action -> (Int, Int) -> Model -> Html
+svgViewWithDimensions context (wdth, hght) model =
+    svg
+        [ width (wdth |> toString)
+        , height (hght |> toString)
+        -- Centre the svg box
+        , style
+          [ ("margin-left", "auto")
+          , ("margin-right", "auto")
+          ]
+        ]
+        (World.view context model.world)
 

@@ -116,7 +116,7 @@ boundsOne : Bubble.Model -> Bounds
 boundsOne b =
     Bounds (b.y - b.size) (b.x + b.size) (b.y + b.size) (b.x - b.size)
 
--- Recentre the bubbles
+-- Recentre the bubbles in a frame of the given dimensions
 
 recentre : Model -> (Int, Int) -> Model
 recentre model (w, h) =

@@ -26,7 +26,8 @@ import Time exposing (Time)
 type alias Model =
     { bubbles : MB.Model
     , springs : Dict (Id,Id) Float
-    , dimensions : (Int, Int)
+    -- Maybe the system has told us our dimensions
+    , dimensions : Maybe (Int, Int)
     }
 
 type Action
@@ -51,41 +52,54 @@ update action model =
             in
                 update (Direct (MB.Tick time)) model'
         NewTags listListTag ->
-            let
-                listListTag' =
-                    listListTag
-                        |> Sizes.topN maxBubbles
-                        |> Sizes.filter listListTag
-                springs =
-                    Springs.toCounter listListTag'
-                        |> Springs.toDictWithZeros minSpringLength maxSpringLength
-                tags = Sizes.idDict listListTag' |> Dict.values
-                bubbles =
-                    Sizes.toDict listListTag'
-                        |> Sizes.rescale minBubbleSize maxBubbleSize
-                        |> MB.make tags
-            in
-                { model
-                | bubbles =
-                    MB.initialArrangement
-                    (toFloat (fst model.dimensions) / 2)
-                    (toFloat (snd model.dimensions) / 2)
-                    model.bubbles
-                    bubbles
-                , springs = springs
-                }
+            case model.dimensions of
+                Just dimensions -> newTags listListTag dimensions model
+                Nothing -> model
         Recentre dims ->
             { model | bubbles = MB.recentre model.bubbles dims }
         Resize windowDims ->
             let
-                newDims = size windowDims
-                oldDims = model.dimensions
+                newDims = Debug.log "newDims" (size windowDims)
+                newBubbles =
+                    case model.dimensions of
+                        Just oldDims ->
+                            MB.forNewDimensions oldDims newDims model.bubbles
+                        Nothing ->
+                            MB.recentre model.bubbles newDims
             in
             { model
-            | dimensions = newDims
-            , bubbles = MB.forNewDimensions oldDims newDims model.bubbles
+            | dimensions = Just newDims
+            , bubbles = newBubbles
             }
 
+-- Introduce new tags to the model
+
+newTags : List Tags -> (Int, Int) -> Model -> Model
+newTags listListTag (width, height) model =
+    let
+        listListTag' =
+            listListTag
+                |> Sizes.topN maxBubbles
+                |> Sizes.filter listListTag
+        springs =
+            Springs.toCounter listListTag'
+                |> Springs.toDictWithZeros minSpringLength maxSpringLength
+        tags = Sizes.idDict listListTag' |> Dict.values
+        bubbles =
+            Sizes.toDict listListTag'
+                |> Sizes.rescale minBubbleSize maxBubbleSize
+                |> MB.make tags
+    in
+        { model
+        | bubbles =
+            MB.initialArrangement
+            (toFloat width / 2)
+            (toFloat height / 2)
+            model.bubbles
+            bubbles
+        , springs = springs
+        }
+ 
 -- Work out the size of the world based on the window's dimensions
 
 size : (Int, Int) -> (Int, Int)

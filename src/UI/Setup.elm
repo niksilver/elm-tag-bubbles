@@ -59,7 +59,7 @@ model =
     , world =
         { bubbles = multiBubbleModel
         , springs = springs
-        , dimensions = World.size (width, height)
+        , dimensions = Nothing
         }
     , status = "Welcome"
     }

@@ -66,7 +66,7 @@ update action model =
                     model
         Resize windowDims ->
             let
-                newDims = Debug.log "newDims" (size windowDims)
+                newDims = size windowDims
                 newBubbles =
                     case model.dimensions of
                         Just oldDims ->

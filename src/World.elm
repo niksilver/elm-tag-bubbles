@@ -37,7 +37,7 @@ type Action
     = Direct MB.Action
     | Tick Time
     | NewTags (List Tags)
-    | Recentre (Int, Int)
+    | Recentre
     | Resize (Int, Int)
 
 update : Action -> Model -> Model
@@ -58,8 +58,12 @@ update action model =
             case model.dimensions of
                 Just dimensions -> newTags listListTag dimensions model
                 Nothing -> model
-        Recentre dims ->
-            { model | bubbles = MB.recentre model.bubbles dims }
+        Recentre ->
+            case model.dimensions of
+                Just dims ->
+                    { model | bubbles = MB.recentre model.bubbles dims }
+                Nothing ->
+                    model
         Resize windowDims ->
             let
                 newDims = Debug.log "newDims" (size windowDims)

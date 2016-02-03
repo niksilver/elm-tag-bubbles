@@ -118,7 +118,7 @@ view address model =
           , ("flex-direction", "column")
           ]
         ]
-        [ NavBar.view context model.dimensions
+        [ NavBar.view context
         , World.view context model.world
         , text (model.status)
         ]

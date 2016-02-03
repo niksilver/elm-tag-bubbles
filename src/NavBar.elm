@@ -8,8 +8,8 @@ import Html exposing (Html, button, text, div)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
 
-view : Context World.Action -> (Int, Int) -> Html
-view context dimensions =
+view : Context World.Action -> Html
+view context =
     div
     [ style
       [ ("height", toString Constants.navHeight ++ "px")
@@ -17,7 +17,7 @@ view context dimensions =
       ]
     ]
     [ button
-      [ onClick context.address (World.Recentre dimensions)
+      [ onClick context.address World.Recentre
       -- Vertical alignment trick from
       -- http://zerosixthree.se/vertical-align-anything-with-just-3-lines-of-css/
       , style

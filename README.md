@@ -2,19 +2,21 @@
 
 Elm implementation of Guardian Tag Bubbles app.
 
+## Build and run the application
+
+```
+sh build.sh
+```
+
+and then visit `out/index.html`.
+
 ## Running the tests
 
-To run the tests start
-
-```
-elm reactor
-```
-
-then make the tests:
+To make the tests run
 
 ```
 elm make tests/TestAll.elm --output tests.html
 ```
 
-and visit `http://localhost:8000/tests/TestAll.elm`
+and load up the `tests.html` file.
 

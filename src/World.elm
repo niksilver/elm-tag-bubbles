@@ -21,7 +21,7 @@ import TagFetcher
 import Maybe exposing (withDefault)
 import Dict exposing (Dict)
 import Html exposing (Html)
-import Html.Attributes exposing (style)
+import Html.Attributes exposing (id)
 import Svg exposing (svg)
 import Svg.Attributes exposing (width, height)
 import Time exposing (Time)
@@ -138,13 +138,9 @@ viewNoDimensions =
 viewWithDimensions : Context Action -> (Int, Int) -> Model -> Html
 viewWithDimensions context (wdth, hght) model =
     svg
-        [ width (wdth |> toString)
+        [ id "world"
+        , width (wdth |> toString)
         , height (hght |> toString)
-        -- Centre the svg box
-        , style
-          [ ("margin-left", "auto")
-          , ("margin-right", "auto")
-          ]
         ]
         (MB.view (forwardTo context Direct) model.bubbles)
 

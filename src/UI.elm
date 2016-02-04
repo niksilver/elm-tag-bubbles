@@ -16,7 +16,7 @@ import TagFetcher
 import NavBar
 
 import Html exposing (Html, div, text)
-import Html.Attributes exposing (id)
+import Html.Attributes exposing (class)
 import Signal exposing (forwardTo)
 import Task exposing (Task)
 import Time exposing (Time, millisecond)
@@ -112,12 +112,12 @@ view address model =
     let
         context = Context.create (Signal.forwardTo address Direct)
     in
-        div [ id "column" ]
+        div [ class "column" ]
         [ NavBar.view context
-        , div [ id "row" ]
-          [ div [ id "sideBar" ] []
+        , div [ class "row" ]
+          [ div [ class "sideBar" ] []
           , World.view context model.world
-          , div [ id "sideBar" ] []
+          , div [ class "sideBar" ] []
           ]
         , div [] [ text (model.status) ]
         ]

@@ -16,7 +16,7 @@ import TagFetcher
 import NavBar
 
 import Html exposing (Html, div, text)
-import Html.Attributes exposing (style)
+import Html.Attributes exposing (id)
 import Signal exposing (forwardTo)
 import Task exposing (Task)
 import Time exposing (Time, millisecond)
@@ -111,36 +111,13 @@ view : Signal.Address Action -> Model -> Html
 view address model =
     let
         context = Context.create (Signal.forwardTo address Direct)
-        sideDiv =
-            div
-            [ style
-              [ ("height", "100%")
-              , ("width", "auto")
-              , ("flex-grow", "1")
-              ]
-            ]
-            []
-        rowDiv =
-            div
-            [ style
-              [ ("display", "flex")
-              , ("flex-direction", "row")
-              ]
-            ]
-        columnDiv =
-            div
-            [ style
-              [ ("display", "flex")
-              , ("flex-direction", "column")
-              ]
-            ]
     in
-        columnDiv
+        div [ id "column" ]
         [ NavBar.view context
-        , rowDiv
-          [ sideDiv
+        , div [ id "row" ]
+          [ div [ id "sideBar" ] []
           , World.view context model.world
-          , sideDiv
+          , div [ id "sideBar" ] []
           ]
         , div [] [ text (model.status) ]
         ]

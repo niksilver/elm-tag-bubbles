@@ -1,6 +1,6 @@
 module World
     ( Model
-    , Action (Tick, NewTags, Recentre, Resize)
+    , Action (Tick, NewTags, Recentre, Resize, Scale)
     , size
     , update, view
     ) where
@@ -39,6 +39,7 @@ type Action
     | NewTags (List Tags)
     | Recentre
     | Resize (Int, Int)
+    | Scale String
 
 update : Action -> Model -> Model
 update action model =
@@ -78,6 +79,11 @@ update action model =
             | dimensions = Just newDims
             , bubbles = newBubbles
             }
+        Scale scaleStr ->
+            let
+                s = Debug.log "scale" scaleStr
+            in
+                model
 
 -- Introduce new tags to the model
 

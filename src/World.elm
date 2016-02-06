@@ -2,7 +2,7 @@ module World
     ( Model
     , Action (Tick, NewTags, Recentre, Resize, Scale)
     , ViewBox
-    , size, viewBox
+    , size, viewBox, viewBoxToString
     , update, view
     ) where
 
@@ -148,6 +148,13 @@ viewBox dims scale =
         height = winHeight / scale
     in
         ViewBox minX minY width height
+
+viewBoxToString : ViewBox -> String
+viewBoxToString vb =
+    toString vb.minX ++ " " ++
+    toString vb.minY ++ " " ++
+    toString vb.width ++ " " ++
+    toString vb.height
 
 -- The view
 -- The world might not yet have got its dimensions, so we have two cases

@@ -10,6 +10,7 @@ all =
     suite "WorldTest"
     [ sizeTest
     , viewBoxTest
+    , viewBoxToStringTest
     ]
 
 sizeTest : Test
@@ -94,5 +95,21 @@ viewBoxTest =
       assertEqual
         44
         (viewBox (201, 88) 2 |> .height)
+
+    ]
+
+viewBoxToStringTest : Test
+viewBoxToStringTest =
+    suite "viewBoxToStringTest"
+
+    [ test "A viewBox should convert to a string correctly" <|
+      assertEqual
+        "11 22 33 44"
+        (ViewBox 11 22 33 44 |> viewBoxToString)
+
+    , test "Another viewBox should convert to a string correctly" <|
+      assertEqual
+        "12 34 56 78"
+        (ViewBox 12 34 56 78 |> viewBoxToString)
 
     ]

@@ -4,8 +4,8 @@ import Constants
 import Context exposing (Context)
 import World
 
-import Html exposing (Html, button, text, div, input)
-import Html.Attributes as Attrs exposing (style, type')
+import Html exposing (Html, button, text, div, input, label)
+import Html.Attributes as Attrs exposing (style, type', class, for, id)
 import Html.Events exposing (onClick, on, targetValue)
 
 
@@ -23,27 +23,28 @@ view context scale =
           , ("text-align", "center")
           ]
         ]
-        [ button
-          [ onClick context.address World.Recentre
+        [ div
           -- Vertical alignment trick from
           -- http://zerosixthree.se/vertical-align-anything-with-just-3-lines-of-css/
-          , style
-              [ ("position", "relative")
-              , ("top", "50%")
-              , ("transform", "translateY(-50%)")
-              ]
+          [ class "vcentre" ]
+          [ button
+            [ onClick context.address World.Recentre ]
+            [ text "Recentre" ]
+          , label
+            [ for "scale" ]
+            [ text "Scale" ]
+          , input
+            [ type' "range"
+            , Attrs.min "0.2"
+            , Attrs.max "2.5"
+            , Attrs.value (toString scale)
+            , Attrs.step "0.01"
+            , id "scale"
+            -- Need both onChange and onInput according to
+            -- stackoverflow.com/questions/18544890
+            , on "change" targetValue scaleMessage
+            , on "input" targetValue scaleMessage
+            ]
+            []
           ]
-          [ text "Recentre" ]
-        , input
-          [ type' "range"
-          , Attrs.min "0.2"
-          , Attrs.max "2.5"
-          , Attrs.value (toString scale)
-          , Attrs.step "0.01"
-          -- Need both onChange and onInput according to
-          -- stackoverflow.com/questions/18544890
-          , on "change" targetValue scaleMessage
-          , on "input" targetValue scaleMessage
-          ]
-          []
         ]

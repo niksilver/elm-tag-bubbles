@@ -60,6 +60,7 @@ model =
         { bubbles = multiBubbleModel
         , springs = springs
         , dimensions = Nothing
+        , scale = 1
         }
     , status = "Welcome"
     }

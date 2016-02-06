@@ -19,12 +19,13 @@ import Springs exposing (toCounter, acceleration, accelDict)
 import Sizes
 import TagFetcher
 
+import String
 import Maybe exposing (withDefault)
 import Dict exposing (Dict)
 import Html exposing (Html)
 import Html.Attributes exposing (id)
 import Svg exposing (svg)
-import Svg.Attributes exposing (width, height)
+import Svg.Attributes as SVGA exposing (width, height, viewBox)
 import Time exposing (Time)
 
 type alias Model =
@@ -32,6 +33,7 @@ type alias Model =
     , springs : Dict (Id,Id) Float
     -- Maybe the system has told us our dimensions
     , dimensions : Maybe (Int, Int)
+    , scale : Float
     }
 
 type Action
@@ -87,10 +89,9 @@ update action model =
             , bubbles = newBubbles
             }
         Scale scaleStr ->
-            let
-                s = Debug.log "scale" scaleStr
-            in
-                model
+            case String.toFloat (Debug.log "scale" scaleStr) of
+                Ok scale -> { model | scale = scale }
+                Err err -> model
 
 -- Introduce new tags to the model
 
@@ -175,6 +176,7 @@ viewWithDimensions context (wdth, hght) model =
         [ id "world"
         , width (wdth |> toString)
         , height (hght |> toString)
+        , SVGA.viewBox (viewBox (wdth, hght) model.scale |> viewBoxToString)
         ]
         (MB.view (forwardTo context Direct) model.bubbles)
 

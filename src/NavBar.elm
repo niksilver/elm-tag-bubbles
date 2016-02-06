@@ -9,8 +9,8 @@ import Html.Attributes as Attrs exposing (style, type')
 import Html.Events exposing (onClick, on, targetValue)
 
 
-view : Context World.Action -> Html
-view context =
+view : Context World.Action -> Float -> Html
+view context scale =
     let
         scaleMessage : String -> Signal.Message
         scaleMessage e =
@@ -37,7 +37,8 @@ view context =
         , input
           [ type' "range"
           , Attrs.min "0.2"
-          , Attrs.max "4.0"
+          , Attrs.max "2.5"
+          , Attrs.value (toString scale)
           , Attrs.step "0.01"
           -- Need both onChange and onInput according to
           -- stackoverflow.com/questions/18544890

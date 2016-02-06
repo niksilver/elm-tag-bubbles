@@ -111,12 +111,13 @@ view : Signal.Address Action -> Model -> Html
 view address model =
     let
         context = Context.create (Signal.forwardTo address Direct)
+        world = model.world
     in
         div [ class "column" ]
-        [ NavBar.view context
+        [ NavBar.view context world.scale
         , div [ class "row" ]
           [ div [ class "sideBar" ] []
-          , World.view context model.world
+          , World.view context world
           , div [ class "sideBar" ] []
           ]
         , div [] [ text (model.status) ]

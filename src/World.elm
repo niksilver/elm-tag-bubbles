@@ -1,7 +1,8 @@
 module World
     ( Model
     , Action (Tick, NewTags, Recentre, Resize, Scale)
-    , size
+    , ViewBox
+    , size, viewBox
     , update, view
     ) where
 
@@ -40,6 +41,12 @@ type Action
     | Recentre
     | Resize (Int, Int)
     | Scale String
+
+type alias ViewBox
+    = { minX : Float
+      , minY : Float
+      , width : Float
+      , height : Float }
 
 update : Action -> Model -> Model
 update action model =
@@ -127,6 +134,20 @@ size (winWidth, winHeight) =
         height = winHeight - Constants.navHeight - Constants.statusBarHeight
     in
         (width, height)
+
+-- Calculating values for an svg view box
+
+viewBox : (Int, Int) -> Float -> ViewBox
+viewBox dims scale =
+    let
+        winWidth = fst dims |> toFloat
+        winHeight = snd dims |> toFloat
+        minX = 0.5 * (winWidth - winWidth / scale)
+        minY = 0.5 * (winHeight - winHeight / scale)
+        width = winWidth / scale
+        height = winHeight / scale
+    in
+        ViewBox minX minY width height
 
 -- The view
 -- The world might not yet have got its dimensions, so we have two cases

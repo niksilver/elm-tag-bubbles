@@ -9,6 +9,7 @@ all : Test
 all =
     suite "WorldTest"
     [ sizeTest
+    , viewBoxTest
     ]
 
 sizeTest : Test
@@ -29,5 +30,69 @@ sizeTest =
       assertEqual
         (100, 800 - navHeight - statusBarHeight)
         (size (100, 800))
+
+    ]
+
+viewBoxTest : Test
+viewBoxTest =
+    suite "viewBoxTest"
+
+    -- Testing minX...
+
+    [ test "With a scale of 1, should give 0 for minX" <|
+      assertEqual
+        0
+        (viewBox (201, 101) 1 |> .minX)
+
+    , test "With a scale of 2, minX should be width/4" <|
+      assertEqual
+        50.25
+        (viewBox (201, 101) 2 |> .minX)
+
+    , test "With a scale of 3, minX should be width/3" <|
+      assertEqual
+        201
+        (viewBox (603, 101) 3 |> .minX)
+
+    -- Testing minY...
+
+    , test "With a scale of 1, minY should be 0" <|
+      assertEqual
+        0
+        (viewBox (201, 101) 1 |> .minY)
+
+    , test "With a scale of 2, minY should be height/4" <|
+      assertEqual
+        22
+        (viewBox (201, 88) 2 |> .minY)
+
+    , test "With a scale of 3, minY should be height/3" <|
+      assertEqual
+        33
+        (viewBox (201, 99) 3 |> .minY)
+
+    -- Testing width...
+
+    , test "With a scale of 1, width should be original width" <|
+      assertEqual
+        201
+        (viewBox (201, 101) 1 |> .width)
+
+    , test "With a scale of 2, width should be half original width" <|
+      assertEqual
+        100.5
+        (viewBox (201, 88) 2 |> .width)
+
+    -- Testing height...
+
+    , test "With a scale of 1, height should be original height" <|
+      assertEqual
+        101
+        (viewBox (201, 101) 1 |> .height)
+
+    , test "With a scale of 2, height should be half original height" <|
+      assertEqual
+        44
+        (viewBox (201, 88) 2 |> .height)
 
     ]

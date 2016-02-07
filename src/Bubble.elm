@@ -250,6 +250,7 @@ view context model =
     let
         workaroundForChromeTextClick =
             Html.Events.onClick context.click model.id
+        onClickAttr = onClick (message context.click model.id)
         textDiv =
             Html.div
             [ Html.Attributes.style
@@ -269,6 +270,8 @@ view context model =
             , Svg.Attributes.y (toString (model.y - model.size * 0.40))
             , Svg.Attributes.width  (toString (model.size * 2 * 0.85))
             , Svg.Attributes.height (toString (model.size * 2 * 0.40))
+            -- Required here as a foreign object doesn't pick up the SVG event
+            , onClickAttr
             ]
         baseCircleAttrs =
             [ cx (toString model.x)
@@ -282,7 +285,7 @@ view context model =
             , cy (toString model.y)
             , r (toString model.size)
             , opacity "0"
-            , onClick (message context.click model.id)
+            , onClickAttr
             ]
     in
         g []

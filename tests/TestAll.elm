@@ -1,11 +1,12 @@
 module TestAll where
 
-import TagFetcherTest exposing (all)
-import PairCounterTest exposing (all)
-import SpringsTest exposing (all)
-import SizesTest exposing (all)
-import MultiBubblesTest exposing (all)
-import WorldTest exposing (all)
+import TagFetcherTest
+import PairCounterTest
+import SpringsTest
+import SizesTest
+import MultiBubblesTest
+import WorldTest
+import LabelTest
 
 import Graphics.Element exposing (Element)
 import ElmTest exposing (elementRunner, suite)
@@ -21,5 +22,6 @@ main =
             , SizesTest.all
             , MultiBubblesTest.all
             , WorldTest.all
+            , LabelTest.all
             ]
         )

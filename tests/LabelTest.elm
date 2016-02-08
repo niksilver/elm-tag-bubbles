@@ -86,5 +86,15 @@ toPartsTest =
       [ Block "Cat-", Block "five" ]
       (toParts "Cat-five")
 
+    , test "'Cat--five' should give Cat-/-/five" <|
+      assertEqual
+      [ Block "Cat-", Block "-", Block "five" ]
+      (toParts "Cat--five")
+
+    , test "'-five' should give -/five" <|
+      assertEqual
+      [ Block "-", Block "five" ]
+      (toParts "-five")
+
     ]
 

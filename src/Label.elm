@@ -98,11 +98,26 @@ consPart : PartChar -> Part -> List Part -> List Part
 consPart chrPart headPart tailParts =
     case (chrPart, headPart) of
         (BlockChar chr, Block head) ->
-            (cons chr head |> Block) :: tailParts
+            consBlockToBlock chr head tailParts
         (WhitespaceChar chr, Block head) ->
             (toPartString chrPart) :: headPart :: tailParts
         (BlockChar chr, Whitespace head) ->
             (toPartString chrPart) :: headPart :: tailParts
         (WhitespaceChar chr, Whitespace head) ->
             (cons chr head |> Whitespace) :: tailParts
+
+-- Add a char (from a Block) onto a string (from a Block)
+-- and put them onto the front of a List Part.
+-- Ordinarily that's trivial, but if the string has just
+-- had a hyphen added to it then we need to create a new block
+-- for the char.
+
+consBlockToBlock : Char -> String -> List Part -> List Part
+consBlockToBlock chr str parts =
+    case uncons str of
+        Just ('-', rest) ->
+            Block (fromChar chr) :: Block str :: parts
+        _ ->
+            (cons chr str |> Block) :: parts
+
 

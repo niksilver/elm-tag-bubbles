@@ -81,5 +81,10 @@ toPartsTest =
       [ Block "Cat", Whitespace "\r", Block "five" ]
       (toParts "Cat\rfive")
 
+    , test "'Cat-five' should give Cat-/five" <|
+      assertEqual
+      [ Block "Cat-", Block "five" ]
+      (toParts "Cat-five")
+
     ]
 

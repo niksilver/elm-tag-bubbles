@@ -23,6 +23,20 @@ pixelsToChars px =
 toParts : String -> List Part
 toParts text =
     toParts' text []
+        |> doubleReverse
+
+doubleReverse : List Part -> List Part
+doubleReverse parts =
+    List.reverse parts
+        |> List.map reversePart
+
+reversePart : Part -> Part
+reversePart part =
+    case part of
+        Block text ->
+            String.reverse text |> Block
+        Whitespace text ->
+            String.reverse text |> Whitespace
 
 toParts' : String -> List Part -> List Part
 toParts' rest accumChars =

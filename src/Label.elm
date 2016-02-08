@@ -69,10 +69,16 @@ addChar next accumChars =
 
 charToPart : Char -> PartChar
 charToPart chr =
-    if (chr == ' ') then
+    if (isWhitespace chr) then
         WhitespaceChar chr
     else
         BlockChar chr
+
+-- Is a character whitespace?
+
+isWhitespace : Char -> Bool
+isWhitespace chr =
+    (chr == ' ') || (chr == '\t')
 
 -- Get a Part (for a string) from a PartChar
 

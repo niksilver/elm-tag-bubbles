@@ -7,8 +7,8 @@ import ElmTest exposing (..)
 all : Test
 all =
     suite "LabelTest"
-    [
-        pixelsToCharsTest
+    [ pixelsToCharsTest
+    , toPartsTest
     ]
 
 pixelsToCharsTest : Test
@@ -32,3 +32,33 @@ pixelsToCharsTest =
 
     ]
 
+toPartsTest : Test
+toPartsTest =
+    suite "toPartsTest"
+
+    [ test "'C' should give C" <|
+      assertEqual
+      [ Block "C" ]
+      (toParts "C")
+
+    , test "'Cat' should give Cat" <|
+      assertEqual
+      [ Block "Cat" ]
+      (toParts "Cat")
+
+    , test "'Cat ' should give Cat/whitespace" <|
+      assertEqual
+      [ Block "Cat", Whitespace " " ]
+      (toParts "Cat ")
+
+    , test "'Cat five' should give Cat/whitespace/five" <|
+      assertEqual
+      [ Block "Cat", Whitespace " ", Block "five" ]
+      (toParts "Cat five")
+
+    , test "'Cat (dbl wspace) five' should give Cat/double-whitespace/five" <|
+      assertEqual
+      [ Block "Cat", Whitespace "  ", Block "five" ]
+      (toParts "Cat  five")
+
+    ]

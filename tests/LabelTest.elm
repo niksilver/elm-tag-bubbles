@@ -71,5 +71,15 @@ toPartsTest =
       [ Block "Cat", Whitespace "\t", Block "five" ]
       (toParts "Cat\tfive")
 
+    , test "'Cat (newline) five' should give Cat/whitespace/five" <|
+      assertEqual
+      [ Block "Cat", Whitespace "\n", Block "five" ]
+      (toParts "Cat\nfive")
+
+    , test "'Cat (return) five' should give Cat/whitespace/five" <|
+      assertEqual
+      [ Block "Cat", Whitespace "\r", Block "five" ]
+      (toParts "Cat\rfive")
+
     ]
 

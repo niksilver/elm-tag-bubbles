@@ -78,7 +78,10 @@ charToPart chr =
 
 isWhitespace : Char -> Bool
 isWhitespace chr =
-    (chr == ' ') || (chr == '\t')
+    (chr == ' ')
+    || (chr == '\t')
+    || (chr == '\n')
+    || (chr == '\r')
 
 -- Get a Part (for a string) from a PartChar
 

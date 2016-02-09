@@ -11,7 +11,6 @@ all =
     , splitTest1
     , splitTest2
     , splitTest3
-    , toPartsTest
     ]
 
 pixelsToCharsTest : Test
@@ -152,72 +151,6 @@ splitTest3 =
       assertEqual
       (Halves ("Abcde", "gh"))
       (split "Abcde\tgh")
-
-    ]
-
-toPartsTest : Test
-toPartsTest =
-    suite "toPartsTest"
-
-    [ test "'C' should give C" <|
-      assertEqual
-      [ Block "C" ]
-      (toParts "C")
-
-    , test "'Cat' should give Cat" <|
-      assertEqual
-      [ Block "Cat" ]
-      (toParts "Cat")
-
-    , test "'Cat ' should give Cat/whitespace" <|
-      assertEqual
-      [ Block "Cat", Whitespace " " ]
-      (toParts "Cat ")
-
-    , test "'Cat five' should give Cat/whitespace/five" <|
-      assertEqual
-      [ Block "Cat", Whitespace " ", Block "five" ]
-      (toParts "Cat five")
-
-    , test "'Cat (dbl wspace) five' should give Cat/double-whitespace/five" <|
-      assertEqual
-      [ Block "Cat", Whitespace "  ", Block "five" ]
-      (toParts "Cat  five")
-
-    , test "' abc ' should give whitespace/abc/whitespace" <|
-      assertEqual
-      [ Whitespace " ", Block "abc", Whitespace " " ]
-      (toParts " abc ")
-
-    , test "'Cat (tab) five' should give Cat/whitespace/five" <|
-      assertEqual
-      [ Block "Cat", Whitespace "\t", Block "five" ]
-      (toParts "Cat\tfive")
-
-    , test "'Cat (newline) five' should give Cat/whitespace/five" <|
-      assertEqual
-      [ Block "Cat", Whitespace "\n", Block "five" ]
-      (toParts "Cat\nfive")
-
-    , test "'Cat (return) five' should give Cat/whitespace/five" <|
-      assertEqual
-      [ Block "Cat", Whitespace "\r", Block "five" ]
-      (toParts "Cat\rfive")
-
-    , test "'Cat-five' should give Cat-/five" <|
-      assertEqual
-      [ Block "Cat-", Block "five" ]
-      (toParts "Cat-five")
-
-    , test "'Cat--five' should give Cat-/-/five" <|
-      assertEqual
-      [ Block "Cat-", Block "-", Block "five" ]
-      (toParts "Cat--five")
-
-    , test "'-five' should give -/five" <|
-      assertEqual
-      [ Block "-", Block "five" ]
-      (toParts "-five")
 
     ]
 

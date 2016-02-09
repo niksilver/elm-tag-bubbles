@@ -36,12 +36,20 @@ pixelsToCharsTest =
 half1 : Split -> String
 half1 split =
     case split of
-        Halves (a, b) -> a
+        Halves (a, _) -> a
         Whole _ -> "Error - got a whole looking for half1"
+
+half2 : Split -> String
+half2 split =
+    case split of
+        Halves (_, b) -> b
+        Whole _ -> "Error - got a whole looking for half2"
 
 splitTest : Test
 splitTest =
     suite "splitTest"
+
+    -- Testing the left half of a split
 
     [ test "'Abc-efgh' should give split Abc-/*" <|
       assertEqual
@@ -77,6 +85,40 @@ splitTest =
       assertEqual
       "Ab"
       (split "Ab\t\tefgh" |> half1)
+
+    -- Testing the right half of a split if we could split in the first half
+
+    , test "'Abc-efgh' should give split */efgh" <|
+      assertEqual
+      "efgh"
+      (split "Abc-efgh" |> half2)
+
+    , test "'Ab-defgh' should give split */defgh" <|
+      assertEqual
+      "defgh"
+      (split "Ab-defgh" |> half2)
+
+    , test "'Ab defgh' should give split */defgh" <|
+      assertEqual
+      "defgh"
+      (split "Ab defgh" |> half2)
+
+    , test "'Ab(spc)(spc)(spc)fgh' should give split */fgh" <|
+      assertEqual
+      "fgh"
+      (split "Ab   fgh" |> half2)
+
+    -- Testing both halves of a split if we couldn't split in the first half
+
+    , test "'Abcdefgh' should give split ''/Abcdefgh" <|
+      assertEqual
+      (Whole "Abcdefgh")
+      (split "Abcdefgh")
+
+    , test "'Abcd-fgh' should give split Abcd-/fgh" <|
+      assertEqual
+      (Halves ("Abcd-", "fgh"))
+      (split "Abcd-fgh")
 
     ]
 

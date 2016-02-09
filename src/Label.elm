@@ -4,7 +4,7 @@ module Label
     , Part(Block, Whitespace), toParts
     ) where
 
-import String exposing (cons, uncons, fromChar, left, length, right, dropRight, trimRight)
+import String exposing (cons, uncons, fromChar, left, length, right, dropRight, trimRight, dropLeft, trimLeft)
 
 -- Splitting a string into halves (if possible)
 
@@ -31,8 +31,14 @@ split text =
         halfIdx = length text // 2
         front = left halfIdx text
         half1 = backSplitFrom front
+        remainder = dropLeft (length half1) text
+        half2 = trimLeft remainder
     in
-        Halves (half1, "oops")
+        if (half1 /= "") then
+            Halves (half1, half2)
+        else
+            splitForward text
+                |> toType
 
 -- Work backwards from the end of a string to find where to split it
 
@@ -50,6 +56,38 @@ backSplitFrom text =
             text
         else
             dropRight 1 text |> backSplitFrom
+
+-- Split the text working forward from the middle
+
+splitForward : String -> (String, String)
+splitForward text =
+    let
+        halfIdx = length text // 2
+        back = dropLeft halfIdx text
+        half2 = frontSplitFrom back
+        half1 = dropRight (length half2) text
+    in
+        (half1, half2)
+
+-- Cut off the front of a string, working forward from the start
+
+frontSplitFrom : String -> String
+frontSplitFrom text =
+    if (text == "") then
+        ""
+    else if (left 1 text == "-") then
+        dropLeft 1 text
+    else
+        dropLeft 1 text |> frontSplitFrom
+
+-- Turn a pair representing a split into a type
+
+toType : (String, String) -> Split
+toType (half1, half2) =
+    if (half2 == "") then
+        Whole half1
+    else
+        Halves (half1, half2)
 
 ----------------------------------------------------------
 

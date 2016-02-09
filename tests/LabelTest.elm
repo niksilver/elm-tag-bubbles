@@ -48,6 +48,11 @@ splitTest =
       "Abc-"
       (split "Abc-efgh" |> half1)
 
+    , test "'Ab-defg' should give split Ab-/*" <|
+      assertEqual
+      "Ab-"
+      (split "Ab-defg" |> half1)
+
     , test "'Ab-defgh' should give split Ab-/*" <|
       assertEqual
       "Ab-"

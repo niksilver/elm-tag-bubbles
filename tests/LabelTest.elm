@@ -120,6 +120,31 @@ splitTest =
       (Halves ("Abcd-", "fgh"))
       (split "Abcd-fgh")
 
+    , test "'Abcde-gh' should give split Abcde-/gh" <|
+      assertEqual
+      (Halves ("Abcde-", "gh"))
+      (split "Abcde-gh")
+
+    , test "'Abcd fgh' should give split Abcd/fgh" <|
+      assertEqual
+      (Halves ("Abcd", "fgh"))
+      (split "Abcd fgh")
+
+    , test "'Abcde gh' should give split Abcde/gh" <|
+      assertEqual
+      (Halves ("Abcde", "gh"))
+      (split "Abcde gh")
+
+    , test "'Abcd(tab)fgh' should give split Abcd/fgh" <|
+      assertEqual
+      (Halves ("Abcd", "fgh"))
+      (split "Abcd\tfgh")
+
+    , test "'Abcde(tab)gh' should give split Abcde/gh" <|
+      assertEqual
+      (Halves ("Abcde", "gh"))
+      (split "Abcde\tgh")
+
     ]
 
 toPartsTest : Test

@@ -65,7 +65,7 @@ splitForward text =
         halfIdx = length text // 2
         back = dropLeft halfIdx text
         half2 = frontSplitFrom back
-        half1 = dropRight (length half2) text
+        half1 = dropRight (length half2) text |> trimRight
     in
         (half1, half2)
 
@@ -73,12 +73,18 @@ splitForward text =
 
 frontSplitFrom : String -> String
 frontSplitFrom text =
-    if (text == "") then
-        ""
-    else if (left 1 text == "-") then
-        dropLeft 1 text
-    else
-        dropLeft 1 text |> frontSplitFrom
+    let
+        trimmedLeft = trimLeft text
+        isTrimmedLeft = (length trimmedLeft < length text)
+    in
+        if (text == "") then
+            ""
+        else if (left 1 text == "-") then
+            dropLeft 1 text
+        else if (isTrimmedLeft) then
+            trimmedLeft
+        else
+            dropLeft 1 text |> frontSplitFrom
 
 -- Turn a pair representing a split into a type
 

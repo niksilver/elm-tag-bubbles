@@ -8,7 +8,9 @@ all : Test
 all =
     suite "LabelTest"
     [ pixelsToCharsTest
-    , splitTest
+    , splitTest1
+    , splitTest2
+    , splitTest3
     , toPartsTest
     ]
 
@@ -45,11 +47,9 @@ half2 split =
         Halves (_, b) -> b
         Whole _ -> "Error - got a whole looking for half2"
 
-splitTest : Test
-splitTest =
-    suite "splitTest"
-
-    -- Testing the left half of a split
+splitTest1 : Test
+splitTest1 =
+    suite "splitTest - left half of a split"
 
     [ test "'Abc-efgh' should give split Abc-/*" <|
       assertEqual
@@ -86,9 +86,13 @@ splitTest =
       "Ab"
       (split "Ab\t\tefgh" |> half1)
 
-    -- Testing the right half of a split if we could split in the first half
+    ]
 
-    , test "'Abc-efgh' should give split */efgh" <|
+splitTest2 : Test
+splitTest2 =
+    suite "splitTest - right half of a split if we could split in the first half"
+
+    [ test "'Abc-efgh' should give split */efgh" <|
       assertEqual
       "efgh"
       (split "Abc-efgh" |> half2)
@@ -108,9 +112,13 @@ splitTest =
       "fgh"
       (split "Ab   fgh" |> half2)
 
-    -- Testing both halves of a split if we couldn't split in the first half
+    ]
 
-    , test "'Abcdefgh' should give split ''/Abcdefgh" <|
+splitTest3 : Test
+splitTest3 =
+    suite "splitTest - Both halves of a split if we couldn't split in the first half"
+
+    [ test "'Abcdefgh' should give split ''/Abcdefgh" <|
       assertEqual
       (Whole "Abcdefgh")
       (split "Abcdefgh")

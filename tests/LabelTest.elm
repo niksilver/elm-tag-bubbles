@@ -8,6 +8,7 @@ all : Test
 all =
     suite "LabelTest"
     [ pixelsToCharsTest
+    , splitTest
     , toPartsTest
     ]
 
@@ -29,6 +30,48 @@ pixelsToCharsTest =
       assertEqual
       9
       (pixelsToChars 80)
+
+    ]
+
+half1 : Split -> String
+half1 split =
+    case split of
+        Halves (a, b) -> a
+        Whole _ -> "Error - got a whole looking for half1"
+
+splitTest : Test
+splitTest =
+    suite "splitTest"
+
+    [ test "'Abc-efgh' should give split Abc-/*" <|
+      assertEqual
+      "Abc-"
+      (split "Abc-efgh" |> half1)
+
+    , test "'Ab-defgh' should give split Ab-/*" <|
+      assertEqual
+      "Ab-"
+      (split "Ab-defgh" |> half1)
+
+    , test "'A-cdefgh' should give split A-/*" <|
+      assertEqual
+      "A-"
+      (split "A-cdefgh" |> half1)
+
+    , test "'Abc efgh' should give split Abc/*" <|
+      assertEqual
+      "Abc"
+      (split "Abc efgh" |> half1)
+
+    , test "'Abc(tab)efgh' should give split Abc/*" <|
+      assertEqual
+      "Abc"
+      (split "Abc\tefgh" |> half1)
+
+    , test "'Ab(tab)(tab)efgh' should give split Ab/*" <|
+      assertEqual
+      "Ab"
+      (split "Ab\t\tefgh" |> half1)
 
     ]
 

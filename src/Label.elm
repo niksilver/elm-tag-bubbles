@@ -1,9 +1,14 @@
 module Label
     ( pixelsToChars
+    , Split(Halves, Whole), split
     , Part(Block, Whitespace), toParts
     ) where
 
-import String exposing (cons, uncons, fromChar)
+import String exposing (cons, uncons, fromChar, left, length, right, dropRight, trimRight)
+
+-- Splitting a string into halves (if possible)
+
+type Split = Halves (String, String) | Whole String
 
 -- Breaking text into parts suitable for line breaks
 
@@ -17,6 +22,36 @@ pixelsToChars : Float -> Int
 pixelsToChars px =
     px / 16 * 1.8  -- 1em = 16px, and the average character is narrower then 1em
         |> floor
+
+-- Split a string (if possible)
+
+split : String -> Split
+split text =
+    let
+        halfIdx = length text // 2
+        front = left halfIdx text
+        half1 = backSplitFrom front
+    in
+        Halves (half1, "oops")
+
+-- Work backwards from the end of a string to find where to split it
+
+backSplitFrom : String -> String
+backSplitFrom text =
+    let
+        trimmedRight = trimRight text
+        isTrimmedRight = (length trimmedRight < length text)
+    in
+        if (isTrimmedRight) then
+            trimmedRight
+        else if (text == "") then
+            ""
+        else if (right 1 text == "-") then
+            text
+        else
+            dropRight 1 text |> backSplitFrom
+
+----------------------------------------------------------
 
 -- Break some text into blocks which may wrap
 

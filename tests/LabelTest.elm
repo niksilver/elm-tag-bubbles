@@ -11,6 +11,7 @@ all =
     , splitTest1
     , splitTest2
     , splitTest3
+    , splitTest4
     ]
 
 pixelsToCharsTest : Test
@@ -151,6 +152,32 @@ splitTest3 =
       assertEqual
       (Halves ("Abcde", "gh"))
       (split "Abcde\tgh")
+
+    ]
+
+splitTest4 : Test
+splitTest4 =
+    suite "splitTest4 - split includes dashes and spaces and other oddities"
+
+    [ test "'A - efghij' should split as A -/efghij" <|
+      assertEqual
+      (Halves ("A -", "efghij"))
+      (split "A - efghij")
+
+    , test "'Abcdef - j' should split as Abcdef/- j" <|
+      assertEqual
+      (Halves ("Abcdef", "- j"))
+      (split "Abcdef - j")
+
+    , test "'----' (four dashes) should split as dashdash/dashdash" <|
+      assertEqual
+      (Halves ("--", "--"))
+      (split "----")
+
+    , test "Four spaces should split as whole ''" <|
+      assertEqual
+      (Whole "")
+      (split "")
 
     ]
 

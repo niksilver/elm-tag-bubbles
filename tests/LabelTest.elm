@@ -12,7 +12,7 @@ all =
     , splitTest2
     , splitTest3
     , splitTest4
-    , labelLengthTest
+    , leastLengthTest
     ]
 
 pixelsToCharsTest : Test
@@ -182,24 +182,24 @@ splitTest4 =
 
     ]
 
-labelLengthTest : Test
-labelLengthTest =
-    suite "labelLengthTest"
+leastLengthTest : Test
+leastLengthTest =
+    suite "leastLengthTest"
 
     [ test "Long+short word label should have length of long word" <|
       assertEqual
       6
-      (labelLength "Houses pot")
+      (leastLength "Houses pot")
 
     , test "Short+long word label should have length of long word" <|
       assertEqual
       8
-      (labelLength "Small fraction")
+      (leastLength "Small fraction")
 
     , test "Single word label should have length of that word" <|
       assertEqual
       9
-      (labelLength "Operation")
+      (leastLength "Operation")
 
     ]
 

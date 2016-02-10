@@ -17,8 +17,9 @@ import Constants exposing
     )
 import Context exposing (Context)
 import Colours exposing (pickBaseColour, pickTextColour)
-import Time exposing (Time)
+import Label
 
+import Time exposing (Time)
 import Maybe exposing (withDefault)
 import Svg exposing 
     ( Svg
@@ -251,6 +252,11 @@ view context model =
         workaroundForChromeTextClick =
             Html.Events.onClick context.click model.id
         onClickAttr = onClick (message context.click model.id)
+        labelHalfWidth = model.size * 0.85
+        labelHalfHeight = model.size * 0.40
+        labelCharWidth = 2 * labelHalfWidth |> Label.pixelsToChars
+        fontPercent = Label.fontScaling model.label labelCharWidth
+            |> Label.toPercent
         textDiv =
             Html.div
             [ Html.Attributes.style
@@ -260,16 +266,17 @@ view context model =
                 , ("text-align", "center")
                 , ("color", (pickTextColour model.label))
                 , ("font-family", "Arial, Helvetica, sans-serif")
+                , ("font-size", fontPercent)
                 , ("opacity", (model.animation.opacity |> toString))
                 ]
             , workaroundForChromeTextClick
             ]
             [ text model.label ]
         foreignObjectAttrs =
-            [ Svg.Attributes.x (toString (model.x - model.size * 0.85))
-            , Svg.Attributes.y (toString (model.y - model.size * 0.40))
-            , Svg.Attributes.width  (toString (model.size * 2 * 0.85))
-            , Svg.Attributes.height (toString (model.size * 2 * 0.40))
+            [ Svg.Attributes.x (toString (model.x - labelHalfWidth))
+            , Svg.Attributes.y (toString (model.y - labelHalfHeight))
+            , Svg.Attributes.width  (toString (2 * labelHalfWidth))
+            , Svg.Attributes.height (toString (2 * labelHalfHeight))
             -- Required here as a foreign object doesn't pick up the SVG event
             , onClickAttr
             ]

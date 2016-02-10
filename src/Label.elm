@@ -1,7 +1,7 @@
 module Label
     ( pixelsToChars
     , Split(Halves, Whole), split
-    , leastLength
+    , leastLength, fontScaling
     ) where
 
 import String exposing
@@ -105,4 +105,19 @@ leastLength text =
     case split text of
         Halves (a, b) -> max (length a) (length b)
         Whole a -> length a
+
+-- How much should we scale a font for a label of given width?
+
+fontScaling : String -> Int -> Float
+fontScaling text width =
+    let
+        len = if (length text > width) then
+                leastLength text
+            else
+                length text
+    in
+        if (len <= width) then
+            1.0
+        else
+            (toFloat width / (len |> toFloat))
 

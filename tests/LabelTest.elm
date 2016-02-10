@@ -14,6 +14,7 @@ all =
     , splitTest4
     , leastLengthTest
     , fontScalingTest
+    , toPercentTest
     ]
 
 pixelsToCharsTest : Test
@@ -227,5 +228,21 @@ fontScalingTest =
       assertEqual
       1.0
       (fontScaling "Business money" 10)
+
+    ]
+
+toPercentTest : Test
+toPercentTest =
+    suite "toPercentText"
+
+    [ test "1.0 -> 100%" <|
+      assertEqual
+      "100%"
+      (toPercent 1.0)
+
+    , test "0.8 -> 80%" <|
+      assertEqual
+      "80%"
+      (toPercent 0.8)
 
     ]

@@ -1,7 +1,7 @@
 module Label
     ( pixelsToChars
     , Split(Halves, Whole), split
-    , leastLength, fontScaling
+    , leastLength, fontScaling, toPercent
     ) where
 
 import String exposing
@@ -120,4 +120,10 @@ fontScaling text width =
             1.0
         else
             (toFloat width / (len |> toFloat))
+
+-- Convert a float to a percentage string
+
+toPercent : Float -> String
+toPercent k =
+    (k * 100 |> toString) ++ "%"
 

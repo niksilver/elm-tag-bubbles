@@ -1,6 +1,7 @@
 module Label
     ( pixelsToChars
     , Split(Halves, Whole), split
+    , labelLength
     ) where
 
 import String exposing
@@ -96,4 +97,12 @@ toType (half1, half2) =
         Whole half1
     else
         Halves (half1, half2)
+
+-- Length of a label (in characters) given it may be split
+
+labelLength : String -> Int
+labelLength text =
+    case split text of
+        Halves (a, b) -> max (length a) (length b)
+        Whole a -> length a
 

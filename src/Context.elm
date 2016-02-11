@@ -2,13 +2,14 @@ module Context
     ( Context
     , CountedClick (NoClick, SingleClick, DoubleClick)
     , mappedCountedClicks
-    , create, forwardTo
+    , create, forwardTo, forwardStatus
     ) where
 
 -- Mechanism for capturing not only messages to a mailbox address,
 -- but also clicks (with an identifier) which might become double clicks.
 
 import Constants exposing (Tag)
+import Status exposing (Status)
 
 import Signal exposing (Address, foldp)
 import Time exposing (Time)
@@ -21,7 +22,8 @@ type CountedClick = NoClick | SingleClick Tag | DoubleClick Tag
 
 type alias Context a =
     { click : Address Tag
-    , address : Signal.Address a
+    , status : Address Status.Action
+    , address :Address a
     }
 
 -- A mailbox that collects id'd clicks, which might turn into double clicks.
@@ -73,12 +75,18 @@ mappedCountedClicks : (CountedClick -> a) -> Signal a
 mappedCountedClicks f =
     Signal.map f countedClicks
 
+-- A mailbox for status updates
+
+statusBox : Signal.Mailbox Status.Action
+statusBox = Signal.mailbox (Status.NoOverlay)
+
 -- Create a `Context` for sending event data.
 -- The argument is the main address.
 
 create : Signal.Address a -> Context a
 create address =
     { click = clickBox.address
+    , status = statusBox.address
     , address = address
     }
 
@@ -88,5 +96,14 @@ forwardTo : Context b -> (a -> b) -> Context a
 forwardTo context fn =
     { context
     | address = Signal.forwardTo context.address fn
+    }
+
+-- Create a context in which the status actions are forwarded to
+-- the main address with a given mapping
+
+forwardStatus : (Status.Action -> b) -> Context b -> Context b
+forwardStatus fn context =
+    { context
+    | status = Signal.forwardTo context.address fn
     }
 

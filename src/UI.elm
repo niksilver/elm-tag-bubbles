@@ -14,7 +14,7 @@ import Context exposing
 import World
 import TagFetcher
 import NavBar
-import Status exposing (Status, Action(Main))
+import Status exposing (Status)
 
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)
@@ -35,6 +35,7 @@ type Action
         | Tick Time
         | NewTags TagsResult
         | Click CountedClick
+        | StatusAction Status.Action
         | NoOp
 
 -- A task to run a tag fetch... or maybe there's no task to run
@@ -83,14 +84,14 @@ update action model =
                 Ok data ->
                     ({ model
                      | world = World.update (World.NewTags data) model.world
-                     , status = (Status.update (Main "Done") model.status)
+                     , status = (Status.update (Status.Main "Done") model.status)
                      }
                      , Nothing
                     )
                 Err error ->
                     let
                         msg = "Error: " ++ (toString error)
-                        status = Status.update (Main msg) model.status
+                        status = Status.update (Status.Main msg) model.status
                     in
                         ({ model | status = status }
                          , Nothing
@@ -104,18 +105,24 @@ update action model =
                 DoubleClick tag ->
                     let
                         msg = "Fetching " ++ (tag.webTitle)
-                        status = Status.update (Main msg) model.status
+                        status = Status.update (Status.Main msg) model.status
                     in
                         ( { model | status = status }
                         , Just (TagFetcher.getTags tag.id)
                         )
+        StatusAction statAct ->
+            ( { model | status = Status.update statAct model.status }
+            , Nothing)
         NoOp ->
             (model, Nothing)
 
 view : Signal.Address Action -> Model -> Html
 view address model =
     let
-        context = Context.create (Signal.forwardTo address Direct)
+        context' =
+            Context.create address
+                |> Context.forwardStatus StatusAction
+        context = Context.forwardTo context' Direct
         world = model.world
     in
         div [ class "column" ]

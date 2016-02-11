@@ -18,6 +18,7 @@ import Constants exposing
 import Context exposing (Context)
 import Colours exposing (pickBaseColour, pickTextColour)
 import Label
+import Status exposing (Action(Overlay))
 
 import Time exposing (Time)
 import Maybe exposing (withDefault)
@@ -32,7 +33,7 @@ import Svg.Attributes exposing
 import Html
 import Html.Attributes
 import Html.Events
-import Svg.Events exposing (onClick)
+import Svg.Events exposing (onClick, onMouseOver)
 import Signal exposing (message)
 import Easing exposing (ease, linear, float)
 
@@ -253,6 +254,8 @@ view context model =
         workaroundForChromeTextClick =
             Html.Events.onClick context.click tag
         onClickAttr = onClick (message context.click tag)
+        onMouseOverAttr =
+            onMouseOver (message context.status (Overlay tag.webTitle))
         labelHalfWidth = model.size * 0.85
         labelHalfHeight = model.size * 0.40
         labelCharWidth = 2 * labelHalfWidth |> Label.pixelsToChars
@@ -294,6 +297,7 @@ view context model =
             , r (toString model.size)
             , opacity "0"
             , onClickAttr
+            , onMouseOverAttr
             ]
     in
         g []

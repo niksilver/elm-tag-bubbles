@@ -258,7 +258,7 @@ view context model =
         onMouseOverAttr =
             onMouseOver (message context.status (Overlay tag.webTitle))
         labelHalfWidth = model.size * 0.85
-        labelHalfHeight = model.size * 0.40
+        labelHalfHeight = model.size * 0.50
         labelCharWidth = 2 * labelHalfWidth |> Label.pixelsToChars
         fontPercent = Label.fontScaling model.label labelCharWidth
             |> Label.toPercent

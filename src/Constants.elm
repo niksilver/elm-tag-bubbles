@@ -1,8 +1,7 @@
 module Constants
     ( Id, Idable
     , Tag, Tags, TagsResult
-    , maxBubbles, bubbleLabelFontSize
-    , minBubbleSize, maxBubbleSize
+    , maxBubbles, minBubbleSize, maxBubbleSize
     , minSpringLength, maxSpringLength
     , maxBubbleOpacity, transitionDuration
     , springStrength, airDragFactor, minimumVelocity
@@ -27,9 +26,6 @@ type alias TagsResult = Result Http.Error (List Tags)
 
 maxBubbles : Int
 maxBubbles = 10
-
-bubbleLabelFontSize : String
-bubbleLabelFontSize = "25pt"
 
 minBubbleSize : Float
 minBubbleSize = 50.0

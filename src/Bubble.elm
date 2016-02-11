@@ -11,7 +11,6 @@ module Bubble
 
 import Constants exposing
     ( Tag
-    , bubbleLabelFontSize
     , maxBubbleOpacity
     , transitionDuration
     )

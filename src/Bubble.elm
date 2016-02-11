@@ -18,7 +18,7 @@ import Constants exposing
 import Context exposing (Context)
 import Colours exposing (pickBaseColour, pickTextColour)
 import Label
-import Status exposing (Action(Overlay))
+import Status exposing (Action(Overlay, NoOverlay))
 
 import Time exposing (Time)
 import Maybe exposing (withDefault)
@@ -33,7 +33,7 @@ import Svg.Attributes exposing
 import Html
 import Html.Attributes
 import Html.Events
-import Svg.Events exposing (onClick, onMouseOver)
+import Svg.Events exposing (onClick, onMouseOver, onMouseOut)
 import Signal exposing (message)
 import Easing exposing (ease, linear, float)
 
@@ -254,6 +254,8 @@ view context model =
         workaroundForChromeTextClick =
             Html.Events.onClick context.click tag
         onClickAttr = onClick (message context.click tag)
+        onMouseOutAttr =
+            onMouseOut (message context.status NoOverlay)
         onMouseOverAttr =
             onMouseOver (message context.status (Overlay tag.webTitle))
         labelHalfWidth = model.size * 0.85
@@ -281,8 +283,10 @@ view context model =
             , Svg.Attributes.y (toString (model.y - labelHalfHeight))
             , Svg.Attributes.width  (toString (2 * labelHalfWidth))
             , Svg.Attributes.height (toString (2 * labelHalfHeight))
-            -- Required here as a foreign object doesn't pick up the SVG event
+            -- Required here as a foreign object doesn't pick up the SVG events
             , onClickAttr
+            , onMouseOverAttr
+            , onMouseOutAttr
             ]
         baseCircleAttrs =
             [ cx (toString model.x)
@@ -298,6 +302,7 @@ view context model =
             , opacity "0"
             , onClickAttr
             , onMouseOverAttr
+            , onMouseOutAttr
             ]
     in
         g []

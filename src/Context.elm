@@ -8,44 +8,46 @@ module Context
 -- Mechanism for capturing not only messages to a mailbox address,
 -- but also clicks (with an identifier) which might become double clicks.
 
+import Constants exposing (Tag)
+
 import Signal exposing (Address, foldp)
 import Time exposing (Time)
 
--- A mouse click with a String identifier
+-- A mouse click with a Tag identifier
 
-type CountedClick = NoClick | SingleClick String | DoubleClick String
+type CountedClick = NoClick | SingleClick Tag | DoubleClick Tag
 
 -- Addresses for click identifiers and other messages
 
 type alias Context a =
-    { click : Address String
+    { click : Address Tag
     , address : Signal.Address a
     }
 
 -- A mailbox that collects id'd clicks, which might turn into double clicks.
 -- The clicks go like this:
--- address for Signal String
+-- address for Signal Tag
 --   mapping to ==>
--- Signal (Time, String)
+-- Signal (Time, Tag)
 --   forwarded to ==>
--- address for (Time, SingleClick/DoubleClick String)
+-- address for (Time, SingleClick/DoubleClick Tag)
 --   mapping to ==>
--- Signal SingleClick/DoubleClick String
+-- Signal SingleClick/DoubleClick Tag
 --   mapping to ==>
--- application-specific wrapping of SingleClick/DoubleClick String
+-- application-specific wrapping of SingleClick/DoubleClick Tag
 
-clickBox : Signal.Mailbox String
-clickBox = Signal.mailbox "n/a"
+clickBox : Signal.Mailbox Tag
+clickBox = Signal.mailbox (Tag "nullid" "No-op tag")
 
-timedId : Signal (Time, String)
+timedId : Signal (Time, Tag)
 timedId = Time.timestamp clickBox.signal
 
-toCountedClick : (Time, String) -> (Time, CountedClick) -> (Time, CountedClick)
-toCountedClick timedString timedClick =
+toCountedClick : (Time, Tag) -> (Time, CountedClick) -> (Time, CountedClick)
+toCountedClick timedTag timedClick =
     let
-        time1 = fst timedString
+        time1 = fst timedTag
         time2 = fst timedClick
-        tag1 = snd timedString
+        tag1 = snd timedTag
         click2 = snd timedClick
         quickClicks = (time1 - time2 < 200 * Time.millisecond)
     in

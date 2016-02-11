@@ -100,9 +100,9 @@ update action model =
                     ( model, Nothing )
                 DoubleClick tag ->
                     ( { model
-                      | status = "Fetching " ++ (tag)
+                      | status = "Fetching " ++ (tag.webTitle)
                       }
-                    , Just (TagFetcher.getTags tag)
+                    , Just (TagFetcher.getTags tag.id)
                     )
         NoOp ->
             (model, Nothing)

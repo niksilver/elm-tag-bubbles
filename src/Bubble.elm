@@ -249,9 +249,10 @@ updateResize model time =
 view : Context Action -> Model -> Svg
 view context model =
     let
+        tag = Tag model.id model.label
         workaroundForChromeTextClick =
-            Html.Events.onClick context.click model.id
-        onClickAttr = onClick (message context.click model.id)
+            Html.Events.onClick context.click tag
+        onClickAttr = onClick (message context.click tag)
         labelHalfWidth = model.size * 0.85
         labelHalfHeight = model.size * 0.40
         labelCharWidth = 2 * labelHalfWidth |> Label.pixelsToChars

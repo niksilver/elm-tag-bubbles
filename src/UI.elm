@@ -14,8 +14,9 @@ import Context exposing
 import World
 import TagFetcher
 import NavBar
+import Status exposing (Status, Action(Main))
 
-import Html exposing (Html, div, text)
+import Html exposing (Html, div)
 import Html.Attributes exposing (class)
 import Signal exposing (forwardTo)
 import Task exposing (Task)
@@ -25,7 +26,7 @@ import Window
 type alias Model =
     { dimensions : (Int, Int)
     , world : World.Model
-    , status : String
+    , status : Status
     }
 
 type Action
@@ -82,16 +83,18 @@ update action model =
                 Ok data ->
                     ({ model
                      | world = World.update (World.NewTags data) model.world
-                     , status = "Done"
+                     , status = (Status.update (Main "Done") model.status)
                      }
                      , Nothing
                     )
                 Err error ->
-                    ({ model
-                     | status = "Error: " ++ (toString error)
-                     }
-                     , Nothing
-                    )
+                    let
+                        msg = "Error: " ++ (toString error)
+                        status = Status.update (Main msg) model.status
+                    in
+                        ({ model | status = status }
+                         , Nothing
+                        )
         Click clicker ->
             case clicker of
                 NoClick ->
@@ -99,11 +102,13 @@ update action model =
                 SingleClick _ ->
                     ( model, Nothing )
                 DoubleClick tag ->
-                    ( { model
-                      | status = "Fetching " ++ (tag.webTitle)
-                      }
-                    , Just (TagFetcher.getTags tag.id)
-                    )
+                    let
+                        msg = "Fetching " ++ (tag.webTitle)
+                        status = Status.update (Main msg) model.status
+                    in
+                        ( { model | status = status }
+                        , Just (TagFetcher.getTags tag.id)
+                        )
         NoOp ->
             (model, Nothing)
 
@@ -120,6 +125,6 @@ view address model =
           , World.view context world
           , div [ class "sideBar" ] []
           ]
-        , div [] [ text (model.status) ]
+        , Status.view model.status
         ]
 

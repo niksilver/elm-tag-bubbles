@@ -11,6 +11,7 @@ import World
 import PairCounter exposing (emptyCounter, incPair)
 import Springs
 import Bubble
+import Status exposing (Status)
 
 import Dict exposing (Dict, empty, insert)
 import Task exposing (Task)
@@ -62,7 +63,7 @@ model =
         , dimensions = Nothing
         , scale = 1
         }
-    , status = "Welcome"
+    , status = Status Nothing "Welcome"
     }
 
 -- Initial task

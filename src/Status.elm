@@ -2,7 +2,11 @@ module Status
     ( Status
     , Action(Overlay, NoOverlay, Main), update
     , message
+    , view
     ) where
+
+import Html exposing (Html, div, text)
+
 
 type alias Status = { overlay : Maybe String, main : String }
 
@@ -25,4 +29,10 @@ update action status =
 message : Status -> String
 message status =
     Maybe.withDefault status.main status.overlay
+
+-- Render the status bar
+
+view : Status -> Html
+view status =
+    div [] [ message status |> text ]
 

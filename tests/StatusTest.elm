@@ -46,5 +46,10 @@ updateTest =
       (Status (Just "oy!") "replaced")
       (Status (Just "oy!") "Initial" |> update (Main "replaced"))
 
+    , test "Resetting the main message should change it & remove the overlay" <|
+      assertEqual
+      (Status Nothing "replaced")
+      (Status (Just "oy!") "Initial" |> update (Reset "replaced"))
+
     ]
 

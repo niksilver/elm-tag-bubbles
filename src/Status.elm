@@ -1,6 +1,6 @@
 module Status
     ( Status
-    , Action(Overlay, NoOverlay, Main), update
+    , Action(Overlay, NoOverlay, Main, Reset), update
     , message
     , view
     ) where
@@ -10,7 +10,11 @@ import Html exposing (Html, div, text)
 
 type alias Status = { overlay : Maybe String, main : String }
 
-type Action = Overlay String | NoOverlay | Main String
+type Action
+    = Overlay String
+    | NoOverlay
+    | Main String
+    | Reset String
 
 -- Update the status
 
@@ -23,6 +27,8 @@ update action status =
             { status | overlay = Nothing }
         Main msg ->
             { status | main = msg }
+        Reset msg ->
+            Status Nothing msg
 
 -- Get the right message from the status
 

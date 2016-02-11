@@ -105,7 +105,7 @@ update action model =
                 DoubleClick tag ->
                     let
                         msg = "Fetching " ++ (tag.webTitle)
-                        status = Status.update (Status.Main msg) model.status
+                        status = Status.update (Status.Reset msg) model.status
                     in
                         ( { model | status = status }
                         , Just (TagFetcher.getTags tag.id)

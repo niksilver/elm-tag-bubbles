@@ -84,7 +84,7 @@ update action model =
                 Ok data ->
                     ({ model
                      | world = World.update (World.NewTags data) model.world
-                     , status = (Status.update (Status.Main "Done") model.status)
+                     , status = Status.update (Status.Main "Ready") model.status
                      }
                      , Nothing
                     )

@@ -7,6 +7,7 @@ import SizesTest
 import MultiBubblesTest
 import WorldTest
 import LabelTest
+import StatusTest
 
 import Graphics.Element exposing (Element)
 import ElmTest exposing (elementRunner, suite)
@@ -23,5 +24,6 @@ main =
             , MultiBubblesTest.all
             , WorldTest.all
             , LabelTest.all
+            , StatusTest.all
             ]
         )

@@ -28,10 +28,10 @@ maxBubbles : Int
 maxBubbles = 10
 
 minBubbleSize : Float
-minBubbleSize = 50.0
+minBubbleSize = 40.0
 
 maxBubbleSize : Float
-maxBubbleSize = 150.0
+maxBubbleSize = 120.0
 
 maxBubbleOpacity : Float
 maxBubbleOpacity = 0.75
@@ -42,10 +42,10 @@ transitionDuration = Time.second
 -- Physics
 
 minSpringLength : Float
-minSpringLength = 150.0
+minSpringLength = 170.0
 
 maxSpringLength : Float
-maxSpringLength = 350.0
+maxSpringLength = 360.0
 
 springStrength : Float
 springStrength = 25.0

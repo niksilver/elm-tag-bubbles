@@ -21,19 +21,14 @@ pixelsToCharsTest : Test
 pixelsToCharsTest =
     suite "pixelsToCharsTest"
 
-    [ test "16 pixels should be 1 char (and a bit more, but it's rounded)" <|
+    [ test "32 pixels should be 4 chars from trying it out on the screen" <|
       assertEqual
-      1
-      (pixelsToChars 16)
-
-    , test "32 pixels should be 3 chars from measuring it on the screen" <|
-      assertEqual
-      3
+      4
       (pixelsToChars 32)
 
-    , test "80 pixels should be 9 chars, from measuring it on the screen" <|
+    , test "80 pixels should be 10 chars, from trying it out on the screen" <|
       assertEqual
-      9
+      10
       (pixelsToChars 80)
 
     ]

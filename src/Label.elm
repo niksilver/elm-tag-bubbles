@@ -23,7 +23,7 @@ type PartChar = BlockChar Char | WhitespaceChar Char
 
 pixelsToChars : Float -> Int
 pixelsToChars px =
-    px / 16 * 1.8  -- 1em = 16px, and the average character is narrower then 1em
+    px / 16 * 2  -- 1em = 16px, and the average character is narrower then 1em
         |> floor
 
 -- Split a string (if possible)

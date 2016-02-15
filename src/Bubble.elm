@@ -270,7 +270,6 @@ view context model =
                 , ("transform", "translateY(-50%)")
                 , ("text-align", "center")
                 , ("color", (pickTextColour model.label))
-                , ("font-family", "Arial, Helvetica, sans-serif")
                 , ("font-size", fontPercent)
                 , ("opacity", (model.animation.opacity |> toString))
                 ]

@@ -63,7 +63,7 @@ model =
         , dimensions = Nothing
         , scale = 1
         }
-    , status = Status Nothing "Ready"
+    , status = Status Nothing Nothing
     }
 
 -- Initial task

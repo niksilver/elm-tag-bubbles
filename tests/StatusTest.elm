@@ -7,49 +7,32 @@ import ElmTest exposing (..)
 all : Test
 all =
     suite "StatusTest"
-    [ messageTest
-    , updateTest
-    ]
-
-messageTest : Test
-messageTest =
-    suite "messageTest"
-
-    [ test "Status with no overlay message should show core message" <|
-      assertEqual
-      "Ready"
-      (Status Nothing "Ready" |> message)
-
-    , test "Status with an overlay message should show the overlay" <|
-      assertEqual
-      "Hold on"
-      (Status (Just "Hold on") "Ready" |> message)
-
+    [ updateTest
     ]
 
 updateTest : Test
 updateTest =
     suite "updateTest"
 
-    [ test "Updating with an overlay should add just the overlay" <|
+    [ test "Updating the rollover should add just the rollover" <|
       assertEqual
-      (Status (Just "over!") "Initial")
-      (Status Nothing "Initial" |> update (Overlay "over!"))
+      (Status (Just "over!") (Just "Initial"))
+      (Status Nothing (Just "Initial") |> update (Rollover "over!"))
 
-    , test "Cancelling the overlay should remove it" <|
+    , test "Cancelling the rollover should remove it" <|
       assertEqual
-      (Status Nothing "Initial")
-      (Status (Just "oy!") "Initial" |> update NoOverlay)
+      (Status Nothing (Just "Initial"))
+      (Status (Just "oy!") (Just "Initial") |> update NoRollover)
 
     , test "Updaing the main message should change just that" <|
       assertEqual
-      (Status (Just "oy!") "replaced")
-      (Status (Just "oy!") "Initial" |> update (Main "replaced"))
+      (Status (Just "oy!") (Just "replaced"))
+      (Status (Just "oy!") (Just "Initial") |> update (Main "replaced"))
 
-    , test "Resetting the main message should change it & remove the overlay" <|
+    , test "Cancelling the main message should change just it" <|
       assertEqual
-      (Status Nothing "replaced")
-      (Status (Just "oy!") "Initial" |> update (Reset "replaced"))
+      (Status (Just "oy!") Nothing)
+      (Status (Just "oy!") (Just "Initial") |> update NoMain)
 
     ]
 

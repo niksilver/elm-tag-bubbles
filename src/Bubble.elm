@@ -17,7 +17,7 @@ import Constants exposing
 import Context exposing (Context)
 import Colours exposing (pickBaseColour, pickTextColour)
 import Label
-import Status exposing (Action(Overlay, NoOverlay))
+import Status exposing (Action(Rollover, NoRollover))
 
 import Time exposing (Time)
 import Maybe exposing (withDefault)
@@ -254,9 +254,9 @@ view context model =
             Html.Events.onClick context.click tag
         onClickAttr = onClick (message context.click tag)
         onMouseOutAttr =
-            onMouseOut (message context.status NoOverlay)
+            onMouseOut (message context.status NoRollover)
         onMouseOverAttr =
-            onMouseOver (message context.status (Overlay tag.webTitle))
+            onMouseOver (message context.status (Rollover tag.webTitle))
         labelHalfWidth = model.size * 0.85
         labelHalfHeight = model.size * 0.50
         labelCharWidth = 2 * labelHalfWidth |> Label.pixelsToChars

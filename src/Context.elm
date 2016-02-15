@@ -78,7 +78,7 @@ mappedCountedClicks f =
 -- A mailbox for status updates
 
 statusBox : Signal.Mailbox Status.Action
-statusBox = Signal.mailbox (Status.NoOverlay)
+statusBox = Signal.mailbox Status.NoMain
 
 -- Create a `Context` for sending event data.
 -- The argument is the main address.

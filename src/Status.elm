@@ -1,44 +1,42 @@
 module Status
     ( Status
-    , Action(Overlay, NoOverlay, Main, Reset), update
-    , message
+    , Action(Rollover, NoRollover, Main, NoMain), update
     , view
     ) where
 
 import Html exposing (Html, div, text)
+import Maybe exposing (withDefault)
 
 
-type alias Status = { overlay : Maybe String, main : String }
+type alias Status = { rollover : Maybe String, main : Maybe String }
 
 type Action
-    = Overlay String
-    | NoOverlay
+    = Rollover String
+    | NoRollover
     | Main String
-    | Reset String
+    | NoMain
 
 -- Update the status
 
 update : Action -> Status -> Status
 update action status =
     case action of
-        Overlay msg ->
-            { status | overlay = Just msg }
-        NoOverlay ->
-            { status | overlay = Nothing }
+        Rollover msg ->
+            { status | rollover = Just msg }
+        NoRollover ->
+            { status | rollover = Nothing }
         Main msg ->
-            { status | main = msg }
-        Reset msg ->
-            Status Nothing msg
-
--- Get the right message from the status
-
-message : Status -> String
-message status =
-    Maybe.withDefault status.main status.overlay
+            { status | main = Just msg }
+        NoMain ->
+            { status | main = Nothing }
 
 -- Render the status bar
 
 view : Status -> Html
 view status =
-    div [] [ message status |> text ]
+    let
+        main = withDefault "Ready" status.main
+        rollover = withDefault "" status.rollover
+    in
+        div [] [ main ++ " / " ++ rollover |> text ]
 

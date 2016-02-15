@@ -125,13 +125,13 @@ view address model =
         context = Context.forwardTo context' Direct
         world = model.world
     in
-        div [ class "column" ]
-        [ NavBar.view context world.scale
-        , div [ class "row" ]
-          [ div [ class "sideBar" ] []
+        div [ class "row" ]
+        [ div [ class "sideBar" ] []
+        , div [ class "column" ]
+          [ NavBar.view context world.scale
           , World.view context world
-          , div [ class "sideBar" ] []
+          , Status.view model.status
           ]
-        , Status.view model.status
+        , div [ class "sideBar" ] []
         ]
 

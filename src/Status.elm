@@ -5,6 +5,7 @@ module Status
     ) where
 
 import Html exposing (Html, div, text)
+import Html.Attributes exposing (id)
 import Maybe exposing (withDefault)
 
 
@@ -36,7 +37,10 @@ view : Status -> Html
 view status =
     let
         main = withDefault "Ready" status.main
-        rollover = withDefault "" status.rollover
+        rollover = withDefault "Dummy" status.rollover
     in
-        div [] [ main ++ " / " ++ rollover |> text ]
+        div [ id "status" ]
+        [ div [ id "main" ] [ main |> text ]
+        , div [ id "rollover" ] [ rollover |> text ]
+        ]
 

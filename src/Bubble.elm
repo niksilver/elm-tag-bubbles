@@ -264,15 +264,13 @@ view context model =
             |> Label.toPercent
         textDiv =
             Html.div
-            [ Html.Attributes.style
-                [ ("position", "relative")
-                , ("top", "50%")
-                , ("transform", "translateY(-50%)")
-                , ("text-align", "center")
-                , ("color", (pickTextColour model.label))
-                , ("font-size", fontPercent)
-                , ("opacity", (model.animation.opacity |> toString))
-                ]
+            [ Html.Attributes.class "vcentre"
+            , Html.Attributes.style
+              [ ("text-align", "center")
+              , ("color", (pickTextColour model.label))
+              , ("font-size", fontPercent)
+              , ("opacity", (model.animation.opacity |> toString))
+              ]
             , workaroundForChromeTextClick
             ]
             [ text model.label ]

@@ -4,8 +4,10 @@ module Status
     , view
     ) where
 
+import Constants
+
 import Html exposing (Html, div, text)
-import Html.Attributes exposing (id)
+import Html.Attributes exposing (id, class, style)
 import Maybe exposing (withDefault)
 
 
@@ -37,10 +39,16 @@ view : Status -> Html
 view status =
     let
         main = withDefault "Ready" status.main
-        rollover = withDefault "Dummy" status.rollover
+        rollover = withDefault "" status.rollover
     in
-        div [ id "status" ]
-        [ div [ id "main" ] [ main |> text ]
-        , div [ id "rollover" ] [ rollover |> text ]
+        div
+        [ id "status"
+        , style
+          [ ("height", toString Constants.statusBarHeight ++ "px")
+          , ("line-height", toString Constants.statusBarHeight ++ "px")
+          ]
+        ]
+        [ div [ class "inner-status" ] [ main |> text ]
+        , div [ class "inner-status" ] [ rollover |> text ]
         ]
 

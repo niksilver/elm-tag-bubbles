@@ -2,8 +2,9 @@ module Help (Help(On, Off), view) where
 
 import Context exposing (Context)
 
-import Html exposing (Html, div, text, h1, p)
+import Html exposing (Html, div, text, h1, p, button)
 import Html.Attributes exposing (id)
+import Html.Events exposing (onClick)
 
 type Help = On | Off
 
@@ -35,13 +36,20 @@ helpHtml =
 
         |> List.map (\t -> p [] [t])
 
-view : Context a -> Help -> Html
+view : Context Help -> Help -> Html
 view context help =
-    if (help == On) then
-        div [ id "help" ]
-        [ div [ id "helpContent" ]
-          (( h1 [] [ text "Tag bubbles" ] ) :: helpHtml)
-        ]
-    else
-        text ""
+    let
+        heading = h1 [] [ text "Tag bubbles" ]
+        done =
+            div [ id "buttonDiv" ]
+            [ button [ onClick context.address Off ] [ text "Done" ] ]
+        content = List.concat [ [heading], helpHtml, [done] ]
+    in
+        if (help == On) then
+            div [ id "help" ]
+            [ div [ id "helpContent" ]
+              content
+            ]
+        else
+            text ""
 

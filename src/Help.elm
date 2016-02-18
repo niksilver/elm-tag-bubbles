@@ -1,7 +1,11 @@
-module Help (view) where
+module Help (Help(On, Off), view) where
+
+import Context exposing (Context)
 
 import Html exposing (Html, div, text, h1, p)
 import Html.Attributes exposing (id)
+
+type Help = On | Off
 
 helpText : List String
 helpText = [ """The Guardian produces lots of articles every day, and each
@@ -28,12 +32,16 @@ helpHtml : List Html
 helpHtml =
     helpText
         |> List.map text
+
         |> List.map (\t -> p [] [t])
 
-view : Html
-view =
-    div [ id "help" ]
-    [ div [ id "helpContent" ]
-      (( h1 [] [ text "Tag bubbles" ] ) :: helpHtml)
-    ]
+view : Context a -> Help -> Html
+view context help =
+    if (help == On) then
+        div [ id "help" ]
+        [ div [ id "helpContent" ]
+          (( h1 [] [ text "Tag bubbles" ] ) :: helpHtml)
+        ]
+    else
+        text ""
 

@@ -15,7 +15,7 @@ import World
 import TagFetcher
 import NavBar
 import Status exposing (Status)
-import Help
+import Help exposing (Help)
 
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)
@@ -28,6 +28,7 @@ type alias Model =
     { dimensions : (Int, Int)
     , world : World.Model
     , status : Status
+    , help : Help
     }
 
 type Action
@@ -37,6 +38,7 @@ type Action
         | NewTags TagsResult
         | Click CountedClick
         | StatusAction Status.Action
+        | HelpAction Help
         | NoOp
 
 -- A task to run a tag fetch... or maybe there's no task to run
@@ -113,7 +115,12 @@ update action model =
                         )
         StatusAction statAct ->
             ( { model | status = Status.update statAct model.status }
-            , Nothing)
+            , Nothing
+            )
+        HelpAction onOff ->
+            ( { model | help = onOff }
+            , Nothing
+            )
         NoOp ->
             (model, Nothing)
 
@@ -123,17 +130,18 @@ view address model =
         context' =
             Context.create address
                 |> Context.forwardStatus StatusAction
-        context = Context.forwardTo context' Direct
+        worldContext = Context.forwardTo context' Direct
+        helpContext = Context.forwardTo context' HelpAction
         world = model.world
     in
         div [ class "row" ]
         [ div [ class "sideBar" ] []
         , div [ class "column" ]
-          [ NavBar.view context world.scale
-          , World.view context world
+          [ NavBar.view worldContext helpContext world.scale
+          , World.view worldContext world
           , Status.view model.status
           ]
         , div [ class "sideBar" ] []
-        , Help.view
+        , Help.view helpContext model.help
         ]
 

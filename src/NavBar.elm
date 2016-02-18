@@ -3,19 +3,20 @@ module NavBar (view) where
 import Constants
 import Context exposing (Context)
 import World
+import Help exposing (Help(On))
 
 import Html exposing (Html, button, text, div, input, label)
 import Html.Attributes as Attrs exposing (style, type', class, for, id)
 import Html.Events exposing (onClick, on, targetValue)
 
 
-view : Context World.Action -> Float -> Html
-view context scale =
+view : Context World.Action -> Context Help -> Float -> Html
+view worldContext helpContext scale =
     let
         scaleMessage : String -> Signal.Message
         scaleMessage e =
             World.Scale e
-                |> Signal.message context.address
+                |> Signal.message worldContext.address
     in
         div
         [ style
@@ -28,7 +29,7 @@ view context scale =
           -- http://zerosixthree.se/vertical-align-anything-with-just-3-lines-of-css/
           [ class "vcentre" ]
           [ button
-            [ onClick context.address World.Recentre ]
+            [ onClick worldContext.address World.Recentre ]
             [ text "Recentre" ]
           , label
             [ for "scale" ]
@@ -46,5 +47,8 @@ view context scale =
             , on "input" targetValue scaleMessage
             ]
             []
+          , button
+            [onClick helpContext.address Help.On ]
+            [ text "Help" ]
           ]
         ]

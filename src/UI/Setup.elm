@@ -12,6 +12,7 @@ import PairCounter exposing (emptyCounter, incPair)
 import Springs
 import Bubble
 import Status exposing (Status)
+import Help
 
 import Dict exposing (Dict, empty, insert)
 import Task exposing (Task)
@@ -64,6 +65,7 @@ model =
         , scale = 1
         }
     , status = Status Nothing Nothing
+    , help = Help.Off
     }
 
 -- Initial task

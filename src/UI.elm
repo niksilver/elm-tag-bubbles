@@ -15,6 +15,7 @@ import World
 import TagFetcher
 import NavBar
 import Status exposing (Status)
+import Help
 
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)
@@ -133,5 +134,6 @@ view address model =
           , Status.view model.status
           ]
         , div [ class "sideBar" ] []
+        , Help.view
         ]
 

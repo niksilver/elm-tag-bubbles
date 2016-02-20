@@ -301,7 +301,8 @@ view context model =
             , onMouseOutAttr
             ]
     in
-        g []
+        g
+        [ Svg.Attributes.class "bubble" ]
         [ circle baseCircleAttrs []
         , foreignObject foreignObjectAttrs [ textDiv ]
         , circle coveringCircleAttrs' []

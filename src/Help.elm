@@ -2,8 +2,8 @@ module Help (Help(On, Off), view) where
 
 import Context exposing (Context)
 
-import Html exposing (Html, div, text, h1, p, button)
-import Html.Attributes exposing (id)
+import Html exposing (Html, div, text, h1, p, button, a)
+import Html.Attributes exposing (id, href)
 import Html.Events exposing (onClick)
 
 type Help = On | Off
@@ -29,7 +29,11 @@ your chosen topic."""
 the bubble and its name will appear on the bottom right."""
     ]
 
-loveText = "Made with love in the Elm language"
+loveHtml : List Html
+loveHtml =
+    [ text "Made with love in "
+    , a [ href "http://elm-lang.org/" ] [ text "the Elm language" ]
+    ]
 
 helpHtml : List Html
 helpHtml =
@@ -49,7 +53,7 @@ helpDiv context =
     in
         div [ id "help" ]
         [ div [ id "helpContent" ] content
-        , div [ id "helpLove" ] [ text loveText ]
+        , div [ id "helpLove" ] loveHtml
         ]
 
 view : Context Help -> Help -> Html

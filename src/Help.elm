@@ -3,7 +3,7 @@ module Help (Help(On, Off), view) where
 import Context exposing (Context)
 
 import Html exposing (Html, div, text, h1, p, button, a)
-import Html.Attributes exposing (id, href)
+import Html.Attributes exposing (id, class, href)
 import Html.Events exposing (onClick)
 
 type Help = On | Off
@@ -35,6 +35,14 @@ loveHtml =
     , a [ href "http://elm-lang.org/" ] [ text "the Elm language" ]
     ]
 
+sourceHtml : List Html
+sourceHtml =
+    [ text "Source on "
+    , a
+      [ href "https://github.com/niksilver/elm-tag-bubbles" ]
+      [ text "GitHub" ]
+    ]
+
 helpHtml : List Html
 helpHtml =
     helpText
@@ -53,7 +61,8 @@ helpDiv context =
     in
         div [ id "help" ]
         [ div [ id "helpContent" ] content
-        , div [ id "helpLove" ] loveHtml
+        , div [ id "helpLove", class "footer" ] loveHtml
+        , div [ id "helpSource", class "footer" ] sourceHtml
         ]
 
 view : Context Help -> Help -> Html

@@ -31,17 +31,26 @@ pixelsToChars px =
 split : String -> Split
 split text =
     let
+        diff a b = (length a) - (length b) |> abs
+        backSplit = splitBackward text
+        backDiff = diff (fst backSplit) (snd backSplit)
+        foreSplit = splitForward text
+        foreDiff = diff (fst foreSplit) (snd foreSplit)
+    in
+        (if (backDiff < foreDiff) then backSplit else foreSplit) |> toType
+
+-- Split the text working backwards from the middle
+
+splitBackward : String -> (String, String)
+splitBackward text =
+    let
         halfIdx = length text // 2
         front = left halfIdx text
         half1 = backSplitFrom front
         remainder = dropLeft (length half1) text
         half2 = trimLeft remainder
     in
-        if (half1 /= "") then
-            Halves (half1, half2)
-        else
-            splitForward text
-                |> toType
+        (half1, half2)
 
 -- Work backwards from the end of a string to find where to split it
 

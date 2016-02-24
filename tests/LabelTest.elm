@@ -12,6 +12,7 @@ all =
     , splitTest2
     , splitTest3
     , splitTest4
+    , splitTest5
     , leastLengthTest
     , fontScalingTest
     , toPercentTest
@@ -155,6 +156,17 @@ splitTest3 =
 
 splitTest4 : Test
 splitTest4 =
+    suite "splitTest - First half can be split but it's better to split in the seond half"
+
+    [ test "'ooo ooo oooo' should give split ooo ooo/oooo" <|
+      assertEqual
+      (Halves ("ooo ooo", "oooo"))
+      (split "ooo ooo oooo")
+
+    ]
+
+splitTest5 : Test
+splitTest5 =
     suite "splitTest4 - split includes dashes and spaces and other oddities"
 
     [ test "'A - efghij' should split as A -/efghij" <|

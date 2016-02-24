@@ -19,7 +19,8 @@ view worldContext helpContext scale =
                 |> Signal.message worldContext.address
     in
         div
-        [ style
+        [ id "navbar"
+        , style
           [ ("height", toString Constants.navHeight ++ "px")
           , ("text-align", "center")
           ]
@@ -48,7 +49,7 @@ view worldContext helpContext scale =
             ]
             []
           , button
-            [onClick helpContext.address Help.On ]
+            [ onClick helpContext.address Help.On ]
             [ text "Help" ]
           ]
         ]

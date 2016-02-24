@@ -29,12 +29,28 @@ your chosen topic."""
 the bubble and its name will appear on the bottom right."""
     ]
 
+loveText = "Made with love in the Elm language"
+
 helpHtml : List Html
 helpHtml =
     helpText
         |> List.map text
 
         |> List.map (\t -> p [] [t])
+
+helpDiv : Context Help -> Html
+helpDiv context =
+    let
+        heading = h1 [] [ text "Tag bubbles" ]
+        done =
+            div [ id "buttonDiv" ]
+            [ button [ onClick context.address Off ] [ text "Done" ] ]
+        content = List.concat [ [heading], helpHtml, [done] ]
+    in
+        div [ id "help" ]
+        [ div [ id "helpContent" ] content
+        , div [ id "helpLove" ] [ text loveText ]
+        ]
 
 view : Context Help -> Help -> Html
 view context help =
@@ -46,10 +62,7 @@ view context help =
         content = List.concat [ [heading], helpHtml, [done] ]
     in
         if (help == On) then
-            div [ id "help" ]
-            [ div [ id "helpContent" ]
-              content
-            ]
+            helpDiv context
         else
             text ""
 

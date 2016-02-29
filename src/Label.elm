@@ -167,9 +167,6 @@ view label x y width opacity =
         , Svg.Attributes.x (toString x)
         , Svg.Attributes.y (toString y)
         , Svg.Attributes.textAnchor "middle"
-        -- Removed: workaroundForChromeTextClick defined in Bubble
-        -- workaroundForChromeTextClick =
-        --     Html.Events.onClick context.click tag
         ]
         [ Svg.text label ]
 

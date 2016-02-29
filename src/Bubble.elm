@@ -25,10 +25,7 @@ import Svg exposing
     ( Svg
     , circle, text, text', foreignObject, g
     )
-import Svg.Attributes exposing
-    ( cx, cy, r, fill, opacity
-    , x, y, textAnchor, alignmentBaseline, fontSize
-    )
+import Svg.Attributes exposing (cx, cy, r, fill, opacity)
 import Html
 import Html.Attributes
 import Html.Events
@@ -249,36 +246,27 @@ updateResize model time =
 view : Context Action -> Model -> Svg
 view context model =
     let
+        x = model.x
+        y = model.y
         tag = Tag model.id model.label
         onClickAttr = onClick (message context.click tag)
         onMouseOutAttr =
             onMouseOut (message context.status NoRollover)
         onMouseOverAttr =
             onMouseOver (message context.status (Rollover tag.webTitle))
-        labelHalfWidth = model.size * 0.85
-        labelHalfHeight = model.size * 0.50
-        labelWidth = 2 * labelHalfWidth
-        foreignObjectAttrs =
-            [ Svg.Attributes.x (toString (model.x - labelHalfWidth))
-            , Svg.Attributes.y (toString (model.y - labelHalfHeight))
-            , Svg.Attributes.width  (toString (2 * labelHalfWidth))
-            , Svg.Attributes.height (toString (2 * labelHalfHeight))
-            -- Required here as a foreign object doesn't pick up the SVG events
-            , onClickAttr
-            , onMouseOverAttr
-            , onMouseOutAttr
-            ]
-        textDiv = Label.view model.label model.x model.y labelWidth model.animation.opacity
+        labelWidth = 2 * model.size * 0.85
+        textDiv =
+            Label.view model.label x y labelWidth model.animation.opacity
         baseCircleAttrs =
-            [ cx (toString model.x)
-            , cy (toString model.y)
+            [ cx (toString x)
+            , cy (toString y)
             , r (toString model.size)
             , fill (pickBaseColour model.label)
             , opacity (model.animation.opacity |> toString)
             ]
         coveringCircleAttrs' =
-            [ cx (toString model.x)
-            , cy (toString model.y)
+            [ cx (toString x)
+            , cy (toString y)
             , r (toString model.size)
             , opacity "0"
             , onClickAttr

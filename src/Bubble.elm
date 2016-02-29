@@ -268,7 +268,7 @@ view context model =
             , onMouseOverAttr
             , onMouseOutAttr
             ]
-        textDiv = Label.view model.label labelWidth model.animation.opacity
+        textDiv = Label.view model.label model.x model.y labelWidth model.animation.opacity
         baseCircleAttrs =
             [ cx (toString model.x)
             , cy (toString model.y)
@@ -289,7 +289,7 @@ view context model =
         g
         [ Svg.Attributes.class "bubble" ]
         [ circle baseCircleAttrs []
-        , foreignObject foreignObjectAttrs [ textDiv ]
+        , textDiv
         , circle coveringCircleAttrs' []
         ]
 

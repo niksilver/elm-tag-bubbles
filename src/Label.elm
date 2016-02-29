@@ -11,8 +11,8 @@ import String exposing
     ( cons, uncons, fromChar, left, length, right
     , dropRight, trimRight, dropLeft, trimLeft
     )
-import Html exposing (Html)
-import Html.Attributes
+import Svg exposing (Svg)
+import Svg.Attributes
 
 -- Splitting a string into halves (if possible)
 
@@ -140,26 +140,36 @@ toPercent : Float -> String
 toPercent k =
     (k * 100 |> toString) ++ "%"
 
+-- Convenience class for the Svg style attribute
+
+styles : List (String, String) -> Svg.Attribute
+styles pairs =
+    pairs
+        |> List.map (\p -> fst p ++ ": " ++ snd p ++ "; ")
+        |> String.concat
+        |> Svg.Attributes.style
+
 -- The view of a label
 
-view : String -> Float -> Float -> Html
-view label width opacity =
+view : String -> Float -> Float -> Float -> Float -> Svg
+view label x y width opacity =
     let
         labelCharWidth = width |> pixelsToChars
         fontPercent = fontScaling label labelCharWidth
             |> toPercent
     in
-        Html.div
-        [ Html.Attributes.class "vcentre"
-        , Html.Attributes.style
-          [ ("text-align", "center")
-          , ("color", pickTextColour label)
+        Svg.text'
+        [ styles
+          [ ("color", pickTextColour label)
           , ("font-size", fontPercent)
           , ("opacity", opacity |> toString)
           ]
+        , Svg.Attributes.x (toString x)
+        , Svg.Attributes.y (toString y)
+        , Svg.Attributes.textAnchor "middle"
         -- Removed: workaroundForChromeTextClick defined in Bubble
         -- workaroundForChromeTextClick =
         --     Html.Events.onClick context.click tag
         ]
-        [ Html.text label ]
+        [ Svg.text label ]
 

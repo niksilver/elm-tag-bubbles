@@ -2,12 +2,17 @@ module Label
     ( pixelsToChars
     , Split(Halves, Whole), split
     , leastLength, fontScaling, toPercent
+    , view
     ) where
+
+import Colours exposing (pickTextColour)
 
 import String exposing
     ( cons, uncons, fromChar, left, length, right
     , dropRight, trimRight, dropLeft, trimLeft
     )
+import Html exposing (Html)
+import Html.Attributes
 
 -- Splitting a string into halves (if possible)
 
@@ -134,4 +139,27 @@ fontScaling text width =
 toPercent : Float -> String
 toPercent k =
     (k * 100 |> toString) ++ "%"
+
+-- The view of a label
+
+view : String -> Float -> Float -> Html
+view label width opacity =
+    let
+        labelCharWidth = width |> pixelsToChars
+        fontPercent = fontScaling label labelCharWidth
+            |> toPercent
+    in
+        Html.div
+        [ Html.Attributes.class "vcentre"
+        , Html.Attributes.style
+          [ ("text-align", "center")
+          , ("color", pickTextColour label)
+          , ("font-size", fontPercent)
+          , ("opacity", opacity |> toString)
+          ]
+        -- Removed: workaroundForChromeTextClick defined in Bubble
+        -- workaroundForChromeTextClick =
+        --     Html.Events.onClick context.click tag
+        ]
+        [ Html.text label ]
 

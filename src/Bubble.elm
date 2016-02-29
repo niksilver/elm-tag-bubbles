@@ -15,7 +15,7 @@ import Constants exposing
     , transitionDuration
     )
 import Context exposing (Context)
-import Colours exposing (pickBaseColour, pickTextColour)
+import Colours exposing (pickBaseColour)
 import Label
 import Status exposing (Action(Rollover, NoRollover))
 
@@ -250,8 +250,6 @@ view : Context Action -> Model -> Svg
 view context model =
     let
         tag = Tag model.id model.label
-        workaroundForChromeTextClick =
-            Html.Events.onClick context.click tag
         onClickAttr = onClick (message context.click tag)
         onMouseOutAttr =
             onMouseOut (message context.status NoRollover)
@@ -259,21 +257,7 @@ view context model =
             onMouseOver (message context.status (Rollover tag.webTitle))
         labelHalfWidth = model.size * 0.85
         labelHalfHeight = model.size * 0.50
-        labelCharWidth = 2 * labelHalfWidth |> Label.pixelsToChars
-        fontPercent = Label.fontScaling model.label labelCharWidth
-            |> Label.toPercent
-        textDiv =
-            Html.div
-            [ Html.Attributes.class "vcentre"
-            , Html.Attributes.style
-              [ ("text-align", "center")
-              , ("color", (pickTextColour model.label))
-              , ("font-size", fontPercent)
-              , ("opacity", (model.animation.opacity |> toString))
-              ]
-            , workaroundForChromeTextClick
-            ]
-            [ text model.label ]
+        labelWidth = 2 * labelHalfWidth
         foreignObjectAttrs =
             [ Svg.Attributes.x (toString (model.x - labelHalfWidth))
             , Svg.Attributes.y (toString (model.y - labelHalfHeight))
@@ -284,6 +268,7 @@ view context model =
             , onMouseOverAttr
             , onMouseOutAttr
             ]
+        textDiv = Label.view model.label labelWidth model.animation.opacity
         baseCircleAttrs =
             [ cx (toString model.x)
             , cy (toString model.y)

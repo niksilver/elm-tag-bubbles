@@ -160,7 +160,7 @@ view label x y width opacity =
     in
         Svg.text'
         [ styles
-          [ ("color", pickTextColour label)
+          [ ("fill", pickTextColour label)
           , ("font-size", fontPercent)
           , ("opacity", opacity |> toString)
           ]

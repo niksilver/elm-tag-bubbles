@@ -1,7 +1,7 @@
 module Label
     ( pixelsToChars
     , Split(Halves, Whole), split
-    , leastLengthStr, splitAndScale
+    , bestLength, splitAndScale
     , toPercent
     , view
     ) where
@@ -112,20 +112,13 @@ toType (half1, half2) =
     else
         Halves (half1, half2)
 
--- Least length a split label can be (in characters) given it may be split
+-- Best length a split label can be (in characters) given it may be split
 
-leastLength : Split -> Int
-leastLength splt =
+bestLength : Split -> Int
+bestLength splt =
     case splt of
         Halves (a, b) -> max (length a) (length b)
         Whole a -> length a
-
--- Least length a string label can be (in characters) given it may be split
-
-leastLengthStr : String -> Int
-leastLengthStr text =
-    split text
-        |> leastLength
 
 -- Given a label and a character width, decide if it should split and how
 -- it should scale
@@ -139,7 +132,7 @@ splitAndScale text width =
                 let
                     splt = split text
                 in
-                    (splt, leastLength splt)
+                    (splt, bestLength splt)
         splt = fst spltLen
         len = snd spltLen
     in

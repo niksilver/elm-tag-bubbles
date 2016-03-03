@@ -25,11 +25,15 @@ type Part = Block String | Whitespace String
 
 type PartChar = BlockChar Char | WhitespaceChar Char
 
+-- 1em = 16px
+
+emsPerPx = 16
+
 -- How many characters can we fit into a pixel width?
 
 pixelsToChars : Float -> Int
 pixelsToChars px =
-    px / 16 * 2  -- 1em = 16px, and the average character is narrower then 1em
+    px / emsPerPx * 2  -- 1em = 16px, and the avg character is narrower then 1em
         |> floor
 
 -- Split a string (if possible)
@@ -180,11 +184,12 @@ view label x y width opacity =
             [ Svg.text txt ]
     in
         case splt of
-            Whole txt -> labelLine txt 0
+            Whole txt ->
+                labelLine txt (0.25 * emsPerPx)
             Halves (txt1, txt2) ->
                 Svg.g
                 []
-                [ labelLine txt1 0
-                , labelLine txt2 10
+                [ labelLine txt1 (-0.15 * emsPerPx)
+                , labelLine txt2 (0.95 * emsPerPx)
                 ]
 

@@ -183,14 +183,15 @@ styles pairs =
 view : String -> Float -> Float -> Float -> Float -> Svg
 view label x y width opacity =
     let
-        splt = split label
         labelCharWidth = width |> pixelsToChars
-        fontPercent = fontScaling label labelCharWidth
-            |> toPercent
-        labelLine dy =
+        spltScale = splitAndScale label labelCharWidth
+        splt = fst spltScale
+        fontPercent = snd spltScale |> toPercent
+        textColour = pickTextColour label
+        labelLine txt dy =
             Svg.text'
             [ styles
-              [ ("fill", pickTextColour label)
+              [ ("fill", textColour)
               , ("font-size", fontPercent)
               , ("opacity", opacity |> toString)
               ]
@@ -198,7 +199,14 @@ view label x y width opacity =
             , Svg.Attributes.y (y + dy |> toString)
             , Svg.Attributes.textAnchor "middle"
             ]
-            [ Svg.text label ]
+            [ Svg.text txt ]
     in
-        labelLine 0
+        case splt of
+            Whole txt -> labelLine txt 0
+            Halves (txt1, txt2) ->
+                Svg.g
+                []
+                [ labelLine txt1 0
+                , labelLine txt2 10
+                ]
 

@@ -1,7 +1,7 @@
 module Label
     ( pixelsToChars
     , Split(Halves, Whole), split
-    , leastLength, fontScaling, toPercent
+    , leastLengthStr, fontScaling, toPercent
     , view
     ) where
 
@@ -111,10 +111,10 @@ toType (half1, half2) =
     else
         Halves (half1, half2)
 
--- Least length a label can be (in characters) given it may be split
+-- Least length a string label can be (in characters) given it may be split
 
-leastLength : String -> Int
-leastLength text =
+leastLengthStr : String -> Int
+leastLengthStr text =
     case split text of
         Halves (a, b) -> max (length a) (length b)
         Whole a -> length a
@@ -125,7 +125,7 @@ fontScaling : String -> Int -> Float
 fontScaling text width =
     let
         len = if (length text > width) then
-                leastLength text
+                leastLengthStr text
             else
                 length text
     in

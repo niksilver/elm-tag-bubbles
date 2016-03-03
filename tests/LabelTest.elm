@@ -13,7 +13,7 @@ all =
     , splitTest3
     , splitTest4
     , splitTest5
-    , leastLengthTest
+    , leastLengthStrTest
     , fontScalingTest
     , toPercentTest
     ]
@@ -191,24 +191,24 @@ splitTest5 =
 
     ]
 
-leastLengthTest : Test
-leastLengthTest =
-    suite "leastLengthTest"
+leastLengthStrTest : Test
+leastLengthStrTest =
+    suite "leastLengthStrTest"
 
     [ test "Long+short word label should have length of long word" <|
       assertEqual
       6
-      (leastLength "Houses pot")
+      (leastLengthStr "Houses pot")
 
     , test "Short+long word label should have length of long word" <|
       assertEqual
       8
-      (leastLength "Small fraction")
+      (leastLengthStr "Small fraction")
 
     , test "Single word label should have length of that word" <|
       assertEqual
       9
-      (leastLength "Operation")
+      (leastLengthStr "Operation")
 
     ]
 

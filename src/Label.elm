@@ -1,7 +1,7 @@
 module Label
     ( pixelsToChars
     , Split(Halves, Whole), split
-    , leastLengthStr, fontScaling, splitAndScale
+    , leastLengthStr, splitAndScale
     , toPercent
     , view
     ) where
@@ -126,21 +126,6 @@ leastLengthStr : String -> Int
 leastLengthStr text =
     split text
         |> leastLength
-
--- How much should we scale a font for a label of given width?
-
-fontScaling : String -> Int -> Float
-fontScaling text width =
-    let
-        len = if (length text > width) then
-                leastLengthStr text
-            else
-                length text
-    in
-        if (len <= width) then
-            1.0
-        else
-            (toFloat width / (len |> toFloat))
 
 -- Given a label and a character width, decide if it should split and how
 -- it should scale

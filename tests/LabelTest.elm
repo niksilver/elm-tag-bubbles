@@ -14,7 +14,6 @@ all =
     , splitTest4
     , splitTest5
     , leastLengthStrTest
-    , fontScalingTest
     , splitAndScaleTest
     , toPercentTest
     ]
@@ -210,32 +209,6 @@ leastLengthStrTest =
       assertEqual
       9
       (leastLengthStr "Operation")
-
-    ]
-
-fontScalingTest : Test
-fontScalingTest =
-    suite "fontScalingTest"
-
-    [ test "Small phrase should have no scaling" <|
-      assertEqual
-      1
-      (fontScaling "Oil" 10)
-
-    , test "Very long word should scale" <|
-      assertEqual
-      (6/8)
-      (fontScaling "Business" 6)
-
-    , test "Long but broken label should scale to long word" <|
-      assertEqual
-      (4/8)
-      (fontScaling "Business money" 4)
-
-    , test "Long but broken label should not scale if space is wide enough" <|
-      assertEqual
-      1.0
-      (fontScaling "Business money" 10)
 
     ]
 

@@ -111,13 +111,20 @@ toType (half1, half2) =
     else
         Halves (half1, half2)
 
+-- Least length a split label can be (in characters) given it may be split
+
+leastLength : Split -> Int
+leastLength splt =
+    case splt of
+        Halves (a, b) -> max (length a) (length b)
+        Whole a -> length a
+
 -- Least length a string label can be (in characters) given it may be split
 
 leastLengthStr : String -> Int
 leastLengthStr text =
-    case split text of
-        Halves (a, b) -> max (length a) (length b)
-        Whole a -> length a
+    split text
+        |> leastLength
 
 -- How much should we scale a font for a label of given width?
 

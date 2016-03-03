@@ -168,13 +168,13 @@ view label x y width opacity =
         labelCharWidth = width |> pixelsToChars
         spltScale = splitAndScale label labelCharWidth
         splt = fst spltScale
-        fontPercent = snd spltScale |> toPercent
+        scale = snd spltScale
         textColour = pickTextColour label
         labelLine txt dy =
             Svg.text'
             [ styles
               [ ("fill", textColour)
-              , ("font-size", fontPercent)
+              , ("font-size", scale |> toPercent)
               , ("opacity", opacity |> toString)
               ]
             , Svg.Attributes.x (x |> toString)
@@ -185,11 +185,11 @@ view label x y width opacity =
     in
         case splt of
             Whole txt ->
-                labelLine txt (0.25 * emsPerPx)
+                labelLine txt (0.25 * emsPerPx * scale)
             Halves (txt1, txt2) ->
                 Svg.g
                 []
-                [ labelLine txt1 (-0.15 * emsPerPx)
-                , labelLine txt2 (0.95 * emsPerPx)
+                [ labelLine txt1 (-0.15 * emsPerPx * scale)
+                , labelLine txt2 (0.95 * emsPerPx * scale)
                 ]
 

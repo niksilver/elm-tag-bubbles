@@ -15,6 +15,7 @@ all =
     , splitTest5
     , leastLengthStrTest
     , fontScalingTest
+    , splitAndScaleTest
     , toPercentTest
     ]
 
@@ -237,6 +238,33 @@ fontScalingTest =
       (fontScaling "Business money" 10)
 
     ]
+
+splitAndScaleTest : Test
+splitAndScaleTest =
+    suite "splitAndScaleTest"
+
+    [ test "Small phrase should stay whole and have no scaling" <|
+      assertEqual
+      (Whole "Oil", 1)
+      (splitAndScale "Oil" 10)
+
+    , test "Very long word should stay whole and scale" <|
+      assertEqual
+      (Whole "Business", (6/8))
+      (splitAndScale "Business" 6)
+
+    , test "Long but broken label should split and scale to long word" <|
+      assertEqual
+      (Halves ("Business", "money"), (4/8))
+      (splitAndScale "Business money" 4)
+
+    , test "Long two-word label should split but not scale if space is wide enough for larger half" <|
+      assertEqual
+      (Halves ("Business", "money"), 1.0)
+      (splitAndScale "Business money" 10)
+
+    ]
+
 
 toPercentTest : Test
 toPercentTest =

@@ -1,7 +1,8 @@
 module Label
     ( pixelsToChars
     , Split(Halves, Whole), split
-    , leastLengthStr, fontScaling, toPercent
+    , leastLengthStr, fontScaling, splitAndScale
+    , toPercent
     , view
     ) where
 
@@ -141,6 +142,27 @@ fontScaling text width =
         else
             (toFloat width / (len |> toFloat))
 
+-- Given a label and a character width, decide if it should split and how
+-- it should scale
+
+splitAndScale : String -> Int -> (Split, Float)
+splitAndScale text width =
+    let
+        spltLen = if (length text <= width) then
+                (Whole text, length text)
+            else
+                let
+                    splt = split text
+                in
+                    (splt, leastLength splt)
+        splt = fst spltLen
+        len = snd spltLen
+    in
+        if (len <= width) then
+            (splt, 1.0)
+        else
+            (splt, (toFloat width / (len |> toFloat)))
+
 -- Convert a float to a percentage string
 
 toPercent : Float -> String
@@ -161,19 +183,22 @@ styles pairs =
 view : String -> Float -> Float -> Float -> Float -> Svg
 view label x y width opacity =
     let
+        splt = split label
         labelCharWidth = width |> pixelsToChars
         fontPercent = fontScaling label labelCharWidth
             |> toPercent
+        labelLine dy =
+            Svg.text'
+            [ styles
+              [ ("fill", pickTextColour label)
+              , ("font-size", fontPercent)
+              , ("opacity", opacity |> toString)
+              ]
+            , Svg.Attributes.x (x |> toString)
+            , Svg.Attributes.y (y + dy |> toString)
+            , Svg.Attributes.textAnchor "middle"
+            ]
+            [ Svg.text label ]
     in
-        Svg.text'
-        [ styles
-          [ ("fill", pickTextColour label)
-          , ("font-size", fontPercent)
-          , ("opacity", opacity |> toString)
-          ]
-        , Svg.Attributes.x (toString x)
-        , Svg.Attributes.y (toString y)
-        , Svg.Attributes.textAnchor "middle"
-        ]
-        [ Svg.text label ]
+        labelLine 0
 

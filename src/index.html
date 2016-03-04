@@ -186,14 +186,17 @@
 			/* Background */
 			background-color: white;
 		}
-		#world ::-moz-selection {
-			background-color: inherit;
-		}
-		#world ::selection {
-			background-color: inherit;
-		}
 		.bubble {
 			cursor: default;
+		}
+		.bubble {
+			-webkit-touch-callout: none; /* iOS Safari */
+			-webkit-user-select: none;   /* Chrome/Safari/Opera */
+			-khtml-user-select: none;    /* Konqueror */
+			-moz-user-select: none;      /* Firefox */
+			-ms-user-select: none;       /* IE/Edge */
+			/* non-prefixed version, currently not supported by any browser */
+			user-select: none;
 		}
 
 		/* ----------------- Status bar --------------------- */

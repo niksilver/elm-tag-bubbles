@@ -127,6 +127,24 @@
 			cursor: pointer;
 		}
 
+		/* ----------------- Range (thumb, hovering) ----------- */
+
+		/* Special styling for WebKit/Blink */
+		input[type=range]:hover::-webkit-slider-thumb {
+			/* Slightly lighter than Aluminium 5 */
+			background-color: rgb(105, 107, 103);
+		}
+		/* For Firefox*/
+		input[type=range]:hover::-moz-range-thumb {
+			/* Slightly lighter than Aluminium 5 */
+			background-color: rgb(105, 107, 103);
+		}
+		/* For IE */
+		input[type=range]:hover::-ms-thumb {
+			/* Slightly lighter than Aluminium 5 */
+			background-color: rgb(105, 107, 103);
+		}
+
 		/* ----------------- Range (track) --------------------- */
 
 		input[type=range]::-webkit-slider-runnable-track {

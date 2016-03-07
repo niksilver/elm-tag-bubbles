@@ -33,7 +33,9 @@ view worldContext helpContext scale =
             [ onClick worldContext.address World.Recentre ]
             [ text "Recentre" ]
           , label
-            [ for "scale" ]
+            [ for "scale"
+            , id "scale-label"
+            ]
             [ text "Scale" ]
           , input
             [ type' "range"

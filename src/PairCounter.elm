@@ -20,11 +20,11 @@ import Dict exposing (Dict, empty, get, insert, toList, fromList)
 
 type Counter = Counter (Dict (String, String) Int)
 
-emptyDict' : Dict (String, String) Int
-emptyDict' = empty
+emptyDict : Dict (String, String) Int
+emptyDict = empty
 
 emptyCounter : Counter
-emptyCounter = Counter emptyDict'
+emptyCounter = Counter emptyDict
 
 -- Return the count of the given pair
 
@@ -85,26 +85,26 @@ missingPairs : Counter -> List (String, String)
 missingPairs (Counter dict) =
     let
         keys = Dict.keys dict
-        elts = compileElements' keys
+        elts = compileElements keys
         pairs = allPairs elts
     in
         filter (\e -> not(member e keys)) pairs
 
-compileElements' : List (a, a) -> List a
-compileElements' pairs =
-    addUniquely' pairs []
+compileElements : List (a, a) -> List a
+compileElements pairs =
+    addUniquely pairs []
 
-addUniquely' : List (a, a) -> List a -> List a
-addUniquely' pairs accum =
+addUniquely : List (a, a) -> List a -> List a
+addUniquely pairs accum =
     case pairs of
         head :: tail ->
-            addOneUniquely' (fst head) accum
-                |> addOneUniquely' (snd head)
-                |> addUniquely' tail
+            addOneUniquely (fst head) accum
+                |> addOneUniquely (snd head)
+                |> addUniquely tail
         [] -> reverse accum
 
-addOneUniquely' : a -> List a -> List a
-addOneUniquely' elt list =
+addOneUniquely : a -> List a -> List a
+addOneUniquely elt list =
     if (member elt list) then
         list
     else
@@ -131,7 +131,7 @@ topN n (Counter dict) =
         |> filter (\((x,y),i) -> x < y)
         |> sortBy (\((x,y),i) -> -i)
         |> take n
-        |> mirror' []
+        |> mirror []
         |> fromList
         |> Counter
 
@@ -140,10 +140,10 @@ topN n (Counter dict) =
 
 type alias PairCount = ((String, String), Int)
 
-mirror' : List PairCount -> List PairCount -> List PairCount
-mirror' countsOut countsIn =
+mirror : List PairCount -> List PairCount -> List PairCount
+mirror countsOut countsIn =
     case countsIn of
-        ((x,y),i) :: tl -> mirror' ( ((x,y),i) :: ((y,x),i) :: countsOut ) tl
+        ((x,y),i) :: tl -> mirror ( ((x,y),i) :: ((y,x),i) :: countsOut ) tl
         [] -> countsOut
 
 -- Get all pairs (ignoring symmetry) of elements of a list.
@@ -159,15 +159,15 @@ allPairs' : List a -> List a -> List (a, a) -> List (a, a)
 allPairs' next done accum =
     case next of
         hd :: tl ->
-            allPairs' tl (hd :: done) (append (distribute' hd done) accum)
+            allPairs' tl (hd :: done) (append (distribute hd done) accum)
         [] ->
             accum
 
 -- Distribute a seed across others to create pairs.
 -- E.g. distribute 7 [1,2,3] == [(7,1), (7,2), (7,3)]
 
-distribute' : a -> List a -> List (a, a)
-distribute' seed others =
+distribute : a -> List a -> List (a, a)
+distribute seed others =
     List.map (\other -> (seed, other)) others
 
 {-| Get the greatest count of all the pairs, or 0 if there are none.

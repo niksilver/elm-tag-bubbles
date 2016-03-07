@@ -9,17 +9,17 @@ import Html.Events exposing (onClick)
 type Help = On | Off
 
 helpText : List String
-helpText = [ """The Guardian produces lots of articles every day, and each
-article covers several different topics. How are these topics related?
+helpText = [ """The Guardian produces a lot of content every day, and each
+piece of content covers several different topics. How are these topics related?
 This app helps us visualise that.
 """
     , """Each bubble represents a topic.
-Double-click a bubble to find out more about that topic. The application
-will fetch the latest articles on that topic, and will discover all
-the other topics that those articles also cover. The larger the bubble
-the more that topic has been covered within the topic you chose.
+Double-click a bubble to find out more about it. The application
+will fetch the latest content on that topic, and will discover all
+the other topics covered by that same content. The larger the bubble
+the more that topic has been covered within the one you chose.
 The closer two bubbles are
-the more those topics are written about together."""
+the more content covers both of those topics."""
 
     , """On the bottom left you will see if the app is ready for your next
 double-click or if it is currently fetching the latest articles on

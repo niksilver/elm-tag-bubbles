@@ -35,10 +35,10 @@
 		    transform: translateY(-50%);
 		}
 
-		/* ----------------- Navbar --------------------- */
+		/* ----------------- Button defaults --------------------- */
 
 		/* Button styling from http://cssdeck.com/labs/better-button */
-		#navbar button
+		button
 		{
 			font-size: 100%;
 			padding: 5px 15px;
@@ -51,16 +51,18 @@
 			border-radius: 4px;
 			cursor: pointer;
 		}
-		#navbar button:active
+		button:active
 		{
 			-webkit-transform: translate(1px, 1px);
 			transform: translate(1px, 1px);
 		}
-		#navbar button:hover
+		button:hover
 		{
 			/* Slightly lighter than Aluminium 5 */
 			background-color: rgb(105, 107, 103);
 		}
+
+		/* ----------------- Navbar --------------------- */
 
 		/* ----------------- Range (base) --------------------- */
 		/* From https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/ */
@@ -268,6 +270,26 @@
 			right: 10px;
 			bottom: 10px;
 		}
+
+		/* ----------------- Help button specifics --------------------- */
+
+		/* Button styling from http://cssdeck.com/labs/better-button */
+		#help button
+		{
+			color: black;
+			background-color: white;
+		}
+		#help button:active
+		{
+			-webkit-transform: translate(1px, 1px);
+			transform: translate(1px, 1px);
+		}
+		#help button:hover
+		{
+			/* Slightly darker than white */
+			background-color: rgb(235, 235, 235);
+		}
+
 	</style>
 </head>
 

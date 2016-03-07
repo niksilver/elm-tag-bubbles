@@ -1,6 +1,9 @@
 # Elm tag bubbles
 
-Elm implementation of Guardian Tag Bubbles app.
+Elm application to explore the relationship between the
+many topics written about at [theguardian.com](http://theguardian.com).
+See it in action at
+[http://niksilver.github.io/elm-tag-bubbles/](http://niksilver.github.io/elm-tag-bubbles/).
 
 ## Build and run the application
 

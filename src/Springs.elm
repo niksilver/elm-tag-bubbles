@@ -20,19 +20,17 @@ import List
 import Dict exposing (Dict)
 import Maybe exposing (withDefault)
 
-{-| Generate a `Counter` from a list of list of tags.
--}
+-- Generate a `Counter` from a list of list of tags.
 
 toCounter : List Tags -> Counter
 toCounter tagsList =
-    List.foldl includePairs' emptyCounter tagsList
+    List.foldl includePairs emptyCounter tagsList
 
-{-| Given some tags and a pair counter, take all the pairings of the
-    tags and add them into the counter.
--}
+-- Given some tags and a pair counter, take all the pairings of the
+-- tags and add them into the counter.
 
-includePairs' : List Tag -> Counter -> Counter
-includePairs' tags counter =
+includePairs : List Tag -> Counter -> Counter
+includePairs tags counter =
     List.foldl (\pair -> inc (fst pair) (snd pair)) counter (allPairs tags)
 
 -- From a counter, generate a `Dict` from each tag id pair to its
@@ -67,14 +65,13 @@ toDictWithZeros shortest longest counter =
         |> includeMissingPairs
         |> toDict shortest longest
 
-{-| Calculate the acceleration for a bubble.
-    Parameters are:
-    strength of the springs;
-    the springs `Dict`;
-    a bubble that's pulling the bubble in question;
-    the bubble in question.
-    Return value the acceleration in the x and y directions.
--}
+-- Calculate the acceleration for a bubble.
+-- Parameters are:
+-- strength of the springs;
+-- the springs `Dict`;
+-- a bubble that's pulling the bubble in question;
+-- the bubble in question.
+-- Return value the acceleration in the x and y directions.
 
 acceleration : Float -> Dict (Id,Id) Float -> Bubble.Model -> Bubble.Model ->
     (Float, Float)
@@ -138,12 +135,11 @@ signedSqrt a =
     else
         sqrt a
 
-{-| Return a dictionary of (x,y) acceleration for each bubble, identified
-    by its id. Parameters are:
-    a list of bubbles;
-    a function which takes a pulling bubble and a pulled bubble and returns
-    the pulled bubble's consequential acceleration.
--}
+-- Return a dictionary of (x,y) acceleration for each bubble, identified
+-- by its id. Parameters are:
+-- a list of bubbles;
+-- a function which takes a pulling bubble and a pulled bubble and returns
+-- the pulled bubble's consequential acceleration.
 
 accelDict : List Bubble.Model ->
     (Bubble.Model -> Bubble.Model -> (Float, Float)) ->
@@ -166,8 +162,7 @@ accelDict bubbles accelFun =
         List.map accel bubbles
             |> Dict.fromList
 
-{- Calculate the x and y drag given an initial dx and dy velocity.
--}
+-- Calculate the x and y drag given an initial dx and dy velocity.
 
 drag : Float -> Float -> (Float, Float)
 drag dx dy =
@@ -181,9 +176,8 @@ drag dx dy =
     in
         (dragX', dragY')
 
-{-| Given a dx and dy velocity return the same values, or zero if the
-    overall velocity is too low.
--}
+-- Given a dx and dy velocity return the same values, or zero if the
+-- overall velocity is too low.
 
 dampen : Float -> Float -> (Float, Float)
 dampen dx dy =

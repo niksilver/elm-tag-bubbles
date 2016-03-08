@@ -14130,7 +14130,11 @@ Elm.Help.make = function (_elm) {
                             ,A2($Html.a,
                             _U.list([$Html$Attributes.href("https://github.com/niksilver/elm-tag-bubbles")]),
                             _U.list([$Html.text("GitHub")]))]);
-   var loveHtml = _U.list([$Html.text("Made with love in ")
+   var loveHtml = _U.list([$Html.text("Made with ")
+                          ,A2($Html.a,
+                          _U.list([$Html$Attributes.href("http://niksilver.com/2016/03/08/discovering-the-elm-language/")]),
+                          _U.list([$Html.text("love and sweat")]))
+                          ,$Html.text(" in ")
                           ,A2($Html.a,
                           _U.list([$Html$Attributes.href("http://elm-lang.org/")]),
                           _U.list([$Html.text("the Elm language")]))]);
@@ -14511,7 +14515,7 @@ Elm.Springs.make = function (_elm) {
       longest,
       $PairCounter.includeMissingPairs(counter));
    });
-   var includePairs$ = F2(function (tags,counter) {
+   var includePairs = F2(function (tags,counter) {
       return A3($List.foldl,
       function (pair) {
          return A2($PairCounter.inc,
@@ -14523,7 +14527,7 @@ Elm.Springs.make = function (_elm) {
    });
    var toCounter = function (tagsList) {
       return A3($List.foldl,
-      includePairs$,
+      includePairs,
       $PairCounter.emptyCounter,
       tagsList);
    };

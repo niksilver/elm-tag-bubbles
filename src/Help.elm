@@ -31,8 +31,14 @@ the bubble and its name will appear on the bottom right."""
 
 loveHtml : List Html
 loveHtml =
-    [ text "Made with love in "
-    , a [ href "http://elm-lang.org/" ] [ text "the Elm language" ]
+    [ text "Made with "
+    , a
+      [ href "http://niksilver.com/2016/03/08/discovering-the-elm-language/" ]
+      [ text "love and sweat" ]
+    , text " in "
+    , a
+      [ href "http://elm-lang.org/" ]
+      [ text "the Elm language" ]
     ]
 
 sourceHtml : List Html

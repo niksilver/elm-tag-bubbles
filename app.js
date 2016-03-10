@@ -14954,7 +14954,7 @@ Elm.TagFetcher.make = function (_elm) {
    resultsToTags);
    var url = function (tag) {
       return A2($Http.url,
-      "http://content.guardianapis.com/search",
+      "https://content.guardianapis.com/search",
       _U.list([{ctor: "_Tuple2",_0: "show-tags",_1: "keyword"}
               ,{ctor: "_Tuple2",_0: "tag",_1: tag}
               ,{ctor: "_Tuple2",_0: "page-size",_1: "20"}

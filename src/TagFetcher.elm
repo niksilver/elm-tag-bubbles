@@ -8,7 +8,7 @@ import Http exposing (url, get)
 import Task exposing (Task)
 
 url tag =
-    Http.url "http://content.guardianapis.com/search"
+    Http.url "https://content.guardianapis.com/search"
     [ ("show-tags", "keyword")
     , ("tag", tag)
     , ("page-size", "20")

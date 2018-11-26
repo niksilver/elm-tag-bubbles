@@ -1,10 +1,10 @@
-module Colours
+module Colours exposing
     ( colours
     , colourNames, colourBases, colourText
     , greys
     , greyNames, greyBases, greyText
     , pickBaseColour, pickTextColour
-    ) where
+    )
 
 import Color exposing (Color, rgb, black, white, toRgb)
 import List exposing (map)
@@ -13,7 +13,9 @@ import Maybe exposing (withDefault)
 import String
 import Char
 
+
 type alias Colour = { name : String, base : Color, text : Color }
+
 
 colList : List Colour
 colList =
@@ -40,6 +42,7 @@ colList =
     , Colour "Scarlet Red 3" (rgb 164 0 0) white
     ]
 
+
 greyList : List Colour
 greyList =
     [ Colour "Aluminium 1" (rgb 238 238 236) black
@@ -51,75 +54,98 @@ greyList =
     ]
 
 
+
 {-| All the (non-grey) colours. -}
+
 colours : Array Colour
 colours = Array.fromList colList
 
+
 {-| Names of all the (non-grey) colours. -}
+
 colourNames : Array String
 colourNames =
     map .name colList |> Array.fromList
 
+
 {-| Actual colour of all the (non-grey) colours. -}
+
 colourBases : Array Color
 colourBases =
     map .base colList |> Array.fromList
 
+
 {-| Text colour for each of the (non-grey) colours. -}
+
 colourText : Array Color
 colourText =
     map .text colList |> Array.fromList
 
 
 {-| All the shades of grey. -}
+
 greys : Array Colour
 greys = Array.fromList greyList
 
+
 {-| Names of the shades of grey. -}
+
 greyNames : Array String
 greyNames =
     map .name greyList |> Array.fromList
 
+
 {-| Actual colour of the shades of grey. -}
+
 greyBases : Array Color
 greyBases =
     map .base greyList |> Array.fromList
 
+
 {-| Text colour for each shade of grey. -}
+
 greyText : Array Color
 greyText =
     map .text greyList |> Array.fromList
 
+
 {-| Pick some colour index for a given string. -}
+
 pickColourIndex : String -> Int
 pickColourIndex s =
     String.toList s
         |> map Char.toCode
         |> List.sum
-        |> (\i -> i % (Array.length colours))
+        |> (\i -> modBy (Array.length colours) i)
+
 
 {-| Pick a base colour (as a W3C string) for a given string. -}
+
 pickBaseColour : String -> String
 pickBaseColour s =
     Array.get (pickColourIndex s) colourBases
         |> withDefault (rgb 60 60 60)
         |> toW3C
 
+
 {-| Pick a suitable text colour (as a W3C string) for a given string. -}
+
 pickTextColour : String -> String
 pickTextColour s =
     Array.get (pickColourIndex s) colourText
         |> withDefault white
         |> toW3C
 
+
 {-| Turn a `Color` into a W3C-friendly string. E.g. `"rgb(34, 89, 109)"`. -}
+
 toW3C : Color -> String
 toW3C col =
     let
         rgba = toRgb col
     in
-        "rgb(" ++ (toString rgba.red) ++
-        "," ++ (toString rgba.green) ++
-        "," ++ (toString rgba.blue) ++
+        "rgb(" ++ (String.fromInt rgba.red) ++
+        "," ++ (String.fromInt rgba.green) ++
+        "," ++ (String.fromInt rgba.blue) ++
         ")"
 

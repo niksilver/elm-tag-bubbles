@@ -1,10 +1,10 @@
-module Label
+module Label exposing
     ( pixelsToChars
-    , Split(Halves, Whole), split
+    , Split(..), split
     , bestLength, splitAndScale
     , toPercent
     , view
-    ) where
+    )
 
 import Colours exposing (pickTextColour)
 
@@ -15,19 +15,25 @@ import String exposing
 import Svg exposing (Svg)
 import Svg.Attributes
 
+
 -- Splitting a string into halves (if possible)
 
 type Split = Halves (String, String) | Whole String
 
+
 -- Breaking text into parts suitable for line breaks
+
 
 type Part = Block String | Whitespace String
 
+
 type PartChar = BlockChar Char | WhitespaceChar Char
+
 
 -- 1em = 16px
 
 emsPerPx = 16
+
 
 -- How many characters can we fit into a pixel width?
 
@@ -35,6 +41,7 @@ pixelsToChars : Float -> Int
 pixelsToChars px =
     px / emsPerPx * 2  -- 1em = 16px, and the avg character is narrower then 1em
         |> floor
+
 
 -- Split a string (if possible)
 
@@ -48,6 +55,7 @@ split text =
         (if (diff backSplit < diff foreSplit) then backSplit else foreSplit)
         |> toType
 
+
 -- Split the text working backwards from the middle
 
 splitBackward : String -> (String, String)
@@ -60,6 +68,7 @@ splitBackward text =
         half2 = trimLeft remainder
     in
         (half1, half2)
+
 
 -- Work backwards from the end of a string to find where to split it
 
@@ -78,6 +87,7 @@ backSplitFrom text =
         else
             dropRight 1 text |> backSplitFrom
 
+
 -- Split the text working forward from the middle
 
 splitForward : String -> (String, String)
@@ -89,6 +99,7 @@ splitForward text =
         half1 = dropRight (length half2) text |> trimRight
     in
         (half1, half2)
+
 
 -- Cut off the front of a string, working forward from the start
 
@@ -107,6 +118,7 @@ frontSplitFrom text =
         else
             dropLeft 1 text |> frontSplitFrom
 
+
 -- Turn a pair representing a split into a type
 
 toType : (String, String) -> Split
@@ -116,6 +128,7 @@ toType (half1, half2) =
     else
         Halves (half1, half2)
 
+
 -- Best length a split label can be (in characters) given it may be split
 
 bestLength : Split -> Int
@@ -123,6 +136,7 @@ bestLength splt =
     case splt of
         Halves (a, b) -> max (length a) (length b)
         Whole a -> length a
+
 
 -- Given a label and a character width, decide if it should split and how
 -- it should scale
@@ -134,51 +148,54 @@ splitAndScale text width =
                 (Whole text, length text)
             else
                 let
-                    splt = split text
+                    splt_ = split text
                 in
-                    (splt, bestLength splt)
-        splt = fst spltLen
-        len = snd spltLen
+                    (splt_, bestLength splt_)
+        splt = Tuple.first spltLen
+        len = Tuple.second spltLen
     in
         if (len <= width) then
             (splt, 1.0)
         else
             (splt, (toFloat width / (len |> toFloat)))
 
+
 -- Convert a float to a percentage string
 
 toPercent : Float -> String
 toPercent k =
-    (k * 100 |> toString) ++ "%"
+    (k * 100 |> String.fromFloat) ++ "%"
+
 
 -- Convenience class for the Svg style attribute
 
-styles : List (String, String) -> Svg.Attribute
+styles : List (String, String) -> Svg.Attribute Never
 styles pairs =
     pairs
-        |> List.map (\p -> fst p ++ ": " ++ snd p ++ "; ")
+        |> List.map (\p -> Tuple.first p ++ ": " ++ Tuple.second p ++ "; ")
         |> String.concat
         |> Svg.Attributes.style
 
+
 -- The view of a label
 
-view : String -> Float -> Float -> Float -> Float -> Svg
+view : String -> Float -> Float -> Float -> Float -> Svg Never
 view label x y width opacity =
     let
         labelCharWidth = width |> pixelsToChars
         spltScale = splitAndScale label labelCharWidth
-        splt = fst spltScale
-        scale = snd spltScale
+        splt = Tuple.first spltScale
+        scale = Tuple.second spltScale
         textColour = pickTextColour label
         labelLine txt dy =
-            Svg.text'
+            Svg.text_
             [ styles
               [ ("fill", textColour)
               , ("font-size", scale |> toPercent)
-              , ("opacity", opacity |> toString)
+              , ("opacity", opacity |> String.fromFloat)
               ]
-            , Svg.Attributes.x (x |> toString)
-            , Svg.Attributes.y (y + dy |> toString)
+            , Svg.Attributes.x (x |> String.fromFloat)
+            , Svg.Attributes.y (y + dy |> String.fromFloat)
             , Svg.Attributes.textAnchor "middle"
             ]
             [ Svg.text txt ]

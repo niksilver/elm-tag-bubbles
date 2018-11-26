@@ -27,11 +27,16 @@ and then visit `out/index.html`.
 
 ## Running the tests
 
-To make the tests run
+Follow the
+[https://www.npmjs.com/package/elm-test](instructions for `elm-test` for Elm 0.19).
+First install the test packages:
+```
+npm install -g elm-test
+```
+
+To run the tests
 
 ```
-elm make tests/TestAll.elm --output tests.html
+elm-test
 ```
-
-and load up the `tests.html` file.
 

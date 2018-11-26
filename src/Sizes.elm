@@ -1,4 +1,4 @@
-module Sizes (toDict, rescale, idDict, topN, filter) where
+module Sizes exposing (toDict, rescale, idDict, topN, filter)
 
 import Constants exposing (Id, Tag, Tags)
 
@@ -6,11 +6,13 @@ import Dict exposing (Dict)
 import List
 import Maybe exposing (withDefault)
 
+
 -- Count the number of times each bubble appears
 
 toDict : List Tags -> Dict Id Int
 toDict listTags =
     List.foldl includeTags Dict.empty listTags
+
 
 -- Include all the tags in a dict of tag counts
 
@@ -18,17 +20,20 @@ includeTags : List Tag -> Dict Id Int -> Dict Id Int
 includeTags tags dict =
     List.foldl includeTag dict tags
 
+
 -- Incude a tag in a dict of tag counts
 
 includeTag : Tag -> Dict Id Int -> Dict Id Int
 includeTag tag dict =
     Dict.update tag.id inc dict
 
+
 inc : Maybe Int -> Maybe Int
 inc mCount =
     case mCount of
         Just count -> Just (count + 1)
         Nothing -> Just 1
+
 
 -- Rescale the dict according to max and min values
 
@@ -44,6 +49,7 @@ rescale minSize maxSize dict =
     in
         Dict.map trans dict
 
+
 -- Get a mapping from id to tag
 
 idDict : List Tags -> Dict Id Tag
@@ -52,15 +58,17 @@ idDict listTags =
             |> List.map (\tag -> (tag.id, tag))
             |> Dict.fromList
 
+
 -- Pick out the top N most frequently used tags
 
 topN : Int -> List Tags -> List Id
 topN n listTags =
     toDict listTags
         |> Dict.toList
-        |> List.sortBy (\idCount -> -1 * (snd idCount))
+        |> List.sortBy (\idCount -> -1 * (Tuple.second idCount))
         |> List.take n
-        |> List.map fst
+        |> List.map Tuple.first
+
 
 -- Filter in only those tags with the given names
 
@@ -69,6 +77,7 @@ filter listTags ids =
     listTags
         |> List.map (reduce ids)
         |> List.filter (not << List.isEmpty)
+
 
 reduce : List Id -> List Tag -> List Tag
 reduce ids tags =

@@ -1,16 +1,18 @@
-module Constants
+module Constants exposing
     ( Id, Idable
-    , Tag, Tags, TagsResult
+    , Tag, Tags
+    -- , TagsResult
     , maxBubbles, minBubbleSize, maxBubbleSize
     , minSpringLength, maxSpringLength
-    , maxBubbleOpacity, transitionDuration
+    , maxBubbleOpacity
+    -- , transitionDuration
     , springStrength, airDragFactor, minimumVelocity
     , navHeight, statusBarHeight, sideBorderWidth, minWorldWidth
-    ) where
+    )
 
-import Http exposing (Error)
-import Time exposing (Time)
-import Signal
+-- import Http exposing (Error)
+-- import Time exposing (Time)
+
 
 type alias Id = String
 
@@ -20,7 +22,7 @@ type alias Tag = { id : Id, webTitle : String }
 
 type alias Tags = List Tag
 
-type alias TagsResult = Result Http.Error (List Tags)
+-- type alias TagsResult = Result Http.Error (List Tags)
 
 -- Bubbles
 
@@ -36,8 +38,8 @@ maxBubbleSize = 120.0
 maxBubbleOpacity : Float
 maxBubbleOpacity = 0.75
 
-transitionDuration : Time
-transitionDuration = Time.second
+-- transitionDuration : Time
+-- transitionDuration = Time.second
 
 -- Physics
 

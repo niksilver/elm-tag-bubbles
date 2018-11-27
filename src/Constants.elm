@@ -5,7 +5,7 @@ module Constants exposing
     , maxBubbles, minBubbleSize, maxBubbleSize
     , minSpringLength, maxSpringLength
     , maxBubbleOpacity
-    -- , transitionDuration
+    , transitionDuration
     , springStrength, airDragFactor, minimumVelocity
     , navHeight, statusBarHeight, sideBorderWidth, minWorldWidth
     )
@@ -38,8 +38,8 @@ maxBubbleSize = 120.0
 maxBubbleOpacity : Float
 maxBubbleOpacity = 0.75
 
--- transitionDuration : Time
--- transitionDuration = Time.second
+transitionDuration : Float
+transitionDuration = Debug.todo "One second"
 
 -- Physics
 

@@ -1,37 +1,38 @@
-module Bubble
+module Bubble exposing
     ( Model
-    , Action (Animate)
+    , Action (..)
     , noAnimation, fadeInAnimation, setToFadeIn, setToFadeOut, isFadedOut
     , setOpacity
     , setToResize, cancelFinishedResize
     , targetSize
     , make
+    , linearEase
     , update, view
-    ) where
+    )
 
 import Constants exposing
     ( Tag
     , maxBubbleOpacity
     , transitionDuration
     )
-import Context exposing (Context)
+-- import Context exposing (Context)
 import Colours exposing (pickBaseColour)
 import Label
-import Status exposing (Action(Rollover, NoRollover))
+-- import Status exposing (Action(Rollover, NoRollover))
 
-import Time exposing (Time)
+import Time exposing (Posix)
 import Maybe exposing (withDefault)
 import Svg exposing 
     ( Svg
-    , circle, text, text', foreignObject, g
+    , circle, text, foreignObject, g
     )
 import Svg.Attributes exposing (cx, cy, r, fill, opacity)
-import Html
-import Html.Attributes
-import Html.Events
-import Svg.Events exposing (onClick, onMouseOver, onMouseOut)
-import Signal exposing (message)
-import Easing exposing (ease, linear, float)
+-- import Html
+-- import Html.Attributes
+-- import Html.Events
+-- import Svg.Events exposing (onClick, onMouseOver, onMouseOut)
+-- import Signal exposing (message)
+
 
 type alias Model =
     { id : String
@@ -44,26 +45,32 @@ type alias Model =
     , animation : Animation
     }
 
+
 type alias Animation =
-    { fadeStart : Maybe Time  -- Time if the fading has started
+    { fadeStart : Maybe Posix  -- Time if the fading has started
     , fading : Fading         -- How it's fading, if it is to fade
     , opacity : Float         -- Current opacity
-    , resizeStart : Maybe Time  -- Time if resizing has started
+    , resizeStart : Maybe Posix  -- Time if resizing has started
     , resizing : Resizing       -- How it's resizing, if it is to resize
     }
+
 
 -- Fading from and to an opacity, or not fading
 
 type Fading = Fading Float Float | NotFading
 
+
 type Resizing = Resizing Float Float | NotResizing
 
-type Action = Animate Time
+
+type Action = Animate Posix
+
 
 type SubAction
     = Move
-        | Fade Time
-        | Resize Time
+        | Fade Posix
+        | Resize Posix
+
 
 -- Fading functions
 
@@ -76,6 +83,7 @@ noAnimation =
     , resizing = NotResizing
     }
 
+
 fadeInAnimation : Animation
 fadeInAnimation =
     { fadeStart = Nothing
@@ -84,6 +92,7 @@ fadeInAnimation =
     , resizeStart = Nothing
     , resizing = NotResizing
     }
+
 
 setToFadeIn : Model -> Model
 setToFadeIn model =
@@ -102,6 +111,7 @@ setToFadeIn model =
             }
         }
 
+
 setToFadeOut : Model -> Model
 setToFadeOut model =
     let
@@ -119,6 +129,7 @@ setToFadeOut model =
             }
         }
 
+
 isFadedOut : Model -> Bool
 isFadedOut model =
     case model.animation.fading of
@@ -126,6 +137,7 @@ isFadedOut model =
             (to == 0.0) && (model.animation.opacity == 0.0)
         NotFading ->
             False
+
 
 setOpacity : Float -> Model -> Model
 setOpacity opacity model =
@@ -139,6 +151,7 @@ setOpacity opacity model =
             }
         }
 
+
 -- Resizing functions
 
 setToResize : Float -> Model -> Model
@@ -149,6 +162,7 @@ setToResize size model =
         { model
         | animation = { animation | resizing = Resizing model.size size }
         }
+
 
 cancelFinishedResize : Model -> Model
 cancelFinishedResize model =
@@ -171,6 +185,7 @@ cancelFinishedResize model =
         else
             model
 
+
 -- What size should a bubble be?
 
 targetSize : Model -> Float
@@ -178,6 +193,7 @@ targetSize model =
     case model.animation.resizing of
         NotResizing -> model.size
         Resizing from to -> to
+
 
 -- Making a basic bubble
 
@@ -191,6 +207,7 @@ make tag size =
     , animation = noAnimation
     }
 
+
 -- Update the model
 
 update : Action -> Model -> Model
@@ -199,6 +216,7 @@ update (Animate time) model =
         |> subUpdate Move
         |> subUpdate (Fade time)
         |> subUpdate (Resize time)
+ 
  
 subUpdate : SubAction -> Model -> Model
 subUpdate subAction model =
@@ -212,22 +230,33 @@ subUpdate subAction model =
         Resize time ->
             updateResize model time
 
-updateFade : Animation -> Time -> Animation
+-- Calculate a point on a linear scale.
+-- 'from' and 'to' are our start and end points.
+-- Our input is the 'now' value, in the range 0 to 'max'.
+-- Our output is the appropriate point in the from-to range.
+
+linearEase : Float -> Float -> Float -> Float -> Float
+linearEase from to max now =
+  (now / max) * (to - from) + from
+
+
+updateFade : Animation -> Posix -> Animation
 updateFade animation time =
     case animation.fading of
         NotFading -> animation
         Fading from to ->
             let
                 fadeStart = animation.fadeStart |> withDefault time
-                elapsed = time - fadeStart
-                opacity = ease linear float from to transitionDuration elapsed
+                elapsed = (Time.posixToMillis time) - (Time.posixToMillis fadeStart) |> toFloat
+                opacity = linearEase from to transitionDuration elapsed
             in
                 { animation
                 | fadeStart = Just fadeStart
                 , opacity = opacity
                 }
 
-updateResize : Model -> Time -> Model
+
+updateResize : Model -> Posix -> Model
 updateResize model time =
     case model.animation.resizing of
         NotResizing -> model
@@ -235,49 +264,50 @@ updateResize model time =
             let
                 animation = model.animation
                 resizeStart = animation.resizeStart |> withDefault time
-                elapsed = time - resizeStart
-                size = ease linear float from to transitionDuration elapsed
+                elapsed = (Time.posixToMillis time) - (Time.posixToMillis resizeStart) |> toFloat
+                size = linearEase from to transitionDuration elapsed
             in
                 { model
                 | size = size
                 , animation = { animation | resizeStart = Just resizeStart }
                 }
 
-view : Context Action -> Model -> Svg
-view context model =
+
+view : Never -> Model -> Svg Never
+view context_removed model =
     let
         x = model.x
         y = model.y
         tag = Tag model.id model.label
-        onClickAttr = onClick (message context.click tag)
-        onMouseOutAttr =
-            onMouseOut (message context.status NoRollover)
-        onMouseOverAttr =
-            onMouseOver (message context.status (Rollover tag.webTitle))
+        -- onClickAttr = onClick (message context.click tag)
+        -- onMouseOutAttr =
+        --     onMouseOut (message context.status NoRollover)
+        -- onMouseOverAttr =
+        --     onMouseOver (message context.status (Rollover tag.webTitle))
         labelWidth = 2 * model.size * 0.85
         textDiv =
             Label.view model.label x y labelWidth model.animation.opacity
         baseCircleAttrs =
-            [ cx (toString x)
-            , cy (toString y)
-            , r (toString model.size)
+            [ cx (String.fromFloat x)
+            , cy (String.fromFloat y)
+            , r (String.fromFloat model.size)
             , fill (pickBaseColour model.label)
-            , opacity (model.animation.opacity |> toString)
+            , opacity (model.animation.opacity |> String.fromFloat)
             ]
-        coveringCircleAttrs' =
-            [ cx (toString x)
-            , cy (toString y)
-            , r (toString model.size)
+        coveringCircleAttrs =
+            [ cx (String.fromFloat x)
+            , cy (String.fromFloat y)
+            , r (String.fromFloat model.size)
             , opacity "0"
-            , onClickAttr
-            , onMouseOverAttr
-            , onMouseOutAttr
+            -- , onClickAttr
+            -- , onMouseOverAttr
+            -- , onMouseOutAttr
             ]
     in
         g
         [ Svg.Attributes.class "bubble" ]
         [ circle baseCircleAttrs []
         , textDiv
-        , circle coveringCircleAttrs' []
+        , circle coveringCircleAttrs []
         ]
 

@@ -14,12 +14,14 @@ tag3Rec = Tag "tag/three" "Tag three"
 tag4Rec = Tag "tag/four" "Tag four"
 tag5Rec = Tag "tag/five" "Tag five"
 
+
 all : Test
 all =
     describe "MultiBubbles suite"
     [ tagDiffTest
     , boundsTest
     ]
+
 
 tagDiffTest : Test
 tagDiffTest =

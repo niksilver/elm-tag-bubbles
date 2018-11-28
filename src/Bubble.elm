@@ -1,6 +1,6 @@
 module Bubble exposing
     ( Model
-    , Action (..)
+    , Message (..)
     , noAnimation, fadeInAnimation, setToFadeIn, setToFadeOut, isFadedOut
     , setOpacity
     , setToResize, cancelFinishedResize
@@ -47,10 +47,10 @@ type alias Model =
 
 
 type alias Animation =
-    { fadeStart : Maybe Posix  -- Time if the fading has started
+    { fadeStart : Maybe Posix  -- Time that fading starting, if the fading has started
     , fading : Fading         -- How it's fading, if it is to fade
     , opacity : Float         -- Current opacity
-    , resizeStart : Maybe Posix  -- Time if resizing has started
+    , resizeStart : Maybe Posix  -- Time that resizing started, if resizing has started
     , resizing : Resizing       -- How it's resizing, if it is to resize
     }
 
@@ -63,13 +63,13 @@ type Fading = Fading Float Float | NotFading
 type Resizing = Resizing Float Float | NotResizing
 
 
-type Action = Animate Posix
+type Message = Animate Posix
 
 
 type SubAction
     = Move
-        | Fade Posix
-        | Resize Posix
+    | Fade Posix
+    | Resize Posix
 
 
 -- Fading functions
@@ -210,7 +210,7 @@ make tag size =
 
 -- Update the model
 
-update : Action -> Model -> Model
+update : Message -> Model -> Model
 update (Animate time) model =
     model
         |> subUpdate Move

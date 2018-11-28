@@ -1,7 +1,7 @@
 module Constants exposing
     ( Id, Idable
     , Tag, Tags
-    -- , TagsResult
+    , TagsResult(..)
     , maxBubbles, minBubbleSize, maxBubbleSize
     , minSpringLength, maxSpringLength
     , maxBubbleOpacity
@@ -10,7 +10,7 @@ module Constants exposing
     , navHeight, statusBarHeight, sideBorderWidth, minWorldWidth
     )
 
--- import Http exposing (Error)
+import Http
 -- import Time exposing (Time)
 
 
@@ -22,7 +22,7 @@ type alias Tag = { id : Id, webTitle : String }
 
 type alias Tags = List Tag
 
--- type alias TagsResult = Result Http.Error (List Tags)
+type TagsResult = TagsResult (Result Http.Error (List Tags))
 
 -- Bubbles
 

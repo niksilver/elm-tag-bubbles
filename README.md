@@ -11,7 +11,7 @@ Once you've cloned the source you'll need to
 [get your own API key](http://open-platform.theguardian.com/access/).
 Then put it in a new file at `src/Secrets.elm` that looks like this:
 ```
-module Secrets where
+module Secrets exposing (..)
 
 apiKey : String
 apiKey = "YOUR-API-KEY-GOES-HERE"

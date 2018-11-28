@@ -1,11 +1,13 @@
-module TagFetcherTest where
+module TagFetcherTest exposing (all)
 
 import Constants exposing (Tag)
 import TagFetcher exposing (..)
 
 import Json.Decode exposing (decodeString)
-import Result exposing (Result(Ok))
-import ElmTest exposing (..)
+import Result exposing (Result(..))
+import Test exposing (..)
+import Expect exposing (..)
+
 
 tag1 = """
     { "id": "world/bali-nine"
@@ -18,7 +20,9 @@ tag1 = """
     }
 """
 
+
 tag1rec = Tag "world/bali-nine" "Bali Nine"
+
 
 tag2 = """
     { "id": "australia-news/q-a"
@@ -32,7 +36,9 @@ tag2 = """
     }
 """
 
+
 tag2rec = Tag "australia-news/q-a" "Q&amp;A"
+
 
 tag3 = """
     { "id": "environment/cecil-the-lion"
@@ -45,7 +51,9 @@ tag3 = """
     }
 """
 
+
 tag3rec = Tag "environment/cecil-the-lion" "Cecil the lion"
+
 
 tag4 = """
     { "id": "world/zimbabwe"
@@ -58,7 +66,9 @@ tag4 = """
 }
 """
 
+
 tag4rec = Tag "world/zimbabwe" "Zimbabwe"
+
 
 tag5 = """
     { "id": "lifeandstyle/shops-and-shopping"
@@ -72,7 +82,9 @@ tag5 = """
 }
 """
 
+
 tag5rec = Tag "lifeandstyle/shops-and-shopping" "Shops and shopping"
+
 
 tag6 = """
     { "id": "money/consumer-affairs"
@@ -85,11 +97,15 @@ tag6 = """
 }
 """
 
+
 tag6rec = Tag "money/consumer-affairs" "Consumer affairs"
+
 
 tags1 = "[" ++ tag1 ++ "," ++ tag2 ++ "," ++ tag3 ++ "]"
 
+
 tags2 = "[" ++ tag4 ++ "," ++ tag5 ++ "," ++ tag6 ++ "]"
+
 
 result1 = """
     { "type": "article"
@@ -103,6 +119,7 @@ result1 = """
     , "tags":
 """ ++ tags1 ++ "}"
 
+
 result2 = """
     { "type": "article"
     , "sectionId": "business"
@@ -115,7 +132,9 @@ result2 = """
     , "tags":
 """ ++ tags2 ++ "}"
 
+
 results = "[" ++ result1 ++ "," ++ result2 ++ "]"
+
 
 response = """
     { "response":
@@ -130,52 +149,59 @@ response = """
         , "results":
 """ ++ results ++ "}}"
 
+
 all : Test
 all =
-    suite "TagFetcherTest"
+    describe "TagFetcherTest suite"
     [ parserTests
     ]
 
 parserTests : Test
 parserTests =
-    suite "parserTests"
+    describe "parserTests"
 
-    [ test "Tag to id"
-      (assertEqual
+    [ test "Tag to id" <|
+      \_ ->
+        Expect.equal
           (Ok "world/bali-nine")
-          (decodeString tagToId tag1))
+          (decodeString tagToId tag1)
 
-    , test "Tag to webTitle"
-      (assertEqual
+    , test "Tag to webTitle" <|
+      \_ ->
+        Expect.equal
           (Ok "Bali Nine")
-          (decodeString tagToWebTitle tag1))
+          (decodeString tagToWebTitle tag1)
 
-    , test "Json tag to Tag"
-      (assertEqual
+    , test "Json tag to Tag" <|
+      \_ ->
+        Expect.equal
           (Ok { id = "world/bali-nine"
-              , webTitle = "Bali Nine"
-              })
-          (decodeString tagToTag tag1))
+              , webTitle = "Bali Nine" })
+          (decodeString tagToTag tag1)
 
-    , test "Json tags to List Tag"
-      (assertEqual
+    , test "Json tags to List Tag" <|
+      \_ ->
+        Expect.equal
           (Ok [ tag1rec, tag2rec, tag3rec ])
-          (decodeString tagsToTags tags1))
+          (decodeString tagsToTags tags1)
 
-    , test "Result to Tags"
-      (assertEqual
+    , test "Result to Tags" <|
+      \_ ->
+        Expect.equal
           (Ok [ tag1rec, tag2rec, tag3rec ])
-          (decodeString resultToTags result1))
+          (decodeString resultToTags result1)
 
-    , test "Results to Tags"
-      (assertEqual
+    , test "Results to Tags" <|
+      \_ ->
+        Expect.equal
           (Ok [[ tag1rec, tag2rec, tag3rec ], [ tag4rec, tag5rec, tag6rec ]])
-          (decodeString resultsToTags results))
+          (decodeString resultsToTags results)
 
-    , test "Response to Tags"
-      (assertEqual
+    , test "Response to Tags" <|
+      \_ ->
+        Expect.equal
           (Ok [[ tag1rec, tag2rec, tag3rec ], [ tag4rec, tag5rec, tag6rec ]])
-          (decodeString responseToTags response))
+          (decodeString responseToTags response)
 
     ]
 

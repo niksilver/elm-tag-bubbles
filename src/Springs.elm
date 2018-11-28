@@ -1,8 +1,9 @@
-module Springs
+module Springs exposing
     ( toCounter, toDict, toDictWithZeros
     , acceleration, accelDict
     , drag, dampen
-    ) where
+    )
+
 
 import Constants exposing
     ( Tag, Tags, Id
@@ -20,18 +21,21 @@ import List
 import Dict exposing (Dict)
 import Maybe exposing (withDefault)
 
+
 -- Generate a `Counter` from a list of list of tags.
 
 toCounter : List Tags -> Counter
 toCounter tagsList =
     List.foldl includePairs emptyCounter tagsList
 
+
 -- Given some tags and a pair counter, take all the pairings of the
 -- tags and add them into the counter.
 
 includePairs : List Tag -> Counter -> Counter
 includePairs tags counter =
-    List.foldl (\pair -> inc (fst pair) (snd pair)) counter (allPairs tags)
+    List.foldl (\pair -> inc (Tuple.first pair) (Tuple.second pair)) counter (allPairs tags)
+
 
 -- From a counter, generate a `Dict` from each tag id pair to its
 -- respective spring length. The pair with the highest tag count
@@ -56,6 +60,7 @@ toDict shortest longest counter =
         PairCounter.toDict counter
         |> Dict.map (\pair count -> conv (toFloat count))
 
+
 -- Just like toDict, but include any pairs which aren't actually connected
 -- (i.e. are missing from the counts of pairs).
 
@@ -64,6 +69,7 @@ toDictWithZeros shortest longest counter =
     counter
         |> includeMissingPairs
         |> toDict shortest longest
+
 
 -- Calculate the acceleration for a bubble.
 -- Parameters are:
@@ -128,12 +134,14 @@ acceleration strength springs bubble2 bubble1 =
             in
                 (accelX, accelY)
 
+
 signedSqrt : Float -> Float
 signedSqrt a =
     if a < 0 then
         -1 * (sqrt -a)
     else
         sqrt a
+
 
 -- Return a dictionary of (x,y) acceleration for each bubble, identified
 -- by its id. Parameters are:
@@ -152,7 +160,7 @@ accelDict bubbles accelFun =
         sumAccels : List (Float, Float) -> (Float, Float)
         sumAccels accels =
             List.foldl
-                (\acc1 acc2 -> (fst acc1 + fst acc2, snd acc1 + snd acc2))
+                (\acc1 acc2 -> (Tuple.first acc1 + Tuple.first acc2, Tuple.second acc1 + Tuple.second acc2))
                 (0, 0)
                 accels
         accel : Bubble.Model -> (Id, (Float, Float))
@@ -162,19 +170,21 @@ accelDict bubbles accelFun =
         List.map accel bubbles
             |> Dict.fromList
 
+
 -- Calculate the x and y drag given an initial dx and dy velocity.
 
 drag : Float -> Float -> (Float, Float)
 drag dx dy =
     let
         v = sqrt (dx^2 + dy^2)
-        drag = -airDragFactor * v * v
-        dragX = if v == 0 then 0 else drag * dx / v
-        dragY = if v == 0 then 0 else drag * dy / v
-        dragX' = if abs dragX > abs dx then -dx else dragX
-        dragY' = if abs dragY > abs dy then -dy else dragY
+        drag_ = -airDragFactor * v * v
+        dragX = if v == 0 then 0 else drag_ * dx / v
+        dragY = if v == 0 then 0 else drag_ * dy / v
+        dragX_ = if abs dragX > abs dx then -dx else dragX
+        dragY_ = if abs dragY > abs dy then -dy else dragY
     in
-        (dragX', dragY')
+        (dragX_, dragY_)
+
 
 -- Given a dx and dy velocity return the same values, or zero if the
 -- overall velocity is too low.
@@ -183,8 +193,8 @@ dampen : Float -> Float -> (Float, Float)
 dampen dx dy =
     let
         v = sqrt (dx^2 + dy^2)
-        dx' = if v < minimumVelocity then 0 else dx
-        dy' = if v < minimumVelocity then 0 else dy
+        dx_ = if v < minimumVelocity then 0 else dx
+        dy_ = if v < minimumVelocity then 0 else dy
     in
-        (dx', dy')
+        (dx_, dy_)
 

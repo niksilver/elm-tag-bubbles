@@ -39,7 +39,7 @@ maxBubbleOpacity : Float
 maxBubbleOpacity = 0.75
 
 transitionDuration : Float
-transitionDuration = Debug.todo "One second"
+transitionDuration = 1000  -- One second
 
 -- Physics
 

@@ -1,10 +1,11 @@
-module World
+module World exposing
     ( Model
-    , Action (Tick, NewTags, Recentre, Resize, Scale)
+    , Msg (..)
     , ViewBox
     , size, viewBox, viewBoxToString
     , update, view
-    ) where
+    )
+
 
 import Constants exposing
     ( Id, Tags
@@ -12,7 +13,7 @@ import Constants exposing
     , minBubbleSize, maxBubbleSize
     , minSpringLength, maxSpringLength
     , springStrength)
-import Context exposing (Context, forwardTo)
+-- import Context exposing (Context, forwardTo)
 import MultiBubbles as MB
 import Bubble exposing (fadeInAnimation)
 import Springs exposing (toCounter, acceleration, accelDict)
@@ -26,7 +27,8 @@ import Html exposing (Html)
 import Html.Attributes exposing (id)
 import Svg exposing (svg)
 import Svg.Attributes as SVGA exposing (width, height, viewBox)
-import Time exposing (Time)
+import Time exposing (Posix)
+
 
 type alias Model =
     { bubbles : MB.Model
@@ -36,13 +38,15 @@ type alias Model =
     , scale : Float
     }
 
-type Action
-    = Direct MB.Action
-    | Tick Time
-    | NewTags (List Tags)
-    | Recentre
-    | Resize (Int, Int)
-    | Scale String
+
+type Msg
+    = Direct MB.Msg
+    | Tick Posix
+    -- | NewTags (List Tags)
+    -- | Recentre
+    -- | Resize (Int, Int)
+    -- | Scale String
+
 
 type alias ViewBox
     = { minX : Float
@@ -50,7 +54,8 @@ type alias ViewBox
       , width : Float
       , height : Float }
 
-update : Action -> Model -> Model
+
+update : Msg -> Model -> Model
 update action model =
     case action of
         Direct act -> { model | bubbles = MB.update act model.bubbles }
@@ -61,53 +66,54 @@ update action model =
                 bubbles = model.bubbles
                 accels = accelDict bubbles accelFn
                 bubsMod = MB.update (MB.AdjustVelocities accels) bubbles
-                model' = { model | bubbles = bubsMod }
+                model_ = { model | bubbles = bubsMod }
             in
-                update (Direct (MB.Tick time)) model'
-        NewTags listListTag ->
-            case model.dimensions of
-                Just dimensions -> newTags listListTag dimensions model
-                Nothing -> model
-        Recentre ->
-            case model.dimensions of
-                Just dims ->
-                    { model | bubbles = MB.recentre model.bubbles dims }
-                Nothing ->
-                    model
-        Resize windowDims ->
-            let
-                newDims = size windowDims
-                newBubbles =
-                    case model.dimensions of
-                        Just oldDims ->
-                            MB.forNewDimensions oldDims newDims model.bubbles
-                        Nothing ->
-                            MB.recentre model.bubbles newDims
-            in
-            { model
-            | dimensions = Just newDims
-            , bubbles = newBubbles
-            }
-        Scale scaleStr ->
-            case String.toFloat (Debug.log "scale" scaleStr) of
-                Ok scale -> { model | scale = scale }
-                Err err -> model
+                update (Direct (MB.Tick time)) model_
+--         NewTags listListTag ->
+--             case model.dimensions of
+--                 Just dimensions -> newTags listListTag dimensions model
+--                 Nothing -> model
+--         Recentre ->
+--             case model.dimensions of
+--                 Just dims ->
+--                     { model | bubbles = MB.recentre model.bubbles dims }
+--                 Nothing ->
+--                     model
+--         Resize windowDims ->
+--             let
+--                 newDims = size windowDims
+--                 newBubbles =
+--                     case model.dimensions of
+--                         Just oldDims ->
+--                             MB.forNewDimensions oldDims newDims model.bubbles
+--                         Nothing ->
+--                             MB.recentre model.bubbles newDims
+--             in
+--             { model
+--             | dimensions = Just newDims
+--             , bubbles = newBubbles
+--             }
+--         Scale scaleStr ->
+--             case String.toFloat (Debug.log "scale" scaleStr) of
+--                 Ok scale -> { model | scale = scale }
+--                 Err err -> model
+
 
 -- Introduce new tags to the model
 
 newTags : List Tags -> (Int, Int) -> Model -> Model
 newTags listListTag (width, height) model =
     let
-        listListTag' =
+        listListTag_ =
             listListTag
                 |> Sizes.topN maxBubbles
                 |> Sizes.filter listListTag
         springs =
-            Springs.toCounter listListTag'
+            Springs.toCounter listListTag_
                 |> Springs.toDictWithZeros minSpringLength maxSpringLength
-        tags = Sizes.idDict listListTag' |> Dict.values
+        tags = Sizes.idDict listListTag_ |> Dict.values
         bubbles =
-            Sizes.toDict listListTag'
+            Sizes.toDict listListTag_
                 |> Sizes.rescale minBubbleSize maxBubbleSize
                 |> MB.make tags
     in
@@ -121,6 +127,7 @@ newTags listListTag (width, height) model =
         , springs = springs
         }
  
+
 -- Work out the size of the world based on the window's dimensions
 
 size : (Int, Int) -> (Int, Int)
@@ -136,13 +143,14 @@ size (winWidth, winHeight) =
     in
         (width, height)
 
+
 -- Calculating values for an svg view box
 
 viewBox : (Int, Int) -> Float -> ViewBox
 viewBox dims scale =
     let
-        winWidth = fst dims |> toFloat
-        winHeight = snd dims |> toFloat
+        winWidth = Tuple.first dims |> toFloat
+        winHeight = Tuple.second dims |> toFloat
         minX = 0.5 * (winWidth - winWidth / scale)
         minY = 0.5 * (winHeight - winHeight / scale)
         width = winWidth / scale
@@ -150,33 +158,38 @@ viewBox dims scale =
     in
         ViewBox minX minY width height
 
+
 viewBoxToString : ViewBox -> String
 viewBoxToString vb =
-    toString vb.minX ++ " " ++
-    toString vb.minY ++ " " ++
-    toString vb.width ++ " " ++
-    toString vb.height
+    String.fromFloat vb.minX ++ " " ++
+    String.fromFloat vb.minY ++ " " ++
+    String.fromFloat vb.width ++ " " ++
+    String.fromFloat vb.height
+
 
 -- The view
 -- The world might not yet have got its dimensions, so we have two cases
 
-view : Context Action -> Model -> Html
-view context model =
+view : Never -> Model -> Html Never
+view context_removed model =
     case model.dimensions of
-        Just dims -> viewWithDimensions context dims model
+        Just dims -> viewWithDimensions context_removed dims model
         Nothing -> viewNoDimensions
 
-viewNoDimensions : Html
+
+viewNoDimensions : Html Never
 viewNoDimensions =
     svg [] []
 
-viewWithDimensions : Context Action -> (Int, Int) -> Model -> Html
-viewWithDimensions context (wdth, hght) model =
+
+viewWithDimensions : Never -> (Int, Int) -> Model -> Html Never
+viewWithDimensions context_removed (wdth, hght) model =
     svg
         [ id "world"
-        , width (wdth |> toString)
-        , height (hght |> toString)
+        , width (wdth |> String.fromInt)
+        , height (hght |> String.fromInt)
         , SVGA.viewBox (viewBox (wdth, hght) model.scale |> viewBoxToString)
         ]
-        (MB.view (forwardTo context Direct) model.bubbles)
+        -- (MB.view (forwardTo context Direct) model.bubbles)
+        (MB.view context_removed model.bubbles)
 

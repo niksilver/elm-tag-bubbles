@@ -1,5 +1,5 @@
 module MultiBubbles exposing
-    ( Action (..)
+    ( Msg (..)
     , Model
     , Diff, tagDiff
     , make
@@ -25,7 +25,7 @@ import Time exposing (Posix)
 type alias Model = List Bubble.Model
 
 
-type Action
+type Msg
     = Tick Posix
     | Direct Id Bubble.Message
     | AdjustVelocities (Dict Id (Float, Float))
@@ -228,9 +228,9 @@ reorder model =
 
 -- Update the model
 
-update : Action -> Model -> Model
-update action model =
-    case action of
+update : Msg -> Model -> Model
+update msg model =
+    case msg of
         Direct id bubAct -> updateOne id bubAct model
         Tick time -> updateAll model time
         AdjustVelocities accels -> updateVelocities accels model
@@ -298,7 +298,7 @@ updateVelocity accels bubble =
     -- Bubble.view (forwardTo context (Direct bubble.id)) bubble
 
 view : Never -> Model -> List (Svg Never)
-view context model =
-    map (Bubble.view context) model
+view context_removed model =
+    map (Bubble.view context_removed) model
 
 

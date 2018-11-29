@@ -21,7 +21,6 @@ import Sizes
 import TagFetcher
 
 import String
-import Maybe exposing (withDefault)
 import Dict exposing (Dict)
 import Html exposing (Html)
 import Html.Attributes exposing (id)
@@ -174,20 +173,20 @@ viewBoxToString vb =
 -- The view
 -- The world might not yet have got its dimensions, so we have two cases
 
-view : Never -> Model -> Html Never
-view context_removed model =
+view : Model -> Html Msg
+view model =
     case model.dimensions of
-        Just dims -> viewWithDimensions context_removed dims model
+        Just dims -> viewWithDimensions dims model
         Nothing -> viewNoDimensions
 
 
-viewNoDimensions : Html Never
+viewNoDimensions : Html Msg
 viewNoDimensions =
     svg [] []
 
 
-viewWithDimensions : Never -> (Int, Int) -> Model -> Html Never
-viewWithDimensions context_removed (wdth, hght) model =
+viewWithDimensions : (Int, Int) -> Model -> Html Msg
+viewWithDimensions (wdth, hght) model =
     svg
         [ id "world"
         , width (wdth |> String.fromInt)
@@ -195,5 +194,5 @@ viewWithDimensions context_removed (wdth, hght) model =
         , SVGA.viewBox (viewBox (wdth, hght) model.scale |> viewBoxToString)
         ]
         -- (MB.view (forwardTo context Direct) model.bubbles)
-        (MB.view context_removed model.bubbles)
+        (MB.view model.bubbles |> List.map (Svg.map Direct))
 

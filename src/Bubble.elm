@@ -273,8 +273,8 @@ updateResize model time =
                 }
 
 
-view : Never -> Model -> Svg Never
-view context_removed model =
+view : Model -> Svg Message
+view model =
     let
         x = model.x
         y = model.y
@@ -310,4 +310,5 @@ view context_removed model =
         , textDiv
         , circle coveringCircleAttrs []
         ]
+
 

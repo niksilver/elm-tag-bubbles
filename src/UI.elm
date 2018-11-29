@@ -24,6 +24,7 @@ import Html.Attributes exposing (class)
 import Time exposing (Posix)
 -- import Window
 
+
 type alias Model =
     { dimensions : (Int, Int)
     , world : World.Model
@@ -135,8 +136,8 @@ update msg model =
     NoOp ->
         (model, Cmd.none)
 
-view : Never -> Model -> Html Never
-view address_removed model =
+view : Model -> Html Msg
+view model =
     let
 --         context' =
 --             Context.create address
@@ -150,7 +151,7 @@ view address_removed model =
         , div [ class "column" ]
           [ -- NavBar.view worldContext helpContext world.scale
           -- , World.view worldContext world
-            World.view address_removed world
+            World.view world |> Html.map Direct
           -- , Status.view model.status
           ]
         , div [ class "sideBar" ] []

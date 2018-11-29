@@ -297,8 +297,13 @@ updateVelocity accels bubble =
 -- fwdingView context bubble =
     -- Bubble.view (forwardTo context (Direct bubble.id)) bubble
 
-view : Never -> Model -> List (Svg Never)
-view context_removed model =
-    map (Bubble.view context_removed) model
+view : Model -> List (Svg Msg)
+view model =
+  let
+      mapper bubble =
+        Bubble.view bubble
+        |> Svg.map (Direct bubble.id)
+  in
+    map mapper model
 
 

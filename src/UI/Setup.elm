@@ -1,4 +1,4 @@
-module UI.Setup (init) where
+module UI.Setup exposing (init)
 
 import Constants exposing
     ( Id, Tag
@@ -11,11 +11,11 @@ import World
 import PairCounter exposing (emptyCounter, incPair)
 import Springs
 import Bubble
-import Status exposing (Status)
-import Help
+-- import Status exposing (Status)
+-- import Help
 
 import Dict exposing (Dict, empty, insert)
-import Task exposing (Task)
+-- import Task exposing (Task)
 
 -- Initial model
 
@@ -37,7 +37,9 @@ tags =
     , Tag "travel/travel" "Travel"
     ]
 
+
 size = minBubbleSize
+
 
 multiBubbleModel : MultiBubbles.Model
 multiBubbleModel =
@@ -47,13 +49,16 @@ multiBubbleModel =
         |> List.map Bubble.setToFadeIn
         |> MultiBubbles.arrangeCentre (width/2) (height/2)
 
+
 allPairs : List (Tag, Tag)
 allPairs = PairCounter.allPairs tags
+
 
 springs : Dict (Id, Id) Float
 springs =
     List.foldl incPair emptyCounter allPairs
         |> Springs.toDictWithZeros minSpringLength maxSpringLength
+
 
 model : UI.Model
 model =
@@ -61,16 +66,17 @@ model =
     , world =
         { bubbles = multiBubbleModel
         , springs = springs
-        , dimensions = Nothing
+        , dimensions = Just (width, height)
         , scale = 1
         }
-    , status = Status Nothing Nothing
-    , help = Help.Off
+    -- , status = Status Nothing Nothing
+    -- , help = Help.Off
     }
 
--- Initial task
 
-init : (UI.Model, UI.TaskOut)
-init =
-    (model, Nothing)
+-- Initial state
+
+init : () -> (UI.Model, Cmd UI.Msg)
+init _ =
+    (model, Cmd.none)
 

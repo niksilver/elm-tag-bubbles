@@ -169,7 +169,7 @@ toPercent k =
 
 -- Convenience class for the Svg style attribute
 
-styles : List (String, String) -> Svg.Attribute Never
+styles : List (String, String) -> Svg.Attribute x
 styles pairs =
     pairs
         |> List.map (\p -> Tuple.first p ++ ": " ++ Tuple.second p ++ "; ")
@@ -179,7 +179,7 @@ styles pairs =
 
 -- The view of a label
 
-view : String -> Float -> Float -> Float -> Float -> Svg Never
+view : String -> Float -> Float -> Float -> Float -> Svg x
 view label x y width opacity =
     let
         labelCharWidth = width |> pixelsToChars

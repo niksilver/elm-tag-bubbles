@@ -42,7 +42,7 @@ type alias Model =
 type Msg
     = Direct MB.Msg
     | Tick Posix
-    -- | NewTags (List Tags)
+    | NewTags (List Tags)
     -- | Recentre
     -- | Resize (Int, Int)
     -- | Scale String
@@ -58,7 +58,9 @@ type alias ViewBox
 update : Msg -> Model -> Model
 update action model =
     case action of
-        Direct act -> { model | bubbles = MB.update act model.bubbles }
+        Direct act ->
+          { model | bubbles = MB.update act model.bubbles }
+
         Tick time ->
             let
                 strength = springStrength
@@ -69,10 +71,12 @@ update action model =
                 model_ = { model | bubbles = bubsMod }
             in
                 update (Direct (MB.Tick time)) model_
---         NewTags listListTag ->
---             case model.dimensions of
---                 Just dimensions -> newTags listListTag dimensions model
---                 Nothing -> model
+
+        NewTags listListTag ->
+            case model.dimensions of
+                Just dimensions -> newTags listListTag dimensions model
+                Nothing -> model
+
 --         Recentre ->
 --             case model.dimensions of
 --                 Just dims ->

@@ -11,7 +11,7 @@ import World
 import PairCounter exposing (emptyCounter, incPair)
 import Springs
 import Bubble
--- import Status exposing (Status)
+import Status exposing (Status)
 -- import Help
 
 import Dict exposing (Dict, empty, insert)
@@ -69,7 +69,7 @@ model =
         , dimensions = Just (width, height)
         , scale = 1
         }
-    -- , status = Status Nothing Nothing
+    , status = Status Nothing Nothing
     -- , help = Help.Off
     }
 

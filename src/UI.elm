@@ -14,7 +14,7 @@ import Constants exposing (TagsResult(..))
 import World
 import TagFetcher
 -- import NavBar
--- import Status exposing (Status)
+import Status exposing (Status)
 -- import Help exposing (Help)
 
 import Html exposing (Html, div)
@@ -28,7 +28,7 @@ import Time exposing (Posix)
 type alias Model =
     { dimensions : (Int, Int)
     , world : World.Model
-    -- , status : Status
+    , status : Status
     -- , help : Help
     }
 
@@ -80,24 +80,42 @@ update msg model =
 --         )
 
     Direct msg_ ->
-        ({ model | world = World.update msg_ model.world }
-         , Cmd.none
+      let
+          (world, maybeStatus) = World.update msg_ model.world
+          status =
+            case maybeStatus of
+              Just statusMsg ->
+                Status.update statusMsg model.status
+              Nothing ->
+                model.status
+      in
+        ( { model
+          | world = world
+          , status = status
+          }
+        , Cmd.none
         )
 
     Tick time ->
-        ({ model | world = World.update (World.Tick time) model.world }
-         , Cmd.none
-        )
+        let
+            (world, _) = World.update (World.Tick time) model.world
+        in
+            ({ model | world = world }
+             , Cmd.none
+            )
 
     NewTags tags ->
         case tags of
             TagsResult (Ok data) ->
-                ({ model
-                 | world = World.update (World.NewTags data) model.world
-                 -- , status = Status.update (Status.Main "Ready") model.status
-                 }
-                 , Cmd.none
-                )
+                let
+                    (world, _) = World.update (World.NewTags data) model.world
+                in
+                  ({ model
+                   | world = world
+                   , status = Status.update (Status.Main "Ready") model.status
+                   }
+                   , Cmd.none
+                  )
             TagsResult (Err error) ->
 --                 let
 --                     statusMessage = "Error: " ++ (toString error)
@@ -152,7 +170,7 @@ view model =
           [ -- NavBar.view worldContext helpContext world.scale
           -- , World.view worldContext world
             World.view world |> Html.map Direct
-          -- , Status.view model.status
+          , Status.view model.status
           ]
         , div [ class "sideBar" ] []
         -- , Help.view helpContext model.help

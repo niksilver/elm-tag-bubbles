@@ -14,8 +14,10 @@ import Constants exposing (Id, Tag)
 -- import Context exposing (Context, forwardTo)
 import Bubble
 import Springs exposing (drag, dampen)
+import Status
+import Util
 
-import List exposing (reverse, length, indexedMap, map, append, filter, member)
+import List exposing (reverse, length, indexedMap, append, filter, member)
 import Dict exposing (Dict)
 import Maybe exposing (withDefault)
 import Svg exposing (Svg)
@@ -90,7 +92,7 @@ arrangeCentre centreX centreY model =
                 |> Bubble.setToFadeIn
         indexedBubs = indexedMap Tuple.pair model
     in
-        map (\ib -> rePos (Tuple.first ib) (Tuple.second ib)) indexedBubs
+        List.map (\ib -> rePos (Tuple.first ib) (Tuple.second ib)) indexedBubs
 
 
 -- Find the bounds of the model
@@ -169,7 +171,7 @@ forNewDimensions (oldX, oldY) (newX, newY) model =
 replace : Model -> Model -> Model
 replace oldModel newModel =
     let
-        diff = tagDiff (map .id oldModel) (map .id newModel)
+        diff = tagDiff (List.map .id oldModel) (List.map .id newModel)
     in
         oldModel
             |> fadeIn newModel diff.new
@@ -192,7 +194,7 @@ fadeOut oldIds oldModel =
             else
                 bubble
     in
-        map selectedFade oldModel
+        List.map selectedFade oldModel
 
 
 resize : Model -> List Id -> Model -> Model
@@ -208,7 +210,7 @@ resize newModel ids model =
             else
                 bubble
     in
-        map selectedResize model
+        List.map selectedResize model
 
 
 -- Find the first element in a list that passes a given test
@@ -228,33 +230,46 @@ reorder model =
 
 -- Update the model
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> (Model, Maybe Status.Msg)
 update msg model =
-    case msg of
-        Direct id bubAct -> updateOne id bubAct model
-        Tick time -> updateAll model time
-        AdjustVelocities accels -> updateVelocities accels model
+  case msg of
+    Direct id bubAct ->
+      updateOne id bubAct model
+
+    Tick time ->
+      (updateAll model time, Nothing)
+
+    AdjustVelocities accels ->
+      (updateVelocities accels model, Nothing)
 
 
-updateOne : Id -> Bubble.Message -> Model -> Model
+updateOne : Id -> Bubble.Message -> Model -> (Model, Maybe Status.Msg)
 updateOne id bubMsg model =
     let
         selectiveUpdate bubModel =
             if id == bubModel.id then
-                (Bubble.update bubMsg bubModel)
+                Bubble.update bubMsg bubModel
             else
-                bubModel
+                (bubModel, Nothing)
+        extractModelAndStatus pairs =
+          ( List.map Tuple.first pairs
+          , List.map Tuple.second pairs
+            |> Util.takeFirstJust
+          )
     in
-        map selectiveUpdate model
+        List.map selectiveUpdate model
+        |> extractModelAndStatus
 
 
 -- Update all the bubbles with the Tick action
 
 updateAll : Model -> Posix -> Model
 updateAll model time =
-    map (Bubble.update (Bubble.Animate time)) model
-        |> removeFadedOut
-        |> cancelFinishedResizes
+  model
+    |> List.map (Bubble.update (Bubble.Animate time))
+    |> List.map Tuple.first
+    |> removeFadedOut
+    |> cancelFinishedResizes
 
 
 removeFadedOut : Model -> Model
@@ -264,7 +279,7 @@ removeFadedOut model =
 
 cancelFinishedResizes : Model -> Model
 cancelFinishedResizes model =
-    map Bubble.cancelFinishedResize model
+    List.map Bubble.cancelFinishedResize model
 
 
 -- Update the velocity of all the bubbles
@@ -272,7 +287,7 @@ cancelFinishedResizes model =
 
 updateVelocities : Dict Id (Float, Float) -> Model -> Model
 updateVelocities accels model =
-    map (updateVelocity accels) model
+    List.map (updateVelocity accels) model
 
 
 updateVelocity : Dict Id (Float, Float) -> Bubble.Model -> Bubble.Model
@@ -304,6 +319,6 @@ view model =
         Bubble.view bubble
         |> Svg.map (Direct bubble.id)
   in
-    map mapper model
+    List.map mapper model
 
 

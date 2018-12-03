@@ -18,7 +18,8 @@ import Constants exposing
 -- import Context exposing (Context)
 import Colours exposing (pickBaseColour)
 import Label
--- import Status exposing (Action(Rollover, NoRollover))
+import Status
+import Util
 
 import Time exposing (Posix)
 import Maybe exposing (withDefault)
@@ -63,7 +64,9 @@ type Fading = Fading Float Float | NotFading
 type Resizing = Resizing Float Float | NotResizing
 
 
-type Message = Animate Posix
+type Message
+  = Animate Posix
+  | StatusChange Status.Msg
 
 
 type SubAction
@@ -210,12 +213,19 @@ make tag size =
 
 -- Update the model
 
-update : Message -> Model -> Model
-update (Animate time) model =
-    model
-        |> subUpdate Move
-        |> subUpdate (Fade time)
-        |> subUpdate (Resize time)
+update : Message -> Model -> (Model, Maybe Status.Msg)
+update msg model =
+  case msg of
+    Animate time ->
+      model
+          |> subUpdate Move
+          |> subUpdate (Fade time)
+          |> subUpdate (Resize time)
+          |> Util.pairWith Nothing
+
+    StatusChange sMsg ->
+      (model, Just sMsg)
+
  
  
 subUpdate : SubAction -> Model -> Model

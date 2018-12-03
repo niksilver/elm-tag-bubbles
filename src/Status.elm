@@ -38,7 +38,7 @@ update action status =
 
 -- Render the status bar
 
-view : Status -> Html Msg
+view : Status -> Html a
 view status =
     let
         main = withDefault "Ready" status.main

@@ -58,6 +58,30 @@ linearEaseTest =
         100.0
         (linearEase 101 100 1 1)
 
+    , test "If we go beyond the end of a forward range we should only get to the end" <|
+      \_ ->
+        expectCloseEnough
+        20
+        (linearEase 15 20 5 6)
+
+    , test "If we are before the start of a forward range we should only be at the start" <|
+      \_ ->
+        expectCloseEnough
+        10
+        (linearEase 10 30 5 -0.5)
+
+    , test "If we go beyond the end of a backwards range we should only get to the (lower) end" <|
+      \_ ->
+        expectCloseEnough
+        15
+        (linearEase 20 15 5 6)
+
+    , test "If we are before the start of a backwards range we should only be at the (higher) start" <|
+      \_ ->
+        expectCloseEnough
+        30
+        (linearEase 30 10 5 -0.5)
+
     ]
 
 

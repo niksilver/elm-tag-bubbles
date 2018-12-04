@@ -245,12 +245,14 @@ subUpdate subAction model =
 
 -- Calculate a point on a linear scale.
 -- 'from' and 'to' are our start and end points.
--- Our input is the 'now' value, in the range 0 to 'max'.
+-- Our input is the 'now' value, in the range 0 to 'max_'.
 -- Our output is the appropriate point in the from-to range.
 
 linearEase : Float -> Float -> Float -> Float -> Float
-linearEase from to max now =
-  (now / max) * (to - from) + from
+linearEase from to max_ now =
+  (now / max_) * (to - from) + from
+  |> min (max from to)
+  |> max (min from to)
 
 
 updateFade : Animation -> Posix -> Animation

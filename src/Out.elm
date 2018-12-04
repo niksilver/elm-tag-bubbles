@@ -1,6 +1,7 @@
 module Out exposing (Msg(..))
 
 import Status
+import Constants
 
 
 --
@@ -10,5 +11,6 @@ import Status
 
 type Msg
   = StatusMsg Status.Msg
+  | RequestTag Constants.Tag
 
 

@@ -11,8 +11,7 @@ module Bubble exposing
     )
 
 import Constants exposing
-    ( Tag
-    , maxBubbleOpacity
+    ( maxBubbleOpacity
     , transitionDuration
     )
 -- import Context exposing (Context)
@@ -68,6 +67,7 @@ type Resizing = Resizing Float Float | NotResizing
 type Message
   = Animate Posix
   | StatusMsg Status.Msg
+  | RequestTag Constants.Tag
 
 
 type SubAction
@@ -201,7 +201,7 @@ targetSize model =
 
 -- Making a basic bubble
 
-make : Tag -> Float -> Model
+make : Constants.Tag -> Float -> Model
 make tag size =
     { id = tag.id
     , x = 0.0 , y = 0.0
@@ -227,6 +227,8 @@ update msg model =
     StatusMsg sMsg ->
       (model, Just (Out.StatusMsg sMsg))
 
+    RequestTag tag ->
+      (model, Just (Out.RequestTag tag))
  
  
 subUpdate : SubAction -> Model -> Model
@@ -289,7 +291,7 @@ view model =
     let
         x = model.x
         y = model.y
-        tag = Tag model.id model.label
+        tag = Constants.Tag model.id model.label
         -- onClickAttr = onClick (message context.click tag)
         labelWidth = 2 * model.size * 0.85
         textDiv =
@@ -306,7 +308,7 @@ view model =
             , cy (String.fromFloat y)
             , r (String.fromFloat model.size)
             , opacity "0"
-            -- , onClickAttr
+            , onClick (RequestTag tag)
             , onMouseOver (StatusMsg (Status.Rollover tag.webTitle))
             , onMouseOut (StatusMsg Status.NoRollover)
             ]

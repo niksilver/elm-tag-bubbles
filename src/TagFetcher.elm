@@ -61,7 +61,7 @@ responseToTags =
 getTags : String -> Cmd TagsResult
 getTags tag =
   Http.get
-    { url = tag
+    { url = url tag
     , expect = Http.expectJson (\x -> TagsResult x) responseToTags
     }
 

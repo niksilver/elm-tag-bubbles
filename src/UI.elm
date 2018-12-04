@@ -83,18 +83,15 @@ update msg model =
     Direct msg_ ->
       let
           (world, maybeOutMsg) = World.update msg_ model.world
-          status =
-            case maybeOutMsg of
-              Just (Out.StatusMsg statusMsg) ->
-                Status.update statusMsg model.status
-              Nothing ->
-                model.status
+          status1 = statusFromOutMsg maybeOutMsg model.status
+          (maybeOutMsg2, fetchCmd) = fetchFromOutMsg maybeOutMsg
+          status2 = statusFromOutMsg maybeOutMsg2 status1
       in
         ( { model
           | world = world
-          , status = status
+          , status = status2
           }
-        , Cmd.none
+        , fetchCmd
         )
 
     Tick time ->
@@ -154,6 +151,32 @@ update msg model =
 
     NoOp ->
         (model, Cmd.none)
+
+
+statusFromOutMsg : Maybe Out.Msg -> Status -> Status
+statusFromOutMsg maybeOutMsg oldStatus =
+  case maybeOutMsg of
+    Just (Out.StatusMsg statusMsg) ->
+      Status.update statusMsg oldStatus
+
+    _ ->
+      oldStatus
+
+
+fetchFromOutMsg : Maybe Out.Msg -> (Maybe Out.Msg, Cmd Msg)
+fetchFromOutMsg maybeOutMsg =
+  case maybeOutMsg of
+    Just (Out.RequestTag tag) ->
+      let
+          notice = "Fetching " ++ (tag.webTitle)
+          outMsg = Just (Out.StatusMsg (Status.Main notice))
+          cmd = TagFetcher.getTags tag.id |> Cmd.map NewTags
+      in
+          (outMsg, cmd)
+
+    _ ->
+      (Nothing, Cmd.none)
+
 
 view : Model -> Html Msg
 view model =

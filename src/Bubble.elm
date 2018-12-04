@@ -290,10 +290,6 @@ view model =
         y = model.y
         tag = Tag model.id model.label
         -- onClickAttr = onClick (message context.click tag)
-        -- onMouseOutAttr =
-        --     onMouseOut (message context.status NoRollover)
-        -- onMouseOverAttr =
-        --     onMouseOver (message context.status (Rollover tag.webTitle))
         labelWidth = 2 * model.size * 0.85
         textDiv =
             Label.view model.label x y labelWidth model.animation.opacity

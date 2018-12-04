@@ -31,7 +31,7 @@ import Svg.Attributes exposing (cx, cy, r, fill, opacity)
 -- import Html
 -- import Html.Attributes
 -- import Html.Events
--- import Svg.Events exposing (onClick, onMouseOver, onMouseOut)
+import Svg.Events exposing (onClick, onMouseOver, onMouseOut)
 -- import Signal exposing (message)
 
 
@@ -66,7 +66,7 @@ type Resizing = Resizing Float Float | NotResizing
 
 type Message
   = Animate Posix
-  | StatusChange Status.Msg
+  | StatusMsg Status.Msg
 
 
 type SubAction
@@ -223,7 +223,7 @@ update msg model =
           |> subUpdate (Resize time)
           |> Util.pairWith Nothing
 
-    StatusChange sMsg ->
+    StatusMsg sMsg ->
       (model, Just sMsg)
 
  
@@ -310,8 +310,8 @@ view model =
             , r (String.fromFloat model.size)
             , opacity "0"
             -- , onClickAttr
-            -- , onMouseOverAttr
-            -- , onMouseOutAttr
+            , onMouseOver (StatusMsg (Status.Rollover tag.webTitle))
+            , onMouseOut (StatusMsg Status.NoRollover)
             ]
     in
         g

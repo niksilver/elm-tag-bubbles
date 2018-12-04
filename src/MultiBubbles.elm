@@ -14,7 +14,7 @@ import Constants exposing (Id, Tag)
 -- import Context exposing (Context, forwardTo)
 import Bubble
 import Springs exposing (drag, dampen)
-import Status
+import Out
 import Util
 
 import List exposing (reverse, length, indexedMap, append, filter, member)
@@ -230,7 +230,7 @@ reorder model =
 
 -- Update the model
 
-update : Msg -> Model -> (Model, Maybe Status.Msg)
+update : Msg -> Model -> (Model, Maybe Out.Msg)
 update msg model =
   case msg of
     Direct id bubAct ->
@@ -243,7 +243,7 @@ update msg model =
       (updateVelocities accels model, Nothing)
 
 
-updateOne : Id -> Bubble.Message -> Model -> (Model, Maybe Status.Msg)
+updateOne : Id -> Bubble.Message -> Model -> (Model, Maybe Out.Msg)
 updateOne id bubMsg model =
     let
         selectiveUpdate bubModel =
@@ -251,14 +251,14 @@ updateOne id bubMsg model =
                 Bubble.update bubMsg bubModel
             else
                 (bubModel, Nothing)
-        extractModelAndStatus pairs =
+        extractModelAndOutMsg pairs =
           ( List.map Tuple.first pairs
           , List.map Tuple.second pairs
             |> Util.takeFirstJust
           )
     in
         List.map selectiveUpdate model
-        |> extractModelAndStatus
+        |> extractModelAndOutMsg
 
 
 -- Update all the bubbles with the Tick action

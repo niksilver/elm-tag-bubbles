@@ -16,6 +16,7 @@ import TagFetcher
 -- import NavBar
 import Status exposing (Status)
 -- import Help exposing (Help)
+import Out
 
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)
@@ -81,10 +82,10 @@ update msg model =
 
     Direct msg_ ->
       let
-          (world, maybeStatus) = World.update msg_ model.world
+          (world, maybeOutMsg) = World.update msg_ model.world
           status =
-            case maybeStatus of
-              Just statusMsg ->
+            case maybeOutMsg of
+              Just (Out.StatusMsg statusMsg) ->
                 Status.update statusMsg model.status
               Nothing ->
                 model.status

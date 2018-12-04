@@ -19,7 +19,7 @@ import Bubble exposing (fadeInAnimation)
 import Springs exposing (toCounter, acceleration, accelDict)
 import Sizes
 import TagFetcher
-import Status
+import Out
 import Util
 
 import String
@@ -56,15 +56,15 @@ type alias ViewBox
       , height : Float }
 
 
-update : Msg -> Model -> (Model, Maybe Status.Msg)
+update : Msg -> Model -> (Model, Maybe Out.Msg)
 update action model =
     case action of
         Direct act ->
           let
-              (bubsMod, sMsg) = MB.update act model.bubbles
+              (bubsMod, outMsg) = MB.update act model.bubbles
           in
               ( { model | bubbles = bubsMod }
-              , sMsg
+              , outMsg
               )
 
         Tick time ->

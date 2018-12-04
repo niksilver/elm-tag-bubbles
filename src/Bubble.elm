@@ -16,6 +16,7 @@ import Constants exposing
     , transitionDuration
     )
 -- import Context exposing (Context)
+import Out
 import Colours exposing (pickBaseColour)
 import Label
 import Status
@@ -213,7 +214,7 @@ make tag size =
 
 -- Update the model
 
-update : Message -> Model -> (Model, Maybe Status.Msg)
+update : Message -> Model -> (Model, Maybe Out.Msg)
 update msg model =
   case msg of
     Animate time ->
@@ -224,7 +225,7 @@ update msg model =
           |> Util.pairWith Nothing
 
     StatusMsg sMsg ->
-      (model, Just sMsg)
+      (model, Just (Out.StatusMsg sMsg))
 
  
  

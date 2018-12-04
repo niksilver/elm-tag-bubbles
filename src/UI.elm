@@ -34,9 +34,8 @@ type alias Model =
     }
 
 type Msg
-   =
-   -- Resize (Int, Int)
-     Direct World.Msg
+   = Resize Int Int
+   | Direct World.Msg
    | Tick Posix
    | NewTags TagsResult
    -- | Click CountedClick
@@ -72,13 +71,16 @@ type Msg
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
---     Resize dims ->
---         ({ model
---          | dimensions = dims
---          , world = World.update (World.Resize dims) model.world
---          }
---          , Nothing
---         )
+    Resize width height ->
+        let
+            (world, _) = World.update (World.Resize width height) model.world
+        in
+          ({ model
+           | dimensions = (width, height)
+           , world = world
+           }
+           , Cmd.none
+          )
 
     Direct msg_ ->
       let

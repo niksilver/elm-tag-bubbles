@@ -22,6 +22,9 @@ main =
 
 subscriptions : UI.Model -> Sub UI.Msg
 subscriptions model =
-  Browser.Events.onAnimationFrame UI.Tick
+  Sub.batch
+    [ Browser.Events.onAnimationFrame UI.Tick
+    , Browser.Events.onResize UI.Resize
+    ]
 
 

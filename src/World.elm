@@ -45,7 +45,7 @@ type Msg
     | Tick Posix
     | NewTags (List Tags)
     -- | Recentre
-    -- | Resize (Int, Int)
+    | Resize Int Int
     -- | Scale String
 
 
@@ -94,20 +94,24 @@ update action model =
 --                     { model | bubbles = MB.recentre model.bubbles dims }
 --                 Nothing ->
 --                     model
---         Resize windowDims ->
---             let
---                 newDims = size windowDims
---                 newBubbles =
---                     case model.dimensions of
---                         Just oldDims ->
---                             MB.forNewDimensions oldDims newDims model.bubbles
---                         Nothing ->
---                             MB.recentre model.bubbles newDims
---             in
---             { model
---             | dimensions = Just newDims
---             , bubbles = newBubbles
---             }
+
+        Resize width height ->
+            let
+                newDims = size width height
+                newBubbles =
+                    case model.dimensions of
+                        Just oldDims ->
+                            MB.forNewDimensions oldDims newDims model.bubbles
+                        Nothing ->
+                            MB.recentre model.bubbles newDims
+            in
+                ( { model
+                  | dimensions = Just newDims
+                  , bubbles = newBubbles
+                  }
+                , Nothing
+                )
+
 --         Scale scaleStr ->
 --             case String.toFloat (Debug.log "scale" scaleStr) of
 --                 Ok scale -> { model | scale = scale }
@@ -145,8 +149,8 @@ newTags listListTag (width, height) model =
 
 -- Work out the size of the world based on the window's dimensions
 
-size : (Int, Int) -> (Int, Int)
-size (winWidth, winHeight) =
+size : Int -> Int -> (Int, Int)
+size winWidth winHeight =
     let
         -- World's width with borders
         fullyBorderedWidth = winWidth - 2 * Constants.sideBorderWidth

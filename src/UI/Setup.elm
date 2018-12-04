@@ -14,8 +14,9 @@ import Bubble
 import Status exposing (Status)
 -- import Help
 
+import Browser.Dom as Dom
 import Dict exposing (Dict, empty, insert)
--- import Task exposing (Task)
+import Task
 
 -- Initial model
 
@@ -66,7 +67,7 @@ model =
     , world =
         { bubbles = multiBubbleModel
         , springs = springs
-        , dimensions = Just (width, height)
+        , dimensions = Nothing
         , scale = 1
         }
     , status = Status Nothing Nothing
@@ -74,9 +75,18 @@ model =
     }
 
 
+-- Create a resize message from a viewport
+
+resizeMsg : Dom.Viewport -> UI.Msg
+resizeMsg vp =
+  UI.Resize (vp.viewport.width |> floor) (vp.viewport.height |> floor)
+
+
 -- Initial state
 
 init : () -> (UI.Model, Cmd UI.Msg)
 init _ =
-    (model, Cmd.none)
+    ( model
+    , Task.perform resizeMsg Dom.getViewport
+    )
 

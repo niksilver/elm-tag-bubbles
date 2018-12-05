@@ -28,7 +28,7 @@ type alias Model = List Bubble.Model
 
 type Msg
     = Tick Posix
-    | Direct Id Bubble.Message
+    | ToBubble Id Bubble.Message
     | AdjustVelocities (Dict Id (Float, Float))
 
 
@@ -232,7 +232,7 @@ reorder model =
 update : Msg -> Model -> (Model, Out.Msg)
 update msg model =
   case msg of
-    Direct id bubAct ->
+    ToBubble id bubAct ->
       updateOne id bubAct model
 
     Tick time ->
@@ -312,7 +312,7 @@ view model =
   let
       mapper bubble =
         Bubble.view bubble
-        |> Svg.map (Direct bubble.id)
+        |> Svg.map (ToBubble bubble.id)
   in
     List.map mapper model
 

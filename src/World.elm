@@ -40,7 +40,7 @@ type alias Model =
 
 
 type Msg
-    = Direct MB.Msg
+    = ToMultiBubbles MB.Msg
     | Tick Posix
     | NewTags (List Tags)
     | Recentre
@@ -58,7 +58,7 @@ type alias ViewBox
 update : Msg -> Model -> (Model, Out.Msg)
 update action model =
     case action of
-        Direct act ->
+        ToMultiBubbles act ->
           let
               (bubsMod, outMsg) = MB.update act model.bubbles
           in
@@ -75,7 +75,7 @@ update action model =
                 (bubsMod, _) = MB.update (MB.AdjustVelocities accels) bubbles
                 model_ = { model | bubbles = bubsMod }
             in
-                update (Direct (MB.Tick time)) model_
+                update (ToMultiBubbles (MB.Tick time)) model_
 
         NewTags listListTag ->
             case model.dimensions of
@@ -211,6 +211,6 @@ viewWithDimensions (wdth, hght) model =
         , height (hght |> String.fromInt)
         , SVGA.viewBox (viewBox (wdth, hght) model.scale |> viewBoxToString)
         ]
-        -- (MB.view (forwardTo context Direct) model.bubbles)
-        (MB.view model.bubbles |> List.map (Svg.map Direct))
+        -- (MB.view (forwardTo context ToMultiBubbles) model.bubbles)
+        (MB.view model.bubbles |> List.map (Svg.map ToMultiBubbles))
 

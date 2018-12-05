@@ -28,7 +28,7 @@ type alias Model =
 
 type Msg
    = Resize Int Int
-   | Direct World.Msg
+   | ToWorld World.Msg
    | Tick Posix
    | NewTags TagsResult
    | HelpMsg Help
@@ -52,7 +52,7 @@ update msg model =
            , Cmd.none
           )
 
-    Direct msg_ ->
+    ToWorld msg_ ->
       let
           (world, outMsg) = World.update msg_ model.world
           model2 = { model | world = world }
@@ -166,7 +166,7 @@ view model =
         [ div [ class "sideBar" ] []
         , div [ class "column" ]
           [ NavBar.view world.scale |> Html.map ToNavBar
-          , World.view world |> Html.map Direct
+          , World.view world |> Html.map ToWorld
           , Status.view model.status
           ]
         , div [ class "sideBar" ] []

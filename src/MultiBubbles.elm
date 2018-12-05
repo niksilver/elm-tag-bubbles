@@ -230,31 +230,31 @@ reorder model =
 
 -- Update the model
 
-update : Msg -> Model -> (Model, Maybe Out.Msg)
+update : Msg -> Model -> (Model, Out.Msg)
 update msg model =
   case msg of
     Direct id bubAct ->
       updateOne id bubAct model
 
     Tick time ->
-      (updateAll model time, Nothing)
+      (updateAll model time, Out.None)
 
     AdjustVelocities accels ->
-      (updateVelocities accels model, Nothing)
+      (updateVelocities accels model, Out.None)
 
 
-updateOne : Id -> Bubble.Message -> Model -> (Model, Maybe Out.Msg)
+updateOne : Id -> Bubble.Message -> Model -> (Model, Out.Msg)
 updateOne id bubMsg model =
     let
         selectiveUpdate bubModel =
             if id == bubModel.id then
                 Bubble.update bubMsg bubModel
             else
-                (bubModel, Nothing)
+                (bubModel, Out.None)
         extractModelAndOutMsg pairs =
           ( List.map Tuple.first pairs
           , List.map Tuple.second pairs
-            |> Util.takeFirstJust
+            |> Out.takeFirstActualMsg
           )
     in
         List.map selectiveUpdate model

@@ -1,16 +1,30 @@
-module NavBar exposing (view)
+module NavBar exposing (Msg, update, view)
 
 import Constants
 -- import Context exposing (Context)
 -- import World
 import Help exposing (Help)
+import Out
 
 import Html exposing (Html, button, text, div, input, label)
 import Html.Attributes as Attrs exposing (style, type_, class, for, id)
 import Html.Events exposing (onClick, on, targetValue)
 
 
-view : Float -> Html Help
+type Msg
+  = HelpMsg Help
+
+
+-- We don't update any model, but we do convert in messages to out (top level) messages
+
+update : Msg -> Out.Msg
+update msg =
+  case msg of
+    HelpMsg helpMsg ->
+      Out.HelpMsg helpMsg
+
+
+view : Float -> Html Msg
 view scale =
 --     let
 --         scaleMessage : String -> Signal.Message
@@ -49,7 +63,7 @@ view scale =
 --             ]
 --             []
           [ button
-            [ onClick Help.On ]
+            [ onClick (HelpMsg Help.On) ]
             [ text "Help" ]
           ]
         ]

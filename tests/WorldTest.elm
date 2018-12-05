@@ -30,19 +30,19 @@ sizeTest =
       \_ ->
         Expect.equal
           (1000 - 2 * sideBorderWidth, 800 - navHeight - statusBarHeight)
-          (size (1000, 800))
+          (size 1000 800)
 
     , test "Slightly-too-narrow window should yield reduced borders" <|
       \_ ->
         Expect.equal
           (Constants.minWorldWidth, 800 - navHeight - statusBarHeight)
-          (size (Constants.minWorldWidth + 3 + 3, 800))
+          (size (Constants.minWorldWidth + 3 + 3) 800)
 
     , test "Very narrow window should yield world as wide as window" <|
       \_ ->
         Expect.equal
           (100, 800 - navHeight - statusBarHeight)
-          (size (100, 800))
+          (size 100 800)
 
     ]
 

@@ -214,7 +214,7 @@ make tag size =
 
 -- Update the model
 
-update : Message -> Model -> (Model, Maybe Out.Msg)
+update : Message -> Model -> (Model, Out.Msg)
 update msg model =
   case msg of
     Animate time ->
@@ -222,13 +222,13 @@ update msg model =
           |> subUpdate Move
           |> subUpdate (Fade time)
           |> subUpdate (Resize time)
-          |> Util.pairWith Nothing
+          |> Util.pairWith Out.None
 
     StatusMsg sMsg ->
-      (model, Just (Out.StatusMsg sMsg))
+      (model, Out.StatusMsg sMsg)
 
     RequestTag tag ->
-      (model, Just (Out.RequestTag tag))
+      (model, Out.RequestTag tag)
  
  
 subUpdate : SubAction -> Model -> Model

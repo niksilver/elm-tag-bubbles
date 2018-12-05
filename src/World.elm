@@ -56,7 +56,7 @@ type alias ViewBox
       , height : Float }
 
 
-update : Msg -> Model -> (Model, Maybe Out.Msg)
+update : Msg -> Model -> (Model, Out.Msg)
 update action model =
     case action of
         Direct act ->
@@ -82,11 +82,11 @@ update action model =
             case model.dimensions of
                 Just dimensions ->
                   ( newTags listListTag dimensions model
-                  , Nothing
+                  , Out.None
                   )
 
                 Nothing ->
-                  (model, Nothing)
+                  (model, Out.None)
 
 --         Recentre ->
 --             case model.dimensions of
@@ -109,7 +109,7 @@ update action model =
                   | dimensions = Just newDims
                   , bubbles = newBubbles
                   }
-                , Nothing
+                , Out.None
                 )
 
 --         Scale scaleStr ->

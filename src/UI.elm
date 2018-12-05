@@ -41,6 +41,7 @@ type Msg
    -- | Click CountedClick
    -- | StatusAction Status.Action
    | HelpMsg Help
+   | ToNavBar NavBar.Msg
    | NoOp
 
 
@@ -84,17 +85,12 @@ update msg model =
 
     Direct msg_ ->
       let
-          (world, maybeOutMsg) = World.update msg_ model.world
-          status1 = statusFromOutMsg maybeOutMsg model.status
-          (maybeOutMsg2, fetchCmd) = fetchFromOutMsg maybeOutMsg
-          status2 = statusFromOutMsg maybeOutMsg2 status1
+          x = Debug.log "UI.update case Direct (i), msg_ =" msg_
+          (world, outMsg) = World.update msg_ model.world
+          y = Debug.log "UI.update case Direct (ii), outMsg =" outMsg
+          model2 = { model | world = world }
       in
-        ( { model
-          | world = world
-          , status = status2
-          }
-        , fetchCmd
-        )
+          updateFromOutMsgs outMsg Cmd.none model2
 
     Tick time ->
         let
@@ -105,6 +101,7 @@ update msg model =
             )
 
     NewTags tags ->
+        let x = Debug.log "UI.update case NewTags" tags in
         case tags of
             TagsResult (Ok data) ->
                 let
@@ -146,6 +143,13 @@ update msg model =
 --         , Nothing
 --         )
 
+    ToNavBar navMsg ->
+        let
+            x = Debug.log "UI.update case ToNavBar" navMsg
+            outMsg = NavBar.update navMsg
+        in
+            updateFromOutMsgs outMsg Cmd.none model
+
     HelpMsg onOff ->
         ( { model | help = onOff }
         , Cmd.none
@@ -154,30 +158,51 @@ update msg model =
     NoOp ->
         (model, Cmd.none)
 
+updateFromOutMsgs : Out.Msg -> Cmd Msg -> Model -> (Model, Cmd Msg)
+updateFromOutMsgs outMsg cmd model =
+  let
+      y = (Debug.log "UI.updateFromOutMsgs outMsg=" outMsg)
+  in
+  case outMsg of
+    Out.None ->
+        let x = Debug.log "UI.updateFromOutMsgs case, Out.None clause" outMsg in
+      (model, cmd)
 
-statusFromOutMsg : Maybe Out.Msg -> Status -> Status
-statusFromOutMsg maybeOutMsg oldStatus =
-  case maybeOutMsg of
-    Just (Out.StatusMsg statusMsg) ->
-      Status.update statusMsg oldStatus
-
-    _ ->
-      oldStatus
-
-
-fetchFromOutMsg : Maybe Out.Msg -> (Maybe Out.Msg, Cmd Msg)
-fetchFromOutMsg maybeOutMsg =
-  case maybeOutMsg of
-    Just (Out.RequestTag tag) ->
+    actualOutMsg ->
       let
-          notice = "Fetching " ++ (tag.webTitle)
-          outMsg = Just (Out.StatusMsg (Status.Main notice))
-          cmd = TagFetcher.getTags tag.id |> Cmd.map NewTags
+          x = Debug.log "UI.updateFromOutMsgs case, actualOutMsg clause" actualOutMsg
+          (model2, cmd2, out2) = updateFromOutMsg actualOutMsg model
       in
-          (outMsg, cmd)
+          updateFromOutMsgs out2 (Cmd.batch [cmd, cmd2]) model2
 
-    _ ->
-      (Nothing, Cmd.none)
+
+updateFromOutMsg : Out.Msg -> Model -> (Model, Cmd Msg, Out.Msg)
+updateFromOutMsg outMsg model =
+  case (Debug.log "UI.updateFromOutMsg case " outMsg) of
+    Out.StatusMsg sMsg ->
+      ( { model | status = Status.update sMsg model.status }
+      , Cmd.none
+      , Out.None
+      )
+
+    Out.HelpMsg hMsg ->
+      ( { model | help = hMsg }
+      , Cmd.none
+      , Out.None
+      )
+
+    Out.RequestTag tag ->
+      let
+          x = Debug.log "UI.updateFromOutMsg case, Out.RequestTag clause, tag is" tag
+          notice = "Fetching " ++ (tag.webTitle)
+          outMsg2 = Out.StatusMsg (Status.Main notice)
+          cmd = TagFetcher.getTags tag.id |> Cmd.map NewTags
+          y = Debug.log "UI.updateFromOutMsg case, Out.RequestTag clause cmd is" cmd
+      in
+          (model, cmd, outMsg2)
+
+    Out.None ->
+      (model, Cmd.none, Out.None)
 
 
 view : Model -> Html Msg
@@ -193,7 +218,7 @@ view model =
         div [ class "row" ]
         [ div [ class "sideBar" ] []
         , div [ class "column" ]
-          [ NavBar.view world.scale |> Html.map HelpMsg
+          [ NavBar.view world.scale |> Html.map ToNavBar
           , World.view world |> Html.map Direct
           , Status.view model.status
           ]

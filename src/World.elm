@@ -44,7 +44,7 @@ type Msg
     = Direct MB.Msg
     | Tick Posix
     | NewTags (List Tags)
-    -- | Recentre
+    | Recentre
     | Resize Int Int
     -- | Scale String
 
@@ -88,12 +88,15 @@ update action model =
                 Nothing ->
                   (model, Out.None)
 
---         Recentre ->
---             case model.dimensions of
---                 Just dims ->
---                     { model | bubbles = MB.recentre model.bubbles dims }
---                 Nothing ->
---                     model
+        Recentre ->
+            case model.dimensions of
+                Just dims ->
+                    ( { model | bubbles = MB.recentre model.bubbles dims }
+                    , Out.None
+                    )
+
+                Nothing ->
+                    (model, Out.None)
 
         Resize width height ->
             let

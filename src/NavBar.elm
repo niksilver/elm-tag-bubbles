@@ -13,6 +13,7 @@ import Html.Events exposing (onClick, on, targetValue)
 
 type Msg
   = HelpMsg Help
+  | Recentre
 
 
 -- We don't update any model, but we do convert in messages to out (top level) messages
@@ -22,6 +23,9 @@ update msg =
   case msg of
     HelpMsg helpMsg ->
       Out.HelpMsg helpMsg
+
+    Recentre ->
+      Out.Recentre
 
 
 view : Float -> Html Msg
@@ -41,9 +45,9 @@ view scale =
           -- Vertical alignment trick from
           -- http://zerosixthree.se/vertical-align-anything-with-just-3-lines-of-css/
           [ class "vcentre" ]
---           [ button
---             [ onClick worldContext.address World.Recentre ]
---             [ text "Recentre" ]
+          [ button
+            [ onClick Recentre ]
+            [ text "Recentre" ]
 --           , label
 --             [ for "scale"
 --             , id "scale-label"
@@ -62,7 +66,7 @@ view scale =
 --             , on "input" targetValue scaleMessage
 --             ]
 --             []
-          [ button
+          , button
             [ onClick (HelpMsg Help.On) ]
             [ text "Help" ]
           ]

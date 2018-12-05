@@ -14,6 +14,7 @@ type Msg
   = StatusMsg Status.Msg
   | HelpMsg Help.Help
   | RequestTag Constants.Tag
+  | Recentre
   | None
 
 

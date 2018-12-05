@@ -191,6 +191,13 @@ updateFromOutMsg outMsg model =
       in
           (model, cmd, outMsg2)
 
+    Out.Recentre ->
+      let
+          (world, outMsg2) = World.update World.Recentre model.world
+          model2 = { model | world = world }
+      in
+          (model2, Cmd.none, outMsg2)
+
     Out.None ->
       (model, Cmd.none, Out.None)
 

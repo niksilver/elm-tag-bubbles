@@ -85,9 +85,7 @@ update msg model =
 
     Direct msg_ ->
       let
-          x = Debug.log "UI.update case Direct (i), msg_ =" msg_
           (world, outMsg) = World.update msg_ model.world
-          y = Debug.log "UI.update case Direct (ii), outMsg =" outMsg
           model2 = { model | world = world }
       in
           updateFromOutMsgs outMsg Cmd.none model2
@@ -101,7 +99,6 @@ update msg model =
             )
 
     NewTags tags ->
-        let x = Debug.log "UI.update case NewTags" tags in
         case tags of
             TagsResult (Ok data) ->
                 let
@@ -145,7 +142,6 @@ update msg model =
 
     ToNavBar navMsg ->
         let
-            x = Debug.log "UI.update case ToNavBar" navMsg
             outMsg = NavBar.update navMsg
         in
             updateFromOutMsgs outMsg Cmd.none model
@@ -160,17 +156,12 @@ update msg model =
 
 updateFromOutMsgs : Out.Msg -> Cmd Msg -> Model -> (Model, Cmd Msg)
 updateFromOutMsgs outMsg cmd model =
-  let
-      y = (Debug.log "UI.updateFromOutMsgs outMsg=" outMsg)
-  in
   case outMsg of
     Out.None ->
-        let x = Debug.log "UI.updateFromOutMsgs case, Out.None clause" outMsg in
       (model, cmd)
 
     actualOutMsg ->
       let
-          x = Debug.log "UI.updateFromOutMsgs case, actualOutMsg clause" actualOutMsg
           (model2, cmd2, out2) = updateFromOutMsg actualOutMsg model
       in
           updateFromOutMsgs out2 (Cmd.batch [cmd, cmd2]) model2
@@ -178,7 +169,7 @@ updateFromOutMsgs outMsg cmd model =
 
 updateFromOutMsg : Out.Msg -> Model -> (Model, Cmd Msg, Out.Msg)
 updateFromOutMsg outMsg model =
-  case (Debug.log "UI.updateFromOutMsg case " outMsg) of
+  case outMsg of
     Out.StatusMsg sMsg ->
       ( { model | status = Status.update sMsg model.status }
       , Cmd.none
@@ -193,11 +184,9 @@ updateFromOutMsg outMsg model =
 
     Out.RequestTag tag ->
       let
-          x = Debug.log "UI.updateFromOutMsg case, Out.RequestTag clause, tag is" tag
           notice = "Fetching " ++ (tag.webTitle)
           outMsg2 = Out.StatusMsg (Status.Main notice)
           cmd = TagFetcher.getTags tag.id |> Cmd.map NewTags
-          y = Debug.log "UI.updateFromOutMsg case, Out.RequestTag clause cmd is" cmd
       in
           (model, cmd, outMsg2)
 

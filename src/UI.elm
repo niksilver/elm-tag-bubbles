@@ -13,9 +13,9 @@ import Constants exposing (TagsResult(..))
 --     )
 import World
 import TagFetcher
--- import NavBar
+import NavBar
 import Status exposing (Status)
--- import Help exposing (Help)
+import Help exposing (Help)
 import Out
 
 import Html exposing (Html, div)
@@ -30,7 +30,7 @@ type alias Model =
     { dimensions : (Int, Int)
     , world : World.Model
     , status : Status
-    -- , help : Help
+    , help : Help
     }
 
 type Msg
@@ -40,7 +40,7 @@ type Msg
    | NewTags TagsResult
    -- | Click CountedClick
    -- | StatusAction Status.Action
-   -- | HelpAction Help
+   | HelpMsg Help
    | NoOp
 
 
@@ -145,11 +145,11 @@ update msg model =
 --         ( { model | status = Status.update statAct model.status }
 --         , Nothing
 --         )
--- 
---     HelpAction onOff ->
---         ( { model | help = onOff }
---         , Nothing
---         )
+
+    HelpMsg onOff ->
+        ( { model | help = onOff }
+        , Cmd.none
+        )
 
     NoOp ->
         (model, Cmd.none)
@@ -193,12 +193,11 @@ view model =
         div [ class "row" ]
         [ div [ class "sideBar" ] []
         , div [ class "column" ]
-          [ -- NavBar.view worldContext helpContext world.scale
-          -- , World.view worldContext world
-            World.view world |> Html.map Direct
+          [ NavBar.view world.scale |> Html.map HelpMsg
+          , World.view world |> Html.map Direct
           , Status.view model.status
           ]
         , div [ class "sideBar" ] []
-        -- , Help.view helpContext model.help
+        , Help.view model.help |> Html.map HelpMsg
         ]
 

@@ -12,7 +12,7 @@ import PairCounter exposing (emptyCounter, incPair)
 import Springs
 import Bubble
 import Status exposing (Status)
--- import Help
+import Help
 
 import Browser.Dom as Dom
 import Dict exposing (Dict, empty, insert)
@@ -71,7 +71,7 @@ model =
         , scale = 1
         }
     , status = Status Nothing Nothing
-    -- , help = Help.Off
+    , help = Help.Off
     }
 
 

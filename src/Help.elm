@@ -1,12 +1,15 @@
-module Help (Help(On, Off), view) where
+module Help exposing (Help(..), view)
 
-import Context exposing (Context)
+
+-- import Context exposing (Context)
 
 import Html exposing (Html, div, text, h1, p, button, a)
 import Html.Attributes exposing (id, class, href)
 import Html.Events exposing (onClick)
 
+
 type Help = On | Off
+
 
 helpText : List String
 helpText = [ """The Guardian produces a lot of content every day, and each
@@ -29,7 +32,8 @@ your chosen topic."""
 the bubble and its name will appear on the bottom right."""
     ]
 
-loveHtml : List Html
+
+loveHtml : List (Html x)
 loveHtml =
     [ text "Made with "
     , a
@@ -41,7 +45,8 @@ loveHtml =
       [ text "the Elm language" ]
     ]
 
-sourceHtml : List Html
+
+sourceHtml : List (Html x)
 sourceHtml =
     [ text "Source on "
     , a
@@ -49,20 +54,21 @@ sourceHtml =
       [ text "GitHub" ]
     ]
 
-helpHtml : List Html
+
+helpHtml : List (Html a)
 helpHtml =
     helpText
         |> List.map text
-
         |> List.map (\t -> p [] [t])
 
-helpDiv : Context Help -> Html
-helpDiv context =
+
+helpDiv : Html Help
+helpDiv =
     let
         heading = h1 [] [ text "Tag bubbles" ]
         done =
             div [ id "buttonDiv" ]
-            [ button [ onClick context.address Off ] [ text "Done" ] ]
+            [ button [ onClick Off ] [ text "Done" ] ]
         content = List.concat [ [heading], helpHtml, [done] ]
     in
         div [ id "help" ]
@@ -71,17 +77,12 @@ helpDiv context =
         , div [ id "helpSource", class "footer" ] sourceHtml
         ]
 
-view : Context Help -> Help -> Html
-view context help =
-    let
-        heading = h1 [] [ text "Tag bubbles" ]
-        done =
-            div [ id "buttonDiv" ]
-            [ button [ onClick context.address Off ] [ text "Done" ] ]
-        content = List.concat [ [heading], helpHtml, [done] ]
-    in
-        if (help == On) then
-            helpDiv context
-        else
-            text ""
+
+view : Help -> Html Help
+view help =
+    if (help == On) then
+        helpDiv
+    else
+        text ""
+
 

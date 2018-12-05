@@ -7,7 +7,7 @@ import Browser.Events
 
 main =
   Browser.element
-    { init = Setup.init
+    { init = Init.init
     , update = UI.update
     , subscriptions = subscriptions
     , view = UI.view

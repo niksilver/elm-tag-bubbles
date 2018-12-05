@@ -1,31 +1,37 @@
 module Util exposing
-  ( takeFirstJust
-  , pairWith
+  ( pairWith
+  , httpErrorToString
   )
 
 
--- Take the first element of a list that's `Just` something
+import Http
 
-takeFirstJust : List (Maybe a) -> Maybe a
-takeFirstJust list =
-  case List.head list of
-    Just Nothing ->
-      case List.tail list of
-        Just tail ->
-          takeFirstJust tail
-        Nothing ->
-          Nothing
-
-    Just elt ->
-      elt
-
-    Nothing ->
-      Nothing
 
 -- Add a second value to create a pair
 
 pairWith : b -> a -> (a, b)
 pairWith b a =
   (a, b)
+
+
+-- Express an HTTP error as a string
+
+httpErrorToString : Http.Error -> String
+httpErrorToString error =
+  case error of
+    Http.BadUrl msg ->
+      "Bad URL: " ++ msg
+
+    Http.Timeout ->
+      "Network timeout error"
+
+    Http.NetworkError ->
+      "Unknown network error"
+
+    Http.BadStatus code ->
+      "Error fetching data: status code " ++ (String.fromInt code)
+
+    Http.BadBody msg ->
+      "Error with data received: " ++ msg
 
 

@@ -17,6 +17,7 @@ import NavBar
 import Status exposing (Status)
 import Help exposing (Help)
 import Out
+import Util
 
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)
@@ -110,14 +111,14 @@ update msg model =
                    }
                    , Cmd.none
                   )
+
             TagsResult (Err error) ->
---                 let
---                     statusMessage = "Error: " ++ (toString error)
---                     status = Status.update (Status.Main statusMessage) model.status
---                 in
-                    -- ({ model | status = status }
-                    (model
-                     , Cmd.none
+                let
+                    statusMessage = Util.httpErrorToString error
+                    status = Status.update (Status.Main statusMessage) model.status
+                in
+                    ( { model | status = status }
+                    , Cmd.none
                     )
 
 --     Click clicker ->

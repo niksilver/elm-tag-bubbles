@@ -9,40 +9,8 @@ import Expect exposing (..)
 all : Test
 all =
     describe "MultiBubbles suite"
-    [ takeFirstJustTest
-    , pairWithTest
+    [ pairWithTest
     ]
-
-
-takeFirstJustTest : Test
-takeFirstJustTest =
-  describe "takeFirstJustTest"
-
-  [ test "On an empty list should be nothing" <|
-    \_ ->
-      Expect.equal
-        Nothing
-        (takeFirstJust [])
-
-  , test "On a list of Nothings should be nothing" <|
-    \_ ->
-      Expect.equal
-        Nothing
-        (takeFirstJust [Nothing, Nothing, Nothing])
-
-  , test "With just one in the middle should be that one" <|
-    \_ ->
-      Expect.equal
-        (Just "b")
-        (takeFirstJust [Nothing, Just "b", Nothing, Nothing])
-
-  , test "With one at start and end should be the first one" <|
-    \_ ->
-      Expect.equal
-        (Just "a")
-        (takeFirstJust [Just "a", Nothing, Nothing, Just "d"])
-
-  ]
 
 
 pairWithTest : Test

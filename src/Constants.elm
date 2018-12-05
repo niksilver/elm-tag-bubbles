@@ -1,14 +1,14 @@
 module Constants exposing
-    ( Id, Idable
-    , Tag, Tags
-    , TagsResult(..)
-    , maxBubbles, minBubbleSize, maxBubbleSize
-    , minSpringLength, maxSpringLength
-    , maxBubbleOpacity
-    , transitionDuration
-    , springStrength, airDragFactor, minimumVelocity
-    , navHeight, statusBarHeight, sideBorderWidth, minWorldWidth
-    )
+  ( Id, Idable
+  , Tag, Tags
+  , TagsResult(..)
+  , maxBubbles, minBubbleSize, maxBubbleSize
+  , minSpringLength, maxSpringLength
+  , maxBubbleOpacity
+  , transitionDuration
+  , springStrength, airDragFactor, minimumVelocity
+  , navHeight, statusBarHeight, sideBorderWidth, minWorldWidth
+  )
 
 import Http
 

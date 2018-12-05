@@ -1,8 +1,8 @@
 module Status exposing
-    ( Status
-    , Msg(..), update
-    , view
-    )
+  ( Status
+  , Msg(..), update
+  , view
+  )
 
 import Constants
 
@@ -15,36 +15,39 @@ type alias Status = { rollover : Maybe String, main : Maybe String }
 
 
 type Msg
-    = Rollover String
-    | NoRollover
-    | Main String
-    | NoMain
+  = Rollover String
+  | NoRollover
+  | Main String
+  | NoMain
 
 
 -- Update the status
 
 update : Msg -> Status -> Status
 update action status =
-    case action of
-        Rollover msg ->
-            { status | rollover = Just msg }
-        NoRollover ->
-            { status | rollover = Nothing }
-        Main msg ->
-            { status | main = Just msg }
-        NoMain ->
-            { status | main = Nothing }
+  case action of
+    Rollover msg ->
+      { status | rollover = Just msg }
+
+    NoRollover ->
+      { status | rollover = Nothing }
+
+    Main msg ->
+      { status | main = Just msg }
+
+    NoMain ->
+      { status | main = Nothing }
 
 
 -- Render the status bar
 
 view : Status -> Html a
 view status =
-    let
-        main = withDefault "Ready" status.main
-        rollover = withDefault "" status.rollover
-    in
-        div
+  let
+      main = withDefault "Ready" status.main
+      rollover = withDefault "" status.rollover
+  in
+      div
         [ id "status"
         , style "height" (String.fromInt Constants.statusBarHeight ++ "px")
         , style "line-height" (String.fromInt Constants.statusBarHeight ++ "px")

@@ -1,12 +1,12 @@
 module MultiBubbles exposing
-    ( Msg (..)
-    , Model
-    , Diff, tagDiff
-    , make
-    , initialArrangement, arrangeCentre
-    , Bounds, bounds, recentre, forNewDimensions
-    , update, view
-    )
+  ( Msg (..)
+  , Model
+  , Diff, tagDiff
+  , make
+  , initialArrangement, arrangeCentre
+  , Bounds, bounds, recentre, forNewDimensions
+  , update, view
+  )
 
 -- Multiple bubbles
 
@@ -27,9 +27,9 @@ type alias Model = List Bubble.Model
 
 
 type Msg
-    = Tick Posix
-    | ToBubble Id Bubble.Message
-    | AdjustVelocities (Dict Id (Float, Float))
+  = Tick Posix
+  | ToBubble Id Bubble.Message
+  | AdjustVelocities (Dict Id (Float, Float))
 
 
 -- The difference between tags already in the world and tags fetched
@@ -48,23 +48,23 @@ type alias Bounds = { top : Float, right : Float, bottom : Float, left : Float }
 
 tagDiff : List a -> List a -> Diff a
 tagDiff current latest =
-    let
-        old = filter (\e -> not(member e latest)) current
-        new = filter (\e -> not(member e current)) latest
-        both = filter (\e -> member e current) latest
-    in
-        Diff old new both
+  let
+      old = filter (\e -> not(member e latest)) current
+      new = filter (\e -> not(member e current)) latest
+      both = filter (\e -> member e current) latest
+  in
+      Diff old new both
 
 
 -- Make some new bubbles using a dictionary of tags and a dictionary of sizes
 
 make : List Tag -> Dict Id Float -> Model
 make tags sizeDict =
-    let
-        size tag = Dict.get tag.id sizeDict |> withDefault 10.0
-        mkBubble tag = Bubble.make tag (size tag)
-    in
-        List.map mkBubble tags
+  let
+      size tag = Dict.get tag.id sizeDict |> withDefault 10.0
+      mkBubble tag = Bubble.make tag (size tag)
+  in
+      List.map mkBubble tags
 
 
 -- Create an initial arrangement for a number of new bubbles.
@@ -72,159 +72,162 @@ make tags sizeDict =
 
 initialArrangement : Float -> Float -> Model -> Model -> Model
 initialArrangement centreX centreY oldModel newModel =
-    arrangeCentre centreX centreY newModel
-        |> replace oldModel
-        |> reorder
+  arrangeCentre centreX centreY newModel
+  |> replace oldModel
+  |> reorder
 
 
 arrangeCentre : Float -> Float -> Model -> Model
 arrangeCentre centreX centreY model =
-    let
-        count = length model
-        turn = 2 * pi / (toFloat count)
-        rePos : Int -> Bubble.Model -> Bubble.Model
-        rePos idx bubble =
-            { bubble
-            | x = centreX + 40 * (cos (turn * (toFloat idx)))
-            , y = centreY + 40 * (sin (turn * (toFloat idx)))
-            }
-                |> Bubble.setToFadeIn
-        indexedBubs = indexedMap Tuple.pair model
-    in
-        List.map (\ib -> rePos (Tuple.first ib) (Tuple.second ib)) indexedBubs
+  let
+      count = length model
+      turn = 2 * pi / (toFloat count)
+      rePos : Int -> Bubble.Model -> Bubble.Model
+      rePos idx bubble =
+        { bubble
+        | x = centreX + 40 * (cos (turn * (toFloat idx)))
+        , y = centreY + 40 * (sin (turn * (toFloat idx)))
+        }
+        |> Bubble.setToFadeIn
+      indexedBubs = indexedMap Tuple.pair model
+  in
+      List.map (\ib -> rePos (Tuple.first ib) (Tuple.second ib)) indexedBubs
 
 
 -- Find the bounds of the model
 
 bounds : Model -> Bounds
 bounds model =
-    case model of
-        [] ->
-            Bounds 0 0 0 0
-        hd :: tl ->
-            boundsOne hd |> addBounds tl
+  case model of
+    [] ->
+      Bounds 0 0 0 0
+
+    hd :: tl ->
+      boundsOne hd |> addBounds tl
 
 
 addBounds : Model -> Bounds -> Bounds
 addBounds model bds =
-    case model of
-        [] -> bds
-        hd :: tl -> 
-            addOne bds hd |> addBounds tl
+  case model of
+    [] ->
+      bds
+
+    hd :: tl -> 
+      addOne bds hd |> addBounds tl
 
 
 addOne : Bounds -> Bubble.Model -> Bounds
 addOne bds bub =
-    let
-        b2 = boundsOne bub
-    in
-        Bounds
-        (min bds.top b2.top)
-        (max bds.right b2.right)
-        (max bds.bottom b2.bottom)
-        (min bds.left b2.left)
+  let
+      b2 = boundsOne bub
+  in
+      Bounds
+      (min bds.top b2.top)
+      (max bds.right b2.right)
+      (max bds.bottom b2.bottom)
+      (min bds.left b2.left)
 
 
 boundsOne : Bubble.Model -> Bounds
 boundsOne b =
-    Bounds (b.y - b.size) (b.x + b.size) (b.y + b.size) (b.x - b.size)
+  Bounds (b.y - b.size) (b.x + b.size) (b.y + b.size) (b.x - b.size)
 
 
 -- Recentre the bubbles in a frame of the given dimensions
 
 recentre : Model -> (Int, Int) -> Model
 recentre model (w, h) =
-    let
-        -- window centre x, window centre y
-        wcx = toFloat w / 2
-        wcy = toFloat h / 2
-        -- Bubble bounds centre x and y
-        bds = bounds model
-        bcx = (bds.left + bds.right) / 2
-        bcy = (bds.top + bds.bottom) / 2
-        -- Offset correction needed x and y
-        offx = wcx - bcx
-        offy = wcy - bcy
-        -- Move a bubble
-        move bubble =
-            { bubble | x = bubble.x + offx, y = bubble.y + offy }
-    in
-        List.map move model
+  let
+      -- window centre x, window centre y
+      wcx = toFloat w / 2
+      wcy = toFloat h / 2
+      -- Bubble bounds centre x and y
+      bds = bounds model
+      bcx = (bds.left + bds.right) / 2
+      bcy = (bds.top + bds.bottom) / 2
+      -- Offset correction needed x and y
+      offx = wcx - bcx
+      offy = wcy - bcy
+      -- Move a bubble
+      move bubble =
+        { bubble | x = bubble.x + offx, y = bubble.y + offy }
+  in
+      List.map move model
 
 
 -- Shift the bubbles to accommodate new world dimensions
 
 forNewDimensions : (Int, Int) -> (Int, Int) -> Model -> Model
 forNewDimensions (oldX, oldY) (newX, newY) model =
-    let
-        dX = (toFloat newX - toFloat oldX) / 2
-        dY = (toFloat newY - toFloat oldY) / 2
-        move bubble =
-            { bubble | x = bubble.x + dX, y = bubble.y + dY }
-    in
-        List.map move model
+  let
+      dX = (toFloat newX - toFloat oldX) / 2
+      dY = (toFloat newY - toFloat oldY) / 2
+      move bubble =
+        { bubble | x = bubble.x + dX, y = bubble.y + dY }
+  in
+      List.map move model
 
 
 -- Replace an old model with a new model.
 
 replace : Model -> Model -> Model
 replace oldModel newModel =
-    let
-        diff = tagDiff (List.map .id oldModel) (List.map .id newModel)
-    in
-        oldModel
-            |> fadeIn newModel diff.new
-            |> fadeOut diff.old
-            |> resize newModel diff.both
+  let
+      diff = tagDiff (List.map .id oldModel) (List.map .id newModel)
+  in
+      oldModel
+      |> fadeIn newModel diff.new
+      |> fadeOut diff.old
+      |> resize newModel diff.both
 
 
 fadeIn : Model -> List Id -> Model -> Model
 fadeIn newModel newIds oldModel =
-    filter (\bubble -> member bubble.id newIds) newModel
-        |> append oldModel
+  filter (\bubble -> member bubble.id newIds) newModel
+  |> append oldModel
 
 
 fadeOut : List Id -> Model -> Model
 fadeOut oldIds oldModel =
-    let
-        selectedFade bubble =
-            if (member bubble.id oldIds) then
-                Bubble.setToFadeOut bubble
-            else
-                bubble
-    in
-        List.map selectedFade oldModel
+  let
+      selectedFade bubble =
+        if (member bubble.id oldIds) then
+          Bubble.setToFadeOut bubble
+        else
+          bubble
+  in
+      List.map selectedFade oldModel
 
 
 resize : Model -> List Id -> Model -> Model
 resize newModel ids model =
-    let
-        newBubbleSize id =
-            find (\b -> b.id == id) newModel
-                |> Maybe.map .size
-                |> withDefault 10.0
-        selectedResize bubble =
-            if (member bubble.id ids) then
-                Bubble.setToResize (newBubbleSize bubble.id) bubble
-            else
-                bubble
-    in
-        List.map selectedResize model
+  let
+      newBubbleSize id =
+        find (\b -> b.id == id) newModel
+        |> Maybe.map .size
+        |> withDefault 10.0
+      selectedResize bubble =
+        if (member bubble.id ids) then
+          Bubble.setToResize (newBubbleSize bubble.id) bubble
+        else
+          bubble
+  in
+      List.map selectedResize model
 
 
 -- Find the first element in a list that passes a given test
 
 find : (a -> Bool) -> List a -> Maybe a
 find test list =
-    List.filter test list |> List.head
+  List.filter test list |> List.head
 
 
 -- Reorder the bubbles with the largest first
 
 reorder : Model -> Model
 reorder model =
-    model
-        |> List.sortBy (\bubble -> -1 * (Bubble.targetSize bubble))
+  model
+  |> List.sortBy (\bubble -> -1 * (Bubble.targetSize bubble))
 
 
 -- Update the model
@@ -244,20 +247,20 @@ update msg model =
 
 updateOne : Id -> Bubble.Message -> Model -> (Model, Out.Msg)
 updateOne id bubMsg model =
-    let
-        selectiveUpdate bubModel =
-            if id == bubModel.id then
-                Bubble.update bubMsg bubModel
-            else
-                (bubModel, Out.None)
-        extractModelAndOutMsg pairs =
-          ( List.map Tuple.first pairs
-          , List.map Tuple.second pairs
-            |> Out.takeFirstActualMsg
-          )
-    in
-        List.map selectiveUpdate model
-        |> extractModelAndOutMsg
+  let
+      selectiveUpdate bubModel =
+        if id == bubModel.id then
+          Bubble.update bubMsg bubModel
+        else
+          (bubModel, Out.None)
+      extractModelAndOutMsg pairs =
+        ( List.map Tuple.first pairs
+        , List.map Tuple.second pairs
+          |> Out.takeFirstActualMsg
+        )
+  in
+      List.map selectiveUpdate model
+      |> extractModelAndOutMsg
 
 
 -- Update all the bubbles with the Tick action
@@ -265,20 +268,20 @@ updateOne id bubMsg model =
 updateAll : Model -> Posix -> Model
 updateAll model time =
   model
-    |> List.map (Bubble.update (Bubble.Animate time))
-    |> List.map Tuple.first
-    |> removeFadedOut
-    |> cancelFinishedResizes
+  |> List.map (Bubble.update (Bubble.Animate time))
+  |> List.map Tuple.first
+  |> removeFadedOut
+  |> cancelFinishedResizes
 
 
 removeFadedOut : Model -> Model
 removeFadedOut model =
-    filter (Bubble.isFadedOut >> not) model
+  filter (Bubble.isFadedOut >> not) model
 
 
 cancelFinishedResizes : Model -> Model
 cancelFinishedResizes model =
-    List.map Bubble.cancelFinishedResize model
+  List.map Bubble.cancelFinishedResize model
 
 
 -- Update the velocity of all the bubbles
@@ -286,23 +289,23 @@ cancelFinishedResizes model =
 
 updateVelocities : Dict Id (Float, Float) -> Model -> Model
 updateVelocities accels model =
-    List.map (updateVelocity accels) model
+  List.map (updateVelocity accels) model
 
 
 updateVelocity : Dict Id (Float, Float) -> Bubble.Model -> Bubble.Model
 updateVelocity accels bubble =
-    let
-        accelXY = Dict.get bubble.id accels |> withDefault (0, 0)
-        accelX = Tuple.first accelXY
-        accelY = Tuple.second accelXY
-        dragXY = drag bubble.dx bubble.dy
-        dragX = Tuple.first dragXY
-        dragY = Tuple.second dragXY
-        dx = bubble.dx + accelX + dragX
-        dy = bubble.dy + accelY + dragY
-        dampenedDxDy = dampen dx dy
-    in
-        { bubble | dx = Tuple.first dampenedDxDy, dy = Tuple.second dampenedDxDy }
+  let
+      accelXY = Dict.get bubble.id accels |> withDefault (0, 0)
+      accelX = Tuple.first accelXY
+      accelY = Tuple.second accelXY
+      dragXY = drag bubble.dx bubble.dy
+      dragX = Tuple.first dragXY
+      dragY = Tuple.second dragXY
+      dx = bubble.dx + accelX + dragX
+      dy = bubble.dy + accelY + dragY
+      dampenedDxDy = dampen dx dy
+  in
+      { bubble | dx = Tuple.first dampenedDxDy, dy = Tuple.second dampenedDxDy }
 
 
 -- A view of all the bubbles

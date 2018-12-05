@@ -13,7 +13,6 @@ import Constants exposing
     , minBubbleSize, maxBubbleSize
     , minSpringLength, maxSpringLength
     , springStrength)
--- import Context exposing (Context, forwardTo)
 import MultiBubbles as MB
 import Bubble exposing (fadeInAnimation)
 import Springs exposing (toCounter, acceleration, accelDict)

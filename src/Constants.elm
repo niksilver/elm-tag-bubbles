@@ -11,7 +11,6 @@ module Constants exposing
     )
 
 import Http
--- import Time exposing (Time)
 
 
 type alias Id = String
@@ -23,6 +22,7 @@ type alias Tag = { id : Id, webTitle : String }
 type alias Tags = List Tag
 
 type TagsResult = TagsResult (Result Http.Error (List Tags))
+
 
 -- Bubbles
 
@@ -41,6 +41,7 @@ maxBubbleOpacity = 0.75
 transitionDuration : Float
 transitionDuration = 1000  -- One second
 
+
 -- Physics
 
 minSpringLength : Float
@@ -57,6 +58,7 @@ airDragFactor = 0.04
 
 minimumVelocity : Float
 minimumVelocity = 0.1
+
 
 -- UI
 

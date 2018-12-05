@@ -1,5 +1,6 @@
 module TagFetcher exposing (..)
 
+
 import Constants exposing (Tag, Tags, TagsResult(..))
 import Secrets exposing (apiKey)
 

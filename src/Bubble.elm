@@ -14,7 +14,6 @@ import Constants exposing
     ( maxBubbleOpacity
     , transitionDuration
     )
--- import Context exposing (Context)
 import Out
 import Colours exposing (pickBaseColour)
 import Label
@@ -28,11 +27,7 @@ import Svg exposing
     , circle, text, foreignObject, g
     )
 import Svg.Attributes exposing (cx, cy, r, fill, opacity)
--- import Html
--- import Html.Attributes
--- import Html.Events
 import Svg.Events exposing (onClick, onMouseOver, onMouseOut)
--- import Signal exposing (message)
 
 
 type alias Model =

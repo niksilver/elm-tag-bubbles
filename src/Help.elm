@@ -1,8 +1,6 @@
 module Help exposing (Help(..), view)
 
 
--- import Context exposing (Context)
-
 import Html exposing (Html, div, text, h1, p, button, a)
 import Html.Attributes exposing (id, class, href)
 import Html.Events exposing (onClick)

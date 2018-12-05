@@ -11,7 +11,6 @@ module MultiBubbles exposing
 -- Multiple bubbles
 
 import Constants exposing (Id, Tag)
--- import Context exposing (Context, forwardTo)
 import Bubble
 import Springs exposing (drag, dampen)
 import Out
@@ -306,11 +305,7 @@ updateVelocity accels bubble =
         { bubble | dx = Tuple.first dampenedDxDy, dy = Tuple.second dampenedDxDy }
 
 
--- A view of a Bubble, using an address at this level of the architecture
-
--- fwdingView : Context Action -> Bubble.Model -> Svg
--- fwdingView context bubble =
-    -- Bubble.view (forwardTo context (Direct bubble.id)) bubble
+-- A view of all the bubbles
 
 view : Model -> List (Svg Msg)
 view model =

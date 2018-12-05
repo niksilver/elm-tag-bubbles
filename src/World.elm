@@ -46,7 +46,7 @@ type Msg
     | NewTags (List Tags)
     | Recentre
     | Resize Int Int
-    -- | Scale String
+    | Scale Float
 
 
 type alias ViewBox
@@ -115,10 +115,10 @@ update action model =
                 , Out.None
                 )
 
---         Scale scaleStr ->
---             case String.toFloat (Debug.log "scale" scaleStr) of
---                 Ok scale -> { model | scale = scale }
---                 Err err -> model
+        Scale factor ->
+            ( { model | scale = factor }
+            , Out.None
+            )
 
 
 -- Introduce new tags to the model

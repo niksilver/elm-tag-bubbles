@@ -198,6 +198,13 @@ updateFromOutMsg outMsg model =
       in
           (model2, Cmd.none, outMsg2)
 
+    Out.Scale factor ->
+      let
+          (world, outMsg2) = World.update (World.Scale factor) model.world
+          model2 = { model | world = world }
+      in
+          (model2, Cmd.none, outMsg2)
+
     Out.None ->
       (model, Cmd.none, Out.None)
 

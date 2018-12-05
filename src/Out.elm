@@ -15,6 +15,7 @@ type Msg
   | HelpMsg Help.Help
   | RequestTag Constants.Tag
   | Recentre
+  | Scale Float
   | None
 
 

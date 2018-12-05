@@ -14,6 +14,7 @@ import Html.Events exposing (onClick, on, targetValue)
 type Msg
   = HelpMsg Help
   | Recentre
+  | Scale String
 
 
 -- We don't update any model, but we do convert in messages to out (top level) messages
@@ -27,9 +28,18 @@ update msg =
     Recentre ->
       Out.Recentre
 
+    Scale factorStr ->
+      case String.toFloat factorStr of
+        Just factor -> Out.Scale factor
+        Nothing ->
+          let
+              _ = Debug.log "Couldn't parse scale factor string" factorStr
+          in
+              Out.None
+
 
 view : Float -> Html Msg
-view scale =
+view factor =
 --     let
 --         scaleMessage : String -> Signal.Message
 --         scaleMessage e =
@@ -48,24 +58,24 @@ view scale =
           [ button
             [ onClick Recentre ]
             [ text "Recentre" ]
---           , label
---             [ for "scale"
---             , id "scale-label"
---             ]
---             [ text "Scale" ]
---           , input
---             [ type_ "range"
---             , Attrs.min "0.2"
---             , Attrs.max "2.5"
---             , Attrs.value (toString scale)
---             , Attrs.step "0.01"
---             , id "scale"
---             -- Need both onChange and onInput according to
---             -- stackoverflow.com/questions/18544890
---             , on "change" targetValue scaleMessage
---             , on "input" targetValue scaleMessage
---             ]
---             []
+          , label
+            [ for "scale"
+            , id "scale-label"
+            ]
+            [ text "Scale" ]
+          , input
+            [ type_ "range"
+            , Attrs.min "0.2"
+            , Attrs.max "2.5"
+            , Attrs.value (String.fromFloat factor)
+            , Attrs.step "0.01"
+            , id "scale"
+            -- Need both onChange and onInput according to
+            -- stackoverflow.com/questions/18544890
+            , on "change" targetValue |> Attrs.map Scale
+            , on "input" targetValue |> Attrs.map Scale
+            ]
+            []
           , button
             [ onClick (HelpMsg Help.On) ]
             [ text "Help" ]

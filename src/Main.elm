@@ -1,5 +1,5 @@
 import UI
-import UI.Setup
+import Init
 
 import Browser
 import Browser.Events
@@ -7,7 +7,7 @@ import Browser.Events
 
 main =
   Browser.element
-    { init = UI.Setup.init
+    { init = Setup.init
     , update = UI.update
     , subscriptions = subscriptions
     , view = UI.view

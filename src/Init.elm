@@ -1,4 +1,4 @@
-module UI.Setup exposing (init)
+module Init exposing (init)
 
 
 import Constants exposing
